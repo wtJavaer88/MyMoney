@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">随手记</string>
+    <string name="dimension">values</string>
+    <string name="done">完成</string>
+    <string name="clear">清除</string>
+    <string name="listview_data_loading">正在加载数据…</string>
+    <string name="listview_empty">没有数据</string>
+    <string name="back_btn">返回</string>
+    <string name="edit_btn">编辑</string>
+    <string name="save">保存</string>
+    <string name="cancel">取消</string>
+    <string name="alert_dialog_ok">确定</string>
+    <string name="alert_dialog_cancel">取消</string>
+    <string name="spn_prompt_category">类别</string>
+    <string name="spn_prompt_subcategory">子类别</string>
+    <string name="spn_prompt_account">账户</string>
+    <string name="spn_prompt_corporation">商家</string>
+    <string name="spn_prompt_project">项目</string>
+    <string name="spn_prompt_time">时间</string>
+    <string name="add_user">添加用户</string>
+    <string name="add_expense_quickly">随手记一笔</string>
+    <string name="list_expense">流水</string>
+    <string name="nav_add_expense">记账</string>
+    <string name="nav_yeartrans">流水</string>
+    <string name="nav_report">报表</string>
+    <string name="nav_planning">计划</string>
+    <string name="nav_budget">预算</string>
+    <string name="nav_account">账户</string>
+    <string name="nav_setting">设置</string>
+    <string name="search">搜索</string>
+    <string name="take_pic">拍照</string>
+    <string name="sync_or_not">是否同步</string>
+    <string name="username">帐号</string>
+    <string name="password">密码</string>
+    <string name="add">添加</string>
+    <string name="password_setting">密码保护</string>
+    <string name="delete_title">删除提示</string>
+    <string name="delete_message">是否删除该记录?</string>
+    <string name="delete">删除</string>
+    <string name="delete_cancel">取消</string>
+    <string name="account_canot_delete">账户不允许删除,请先清空该账户有关的所有消费记录</string>
+    <string name="category_canot_delete">分类不允许删除,请先清空该分类有关的子分类和消费记录</string>
+    <string name="corporation_canot_delete">商家不允许删除,请先清空该商家有关的所有消费记录</string>
+    <string name="magic_code">0</string>
+    <string name="budget_max_expense_tips">本月总预算金额</string>
+    <string name="budget_category_expense_tips">设置月分类预算金额</string>
+    <string name="export_data_csv_info">"您可以导出数据到CSV中然后在电脑中查看。
+ 您如果在Windows里用Excel打开出现乱码，请用记事本打开CSV文件，
+ 点击文件－》另存为，将编码改为ANSI，再保存。
+
+"</string>
+    <string name="setting_multi_suite_tips">"提示:
+1.账套:指的是完全独立的一套账目，每个账套可以与一个随手记帐号同步
+2.切换账套时，当前账套的数据会自动保存
+3.消息提醒、密码保护、自动备份等设置不会因切换账套而改变"</string>
+    <string name="setting_sync_acceleration_tips">"提示:
+ 1.通过缩短同步数据的时间段,可以大大加速同步速度.
+ 2.手机上仅从网站同步下来你设定日期以后的流水账单，设定日期之前的账单在手机上将无法查看,但你仍然可以到随手记网站(www.feidee.com)上查看全部的账单."</string>
+    <string name="setting_auto_backup_tips">"说明:
+1.备份目录：SD卡/.mymoney/backup，您可以将备份文件拷贝到电脑中保存，但请不要修改文件，以免造成无法恢复。
+2.当自动保存的备份文件超过设定的个数，会按时间先后自动删除保留最新备份文件。
+3.只显示当前账套的备份文件，如果想查看其他账套的备份文件，请切换到相应的账套（不存在请新建）。"</string>
+    <string name="version_update_log" formatted="false">"全新设计的备份文件管理界面，更多体贴细节，且备份、恢复性能提升至少20%
+
+1.全新设计的备份文件管理界面，增加分组显示等体贴细节
+2.优化备份、恢复文件时的性能，提升效能至少20%
+3.优化记账提醒，增加更多温馨提示语"</string>
+</resources>

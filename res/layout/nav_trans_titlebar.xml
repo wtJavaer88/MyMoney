@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:background="@drawable/title_bar_bg" android:layout_width="fill_parent" android:layout_height="@dimen/dimen_45_dip" android:minHeight="@dimen/dimen_45_dip"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <Button android:id="@+id/back_btn" android:background="@drawable/common_titlebar_back_btn" android:paddingLeft="@dimen/dimen_7_dip" android:layout_marginLeft="8.0dip" android:text="返回" style="@style/common_titlebar_btn" />
+    <LinearLayout android:gravity="center" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_marginLeft="@dimen/dimen_10_dip" android:layout_marginRight="@dimen/dimen_10_dip" android:layout_weight="1.0">
+        <Button android:id="@+id/pre_btn" android:background="@drawable/nav_year_trans_pre_btn" android:layout_width="@dimen/dimen_50_dip" android:layout_height="@dimen/dimen_40_dip" />
+        <LinearLayout android:gravity="center_horizontal" android:orientation="vertical" android:layout_width="wrap_content" android:layout_height="fill_parent">
+            <TextView android:textSize="@dimen/dimen_17_dip" android:textStyle="bold" android:textColor="#ff793600" android:ellipsize="end" android:gravity="center" android:id="@+id/title_tv" android:layout_width="wrap_content" android:layout_height="0.0dip" android:singleLine="true" android:layout_weight="2.0" />
+            <TextView android:textSize="@dimen/dimen_12_dip" android:textColor="#ff793600" android:ellipsize="end" android:gravity="top|center" android:id="@+id/nav_trans_header_date_range_tv"  android:layout_width="wrap_content" android:layout_height="0.0dip" android:singleLine="true" android:layout_weight="1.0" android:layout_marginBottom="5dp"/>
+        </LinearLayout>
+        <Button android:id="@+id/next_btn" android:background="@drawable/nav_year_trans_next_btn" android:layout_width="@dimen/dimen_50_dip" android:layout_height="@dimen/dimen_40_dip" />
+    </LinearLayout>
+    <Button android:gravity="center" android:id="@+id/titlebar_right_btn" android:background="@drawable/common_titlebar_common_btn" android:layout_marginRight="@dimen/dimen_8_dip" android:text="菜单" style="@style/common_titlebar_btn" />
+</LinearLayout>

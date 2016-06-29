@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView android:textColor="#ff9b8051" android:layout_gravity="bottom|right|center" android:id="@+id/corporation_tips_tv" android:background="@drawable/sort_usage_tips_bg" android:paddingLeft="@dimen/dimen_30_dip" android:paddingTop="@dimen/dimen_10_dip" android:paddingBottom="@dimen/dimen_10_dip" android:visibility="gone" android:layout_width="@dimen/dimen_312_dip" android:layout_height="@dimen/dimen_61_dip" android:layout_marginBottom="@dimen/dimen_37_dip"
+  xmlns:android="http://schemas.android.com/apk/res/android" />

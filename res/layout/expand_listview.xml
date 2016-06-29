@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"  
+    android:layout_width="fill_parent"  
+    android:layout_height="fill_parent"  
+    android:orientation="vertical" >  
+  
+      
+    <FrameLayout  
+        android:id="@+id/list_layout"
+        android:layout_width="fill_parent"  
+        android:layout_height="fill_parent" >  
+  
+        <!-- com.wnc.mymoney.ui.widget  
+            android:choiceMode="singleChoice"  
+            android:id="@+id/home_expandableListView"  
+            android:layout_width="fill_parent"  
+            android:layout_height="fill_parent"  
+            android:cacheColorHint="#00000000"  
+            android:dividerHeight="1dip"  
+            android:fadingEdge="none"  
+            android:groupIndicator="@null" /-->  
+    </FrameLayout>  
+  
+</LinearLayout> 

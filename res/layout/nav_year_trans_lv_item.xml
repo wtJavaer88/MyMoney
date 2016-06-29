@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content" style="@style/nav_trans_lv_item"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout android:paddingLeft="@dimen/dimen_5_dip" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="1.0">
+        <ImageView android:layout_gravity="center_vertical" android:id="@+id/item_icon_iv"  android:layout_width="wrap_content" android:layout_height="wrap_content" />
+        <LinearLayout android:orientation="vertical" android:layout_width="wrap_content" android:layout_height="fill_parent" android:layout_marginLeft="@dimen/dimen_5_dip" android:baselineAligned="false">
+            <LinearLayout android:gravity="bottom" android:layout_width="wrap_content" android:layout_height="0.0dip" android:layout_weight="1.0">
+                <TextView android:id="@+id/item_name_tv" android:text="名称" style="@style/nav_trans_list_item_name_text" />
+                <ImageView android:id="@+id/transfer_arrow_iv" android:background="@drawable/nav_trans_list_transfer_arrow" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                <TextView android:id="@+id/item_name_tv1" android:visibility="gone" android:text="名称" style="@style/nav_trans_list_item_name_text" />
+                <ImageView android:layout_gravity="center_vertical" android:id="@+id/photo_flag_iv"  android:layout_width="@dimen/dimen_15_dip" android:layout_height="@dimen/dimen_13_dip" android:layout_marginLeft="@dimen/dimen_5_dip" />
+            </LinearLayout>
+            <LinearLayout android:gravity="top" android:layout_width="wrap_content" android:layout_height="0.0dip" android:layout_weight="1.0">
+                <TextView android:id="@+id/trade_date_tv" android:visibility="gone" android:layout_marginRight="@dimen/dimen_5_dip" android:text="日期" style="@style/nav_trans_list_item_common_text" />
+                <TextView android:textSize="@dimen/dimen_12_dip" android:id="@+id/memo_tv" android:text="备注" style="@style/nav_trans_list_item_common_text" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout android:gravity="right|center" android:layout_width="wrap_content" android:layout_height="fill_parent">
+        <LinearLayout android:gravity="right|center" android:orientation="vertical" android:layout_width="wrap_content" android:layout_height="fill_parent">
+            <TextView android:id="@+id/cost_tv" android:text="金额" style="@style/nav_trans_list_item_common_text" />
+            <TextView android:id="@+id/currency_cost_tv" android:layout_marginLeft="@dimen/dimen_2_dip" android:visibility="gone" android:text="折合本币金额" style="@style/nav_trans_list_item_common_text" />
+        </LinearLayout>
+        <ImageView android:id="@+id/go_detail_iv" android:background="@drawable/common_list_item_arrow" android:visibility="visible" android:layout_width="@dimen/dimen_8_dip" android:layout_height="@dimen/dimen_13_dip" android:layout_marginLeft="@dimen/dimen_5_dip" android:layout_marginRight="@dimen/dimen_8_dip" />
+    </LinearLayout>
+    <TextView android:id="@+id/item_id_tv" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+    <TextView android:id="@+id/item_type_tv" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+</LinearLayout>

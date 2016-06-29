@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" 
+    android:layout_height="fill_parent"  
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dip" >
+
+        <EditText
+            android:id="@+id/start_et"
+            android:layout_width="159dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="center"
+            android:text="黄石" >
+		
+            <requestFocus />
+        </EditText>
+
+        <EditText
+            android:id="@+id/dest_et"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="center"
+            android:text="武汉" />
+
+    </LinearLayout>
+
+ <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"  >
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:textColor="@+color/red"
+            android:gravity="center"
+            android:text="监控日期" />
+
+        <EditText
+            android:id="@+id/date_et"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="center"
+            android:text="2016-05-16" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"  >
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:textColor="@+color/red"
+            android:gravity="center"
+            android:text="监控车次" />
+
+        <EditText
+            android:id="@+id/trains_et"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="center"
+            android:text="Z26, Z32, Z46" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:gravity="center"   >
+        <Button
+	        android:id="@+id/clearTrans_btn"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="清 空"
+	        />
+	    <Button
+	        android:id="@+id/watch_btn"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="监 控"
+	        />
+    </LinearLayout>
+
+   <TextView
+       android:id="@+id/result_tv"
+       android:layout_marginTop="5dip"
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content"
+       android:ems="10"
+       android:gravity="center"
+       android:text="无票"
+       android:textColor="#ff5500" />
+
+</LinearLayout> 

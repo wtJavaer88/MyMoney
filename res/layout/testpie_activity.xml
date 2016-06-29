@@ -1,0 +1,46 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/report_activity_bg"
+    tools:context=".MainActivity" >
+
+     <FrameLayout android:id="@+id/container_pie_chart_fl" android:layout_width="fill_parent" android:layout_height="fill_parent">
+            <LinearLayout android:paddingTop="10.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content">
+                <Button android:id="@+id/pre_date_range_btn" android:background="@drawable/report_pre_date_range_btn" android:layout_width="@dimen/dimen_27_dip" android:layout_height="@dimen/dimen_36_dip" />
+                <TextView android:gravity="top|center" android:layout_gravity="top" android:id="@+id/date_interval_str_tv"  android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" />
+                <Button android:id="@+id/next_date_range_btn" android:background="@drawable/report_next_date_range_btn" android:layout_width="@dimen/dimen_27_dip" android:layout_height="@dimen/dimen_36_dip" />
+            </LinearLayout>
+        </FrameLayout>
+    <com.example.ulucu.chart.PieChart
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        android:layout_margin="20dip"
+        >
+
+        <com.example.ulucu.chart.PieView
+            android:id="@+id/lotteryView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:tag="pieView" />
+
+        <com.example.ulucu.chart.MyButton
+            android:id="@+id/MyBt"
+            android:layout_width="30dip"
+            android:layout_height="30dip"
+            android:layout_gravity="top|right"
+            android:tag="pieButton" />
+
+        <TextView
+            android:id="@+id/MyTV"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:tag="pieText"
+            android:textSize="20dp" />
+
+ 
+    </com.example.ulucu.chart.PieChart>
+
+</RelativeLayout>

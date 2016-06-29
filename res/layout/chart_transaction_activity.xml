@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout  android:id="@+id/search_layout" android:gravity="center_horizontal" android:orientation="horizontal"  android:layout_width="fill_parent" android:layout_height="@dimen/dimen_40_dip" android:layout_marginTop="@dimen/dimen_15_dip">
+            <TextView android:textColor="@color/red" android:textSize="@dimen/dimen_16_dip" android:layout_gravity="left|center" android:text="2016年4月  食品酒水  (¥1000)" android:id="@+id/summary_tv" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="@dimen/dimen_15_dip" />
+            <Button android:layout_gravity="right" android:text="图表" android:id="@+id/search_pie_btn" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="@dimen/dimen_15_dip" />
+    </LinearLayout>
+    <ListView android:id="@+id/search_expense_lv" android:background="@color/white" android:layout_width="fill_parent" android:layout_height="fill_parent" android:divider="@null" android:dividerHeight="0.0dip" style="@style/Widget.ListView" />
+</LinearLayout>

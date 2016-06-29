@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="config_shortAnimTime">100</integer>
+    <integer name="config_mediumAnimTime">150</integer>
+    <integer name="config_longAnimTime">300</integer>
+    <integer name="piechartView_totalLableTextSize">16</integer>
+    <integer name="piechartView_amountLabelTextSize">20</integer>
+    <integer name="piechartView_categoryOfSectorLabelTextSize">16</integer>
+    <integer name="piechartView_displayOfSectorLabelTextSize">15</integer>
+    <integer name="piechartView_pieCircleRadius">147</integer>
+    <integer name="piechartView_pieCircleMarginTop">47</integer>
+    <integer name="piechartView_totalLabelDrawInY">180</integer>
+    <integer name="piechartView_categoryOfSectorLabelDrawInY">379</integer>
+    <integer name="piechartView_displayOfSectorDrawInY">399</integer>
+    <integer name="piechartView_indicationCenterInX">275</integer>
+    <integer name="piechartView_indicationCenterInY">380</integer>
+    <integer name="piechartView_indicationCircleRadius">10</integer>
+</resources>

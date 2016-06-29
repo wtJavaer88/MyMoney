@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="remindBeforePayDateStr">
+        <item>不提醒</item>
+        <item>提前一天</item>
+        <item>提前两天</item>
+        <item>提前三天</item>
+        <item>提前四天</item>
+        <item>提前五天</item>
+    </string-array>
+    <string-array name="setting_listview_item_operation">
+        <item>编辑</item>
+        <item>删除</item>
+    </string-array>
+    <string-array name="budget_mode_type">
+        <item>简单模式</item>
+        <item>标准模式</item>
+        <item>自定义模式</item>
+    </string-array>
+    <string-array name="week_start">
+        <item>星期日</item>
+        <item>星期一</item>
+        <item>星期六</item>
+    </string-array>
+    <string-array name="trans_corp_project_select_way">
+        <item>优先出现\"最近使用\"</item>
+        <item>优先出现\"所有\"</item>
+    </string-array>
+    <string-array name="month_start">
+        <item>1号</item>
+        <item>2号</item>
+        <item>3号</item>
+        <item>4号</item>
+        <item>5号</item>
+        <item>6号</item>
+        <item>7号</item>
+        <item>8号</item>
+        <item>9号</item>
+        <item>10号</item>
+        <item>11号</item>
+        <item>12号</item>
+        <item>13号</item>
+        <item>14号</item>
+        <item>15号</item>
+        <item>16号</item>
+        <item>17号</item>
+        <item>18号</item>
+        <item>19号</item>
+        <item>20号</item>
+        <item>21号</item>
+        <item>22号</item>
+        <item>23号</item>
+        <item>24号</item>
+        <item>25号</item>
+        <item>26号</item>
+        <item>27号</item>
+        <item>28号</item>
+    </string-array>
+    <string-array name="cycle_seven_days">
+        <item>每一天</item>
+        <item>每两天</item>
+        <item>每三天</item>
+        <item>每四天</item>
+        <item>每五天</item>
+        <item>每六天</item>
+        <item>每七天</item>
+    </string-array>
+</resources>

@@ -1,0 +1,37 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"  
+  	android:layout_width="fill_parent"  
+  	android:layout_height="fill_parent"
+  	android:background="@color/white"
+     >
+    
+	<TextView  
+	   android:layout_width="130dp"  
+	   android:layout_height="wrap_content"  
+	   android:id="@+id/wordname_s"  
+	   android:textSize="14dp"
+	   android:textColor="@color/red"
+	   android:textStyle="bold"
+	   android:text="问题0001"
+	  />
+	<TextView  
+	   android:layout_width="wrap_content"  
+	   android:layout_height="wrap_content"  
+	   android:id="@+id/wordmean_s" 
+	   android:maxLines="4"
+	   android:ellipsize="end"
+	   android:textSize="10dp"
+	   android:textColor="@color/black"
+	   android:text="TextView里有个属性可以设置的！方法有两个TextView里有个属性可以设置的！方法有两个TextView里有个属性可以设置的！方法有两个TextView里有个属性可以设置的！方法有两个" 
+	  />
+	
+	
+	<LinearLayout android:layout_width="fill_parent"  
+	       android:layout_height="wrap_content"  
+	       android:orientation="horizontal"  
+	       android:layout_marginTop="5dip"
+	       android:layout_marginRight="10px"   
+	       android:gravity="right">
+	</LinearLayout>
+	
+</LinearLayout>

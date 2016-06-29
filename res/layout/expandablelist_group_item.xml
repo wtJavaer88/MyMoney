@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView android:textSize="@dimen/dimen_24_dip" android:textStyle="bold" android:textColor="#ff81858c" android:id="@+id/month_tv" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/dimen_5_dip" android:layout_marginTop="@dimen/dimen_4_dip" android:lineSpacingMultiplier="0.85" />
+    <TextView android:textSize="@dimen/dimen_16_dip" android:textColor="#ff94989e" android:id="@+id/month_lable_tv" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="月" android:layout_toRightOf="@+id/month_tv" android:layout_alignBottom="@+id/month_tv" />
+    <TextView android:textSize="@dimen/dimen_10_dip" android:textColor="#ffb1a8a3" android:id="@+id/date_range_tv" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@+id/month_tv" android:layout_alignLeft="@+id/month_tv" />
+    <LinearLayout android:id="@+id/header_ly" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/dimen_5_dip" android:layout_marginRight="@dimen/dimen_15_dip" android:baselineAligned="false" android:layout_toRightOf="@+id/date_range_tv" android:layout_alignBottom="@+id/date_range_tv">
+        <LinearLayout android:orientation="vertical" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_marginRight="@dimen/dimen_5_dip" android:layout_weight="1.0">
+            <TextView android:textColor="#ff81858c" android:gravity="right" android:id="@+id/nav_trans_income_amount_title" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="收入:" />
+            <TextView android:gravity="right" android:id="@+id/income_amount_tv" android:paddingLeft="@dimen/dimen_5_dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="收入总额" style="@style/nav_trans_income_amount_text" />
+        </LinearLayout>
+        <LinearLayout android:orientation="vertical" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0">
+            <TextView android:textColor="#ff81858c" android:gravity="right" android:id="@+id/nav_trans_payout_amount_title" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="支出:" />
+            <TextView android:gravity="right" android:id="@+id/payout_amount_tv" android:paddingLeft="@dimen/dimen_5_dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="支出总额" style="@style/nav_trans_payout_amount_text" />
+        </LinearLayout>
+        <LinearLayout android:orientation="vertical" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0">
+            <TextView android:textColor="#ff81858c" android:gravity="right" android:id="@+id/nav_trans_blance_amount_title" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="结余:" />
+            <TextView android:gravity="right" android:id="@+id/balance_amount_tv" android:paddingLeft="@dimen/dimen_5_dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="结余总额" style="@style/nav_trans_blance_amount_text" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

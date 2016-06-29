@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="drawable" name="darkgray">#404040ff</item>
+    <item type="drawable" name="red">#ffff00ff</item>
+    <item type="drawable" name="green">#ff0ff0ff</item>
+    <item type="drawable" name="lightgray">#c0c0c0ff</item>
+    <item type="drawable" name="blue">#ff00ffff</item>
+    <item type="drawable" name="gray">#808080ff</item>
+    <item type="drawable" name="tab_bg">#ff328981</item>
+    <item type="drawable" name="transparent_drawable">#00000000</item>
+    <item type="drawable" name="white">#ffffffff</item>
+    <item type="drawable" name="black">#ff000000</item>
+    <item type="drawable" name="data_item_odd_bg">#ff272727</item>
+    <item type="drawable" name="data_item_double_bg">#ff191919</item>
+    <item type="drawable" name="safe_mode_bg">#dd000000</item>
+    <item type="drawable" name="dialog_bg">#88000000</item>
+</resources>

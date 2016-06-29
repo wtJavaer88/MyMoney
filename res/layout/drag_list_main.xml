@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" style="@style/common_activity_content"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <include android:layout_width="fill_parent" android:layout_height="wrap_content" layout="@layout/common_titlebar" />
+    <FrameLayout android:layout_width="fill_parent" android:layout_height="0.0dip" android:layout_weight="1.0">
+         <com.wnc.mymoney.ui.widget.draglv.DragListView 
+       android:id="@+id/other_drag_list" 
+       android:layout_width="fill_parent" 
+       android:layout_height="fill_parent"
+       android:cacheColorHint="#00000000"
+       android:listSelector="#00000000"/>
+    </FrameLayout>
+    <include layout="@layout/corp_project_bottom_toolbar" />
+</LinearLayout>

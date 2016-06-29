@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:baselineAligned="false"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout android:gravity="center_horizontal" android:orientation="vertical" android:id="@+id/trans_left_background_ly" android:layout_width="@dimen/dimen_44_dip" android:layout_height="fill_parent">
+        <TextView android:textSize="@dimen/dimen_23_dip" android:text="23" android:textColor="#ff78726f" android:id="@+id/trans_day_of_month_tv" android:layout_width="wrap_content" android:layout_height="wrap_content" android:lineSpacingMultiplier="0.85" />
+        <TextView android:textSize="@dimen/dimen_12_dip" android:text="周六" android:textColor="#ff000000" android:id="@+id/trans_day_of_week_tv" android:layout_width="wrap_content" android:layout_height="wrap_content" android:lineSpacingMultiplier="0.86" />
+    </LinearLayout>
+    <LinearLayout android:orientation="vertical" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0">
+        <LinearLayout android:id="@+id/day_of_count_ly" android:background="@drawable/nav_year_trans_lv_child_item_left_bg" android:paddingLeft="@dimen/dimen_5_dip" android:paddingRight="@dimen/dimen_5_dip" android:visibility="visible" android:layout_width="fill_parent" android:layout_height="@dimen/dimen_30_dip">
+            <TextView android:gravity="center_vertical" android:id="@+id/day_of_income_tv" android:layout_width="0.0dip" android:layout_height="fill_parent" android:drawableLeft="@drawable/icon_nav_trans_day_of_income" android:drawablePadding="@dimen/dimen_3_dip" android:layout_weight="1.0" style="@style/nav_trans_income_amount_text" />
+            <TextView android:gravity="center_vertical" android:id="@+id/day_of_payout_tv" android:layout_width="0.0dip" android:layout_height="fill_parent" android:drawableLeft="@drawable/icon_nav_trans_day_of_pauout" android:drawablePadding="@dimen/dimen_3_dip" android:layout_weight="1.0" style="@style/nav_trans_payout_amount_text" />
+            <TextView android:gravity="center_vertical" android:id="@+id/day_of_balance_tv" android:layout_width="0.0dip" android:layout_height="fill_parent" android:drawableLeft="@drawable/icon_nav_trans_day_of_balance" android:drawablePadding="@dimen/dimen_3_dip" android:layout_weight="1.0" style="@style/nav_trans_blance_amount_text" />
+        </LinearLayout>
+        <LinearLayout android:orientation="vertical" android:id="@+id/trans_rows_ly" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+    </LinearLayout>
+</LinearLayout>
