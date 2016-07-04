@@ -7,6 +7,8 @@ public class TicketInfo
     private int wzCount;// 无座票
     private int yiCount;// 一等票
     private int erCount;// 二等票
+    private String startTime;// 开车时间
+    private String arriveTime;// 到达时间
 
     public String getTrainCode()
     {
@@ -64,5 +66,25 @@ public class TicketInfo
         return "TicketInfo [trainCode=" + trainCode + ", yzCount=" + yzCount
                 + ", wzCount=" + wzCount + ", yiCount=" + yiCount
                 + ", erCount=" + erCount + "]";
+    }
+
+    public String getStartTime()
+    {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime)
+    {
+        this.startTime = startTime;
+    }
+
+    public String getArriveTime()
+    {
+        return arriveTime;
+    }
+
+    public void setArriveTime(String arriveTime)
+    {
+        this.arriveTime = arriveTime;
     }
 }

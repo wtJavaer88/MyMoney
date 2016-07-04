@@ -1,4 +1,4 @@
-package train.model;
+package train.dao;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -18,7 +18,6 @@ public class StationDao
     {
         stations.put("黄石", "HSN");
         stations.put("武汉", "WHN");
-
     }
 
     public static String getCityCode(Activity context, String city)
@@ -30,7 +29,7 @@ public class StationDao
             String newContent = content.substring(i + city.length() + 2);
             int j = newContent.indexOf("|");
             String code = newContent.substring(0, j);
-            System.out.println("Code:" + code);
+            // System.out.println("Code:" + code);
             return code;
         }
         return "";

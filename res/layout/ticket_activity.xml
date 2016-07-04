@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:gravity="center"
-            android:text="黄石" >
+            android:text="杭州" >
 		
             <requestFocus />
         </EditText>
@@ -36,12 +36,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dip"  >
 
-        <TextView
+         <Button
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:textColor="@+color/red"
             android:gravity="center"
+            android:onClick="chooseDate"
             android:text="监控日期" />
 
         <EditText
@@ -59,21 +58,46 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dip"  >
 
+        <Button
+            android:id="@+id/trains_choose_bt"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="监控车次"
+            android:onClick="chooseTrains" />
+
+        <TextView
+            android:id="@+id/trains_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:text="Z26, Z32, Z46" />
+
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"  >
+
         <TextView
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:ems="10"
             android:textColor="@+color/red"
             android:gravity="center"
-            android:text="监控车次" />
+            android:text="监控频率(秒)" />
 
         <EditText
-            android:id="@+id/trains_et"
+            android:id="@+id/trains_fre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
             android:gravity="center"
-            android:text="Z26, Z32, Z46" />
+            android:text="30"
+            android:numeric="integer" />
 
     </LinearLayout>
 
@@ -87,6 +111,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:text="清 空"
+	        android:onClick="clearData"
 	        />
 	    <Button
 	        android:id="@+id/watch_btn"
@@ -103,7 +128,7 @@
        android:layout_height="wrap_content"
        android:ems="10"
        android:gravity="center"
-       android:text="无票"
+       android:text="请点击监控开始查询!"
        android:textColor="#ff5500" />
 
 </LinearLayout> 

@@ -30,6 +30,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.Activity;
 
+import com.wnc.basic.BasicStringUtil;
+
 public class HttpsConnUtil
 {
     // private static final String SYS_VULLN_URL_JSON =
@@ -151,7 +153,12 @@ public class HttpsConnUtil
     }
 
     public static String requestHTTPSPage(Activity context, String mUrl)
+            throws Exception
     {
+        if (BasicStringUtil.isNullString(mUrl))
+        {
+            return "";
+        }
         InputStream ins = null;
         String result = "";
         try

@@ -15,6 +15,7 @@ import cn.org.octopus.wheelview.widget.ArrayWheelAdapter;
 import cn.org.octopus.wheelview.widget.OnWheelChangedListener;
 import cn.org.octopus.wheelview.widget.WheelView;
 
+import com.wnc.basic.BasicDateUtil;
 import com.wnc.basic.BasicStringUtil;
 import com.wnc.mymoney.bean.MyWheelBean;
 import com.wnc.mymoney.util.DateTimeSelectArrUtil;
@@ -92,23 +93,106 @@ public class WheelDialogShowUtil
         dialog.show();
     }
 
+    public static void showCurrDateDialog(Context context,
+            final AfterWheelChooseListener listener)
+    {
+        final AlertDialog dialog = new AlertDialog.Builder(context).create();
+        // dialog.setTitle(title);
+
+        final List<String[]> arrList = new ArrayList<String[]>();
+        arrList.add(DateTimeSelectArrUtil.getYears());
+        arrList.add(DateTimeSelectArrUtil.getMonths());
+        arrList.add(DateTimeSelectArrUtil.getDays());
+
+        LinearLayout llContent = new LinearLayout(context);
+        llContent.setOrientation(LinearLayout.HORIZONTAL);
+
+        final List<WheelView> wheelviews = new ArrayList<WheelView>();
+
+        for (int i = 0; i < 3; i++)
+        {
+            WheelView wheelview = new WheelView(context);
+            wheelview.setVisibleItems(7);
+            if (i > 0)
+            {
+                wheelview.setCyclic(true);
+            }
+            else
+            {
+                wheelview.setCyclic(false);
+            }
+            String[] data = arrList.get(i);
+            wheelview.setAdapter(new ArrayWheelAdapter<String>(data));
+
+            wheelview.setTextSize(40);
+            llContent.addView(wheelview, new LinearLayout.LayoutParams(
+                    LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1));
+            wheelviews.add(wheelview);
+        }
+        setDefaultValue(wheelviews, arrList,
+                BasicDateUtil.getCurrentDateTimeString());
+
+        // 设置对话框点击事件 积极
+        dialog.setButton(AlertDialog.BUTTON_POSITIVE, "确定",
+                new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        listener.afterWheelChoose(getFormatDateStr(wheelviews,
+                                arrList));
+                        dialog.dismiss();
+                    }
+
+                });
+
+        // 设置对话框点击事件 消极
+        dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "取消",
+                new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                    }
+                });
+        dialog.setView(llContent);
+        dialog.show();
+    }
+
+    private static String getFormatDateStr(List<WheelView> wheelviews,
+            List<String[]> arrList)
+    {
+
+        String[] values = new String[arrList.size()];
+        computeDateTimeValues(wheelviews, arrList, values);
+        return TextFormatUtil.addSeparatorToDay(values[0] + values[1]
+                + values[2]);
+    }
+
     private static String getFormatDateTimeStr(List<WheelView> wheelviews,
             List<String[]> arrList)
     {
 
-        String[] values = new String[6];
-        for (int i = 0; i < 6; i++)
+        String[] values = new String[arrList.size()];
+        computeDateTimeValues(wheelviews, arrList, values);
+        return TextFormatUtil.addSeparatorToDay(values[0] + values[1]
+                + values[2])
+                + " "
+                + TextFormatUtil.addSeparatorToTime(values[3] + values[4]
+                        + values[5]);
+    }
+
+    private static void computeDateTimeValues(List<WheelView> wheelviews,
+            List<String[]> arrList, String[] values)
+    {
+        for (int i = 0; i < arrList.size(); i++)
         {
             String value = PatternUtil.getFirstPattern(
                     arrList.get(i)[wheelviews.get(i).getCurrentItem()], "\\d+");
             value = BasicStringUtil.fillLeftStringNotruncate(value, 2, "0");
             values[i] = value;
         }
-        return TextFormatUtil.addSeparatorToDay(values[0] + values[1]
-                + values[2])
-                + " "
-                + TextFormatUtil.addSeparatorToTime(values[3] + values[4]
-                        + values[5]);
     }
 
     private static void setDefaultValue(List<WheelView> wheelviews,
@@ -121,7 +205,7 @@ public class WheelDialogShowUtil
         int minute = date.getMinutes();
         int second = date.getSeconds();
 
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < arrList.size(); i++)
         {
             switch (i)
             {

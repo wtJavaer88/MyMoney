@@ -29,6 +29,11 @@ public class TicParser
         clearAssignTrain();
     }
 
+    public List<TicketInfo> getTicketInfos()
+    {
+        return ticketInfos;
+    }
+
     public String getResultJson()
     {
         return resultJson;
@@ -37,7 +42,10 @@ public class TicParser
     public void parse()
     {
         String[] data = resultJson.split("\"train_no\":");
-        System.out.println(data.length + "个,  第2个:" + data[1]);
+        if (data.length == 0)
+        {
+            return;
+        }
         for (String train : data)
         {
             parseTicketsFromTrain(train);
@@ -52,11 +60,16 @@ public class TicParser
         String zeString = firstMatch(train, "ze_num\":\"([\\S]+?)\",");
         String wzString = firstMatch(train, "wz_num\":\"([\\S]+?)\",");
         String yzString = firstMatch(train, "yz_num\":\"([\\S]+?)\",");
+        String stString = firstMatch(train, "start_time\":\"([\\S]+?)\",");
+        String arString = firstMatch(train, "arrive_time\":\"([\\S]+?)\",");
         tInfo.setTrainCode(code);
         tInfo.setYiCount(wrapCount(zyString));
         tInfo.setErCount(wrapCount(zeString));
         tInfo.setWzCount(wrapCount(wzString));
         tInfo.setYzCount(wrapCount(yzString));
+        tInfo.setYzCount(wrapCount(stString));
+        tInfo.setStartTime(stString);
+        tInfo.setArriveTime(arString);
         if (BasicStringUtil.isNotNullString(code.trim()))
         {
             ticketInfos.add(tInfo);
@@ -92,6 +105,11 @@ public class TicParser
 
     List<String> trains = new ArrayList<String>();
 
+    /**
+     * 添加指定的班次
+     * 
+     * @param code
+     */
     public void addAssignTrain(String code)
     {
         if (BasicStringUtil.isNotNullString(code.trim()))

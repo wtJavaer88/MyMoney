@@ -19,11 +19,11 @@ import com.wnc.mymoney.backup.NetChannel;
 import com.wnc.mymoney.dao.OnStartUpDataUtil;
 import com.wnc.mymoney.dao.TransactionsDao;
 import com.wnc.mymoney.service.LogService;
-import com.wnc.mymoney.test.TrainTicketActivity;
 import com.wnc.mymoney.util.AppRescouceReflect;
 import com.wnc.mymoney.util.SysInit;
 import com.wnc.mymoney.util.TOTAL_RANGE;
 import com.wnc.mymoney.util.TextFormatUtil;
+import com.wnc.train.TrainTicketActivity;
 
 public class MainActivity extends Activity
 {
