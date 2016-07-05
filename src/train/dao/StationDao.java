@@ -4,43 +4,40 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
 
-import com.wnc.basic.BasicStringUtil;
+import com.wnc.string.PatternUtil;
 
 public class StationDao
 {
     public static Map<String, String> stations = new HashMap<String, String>();
-    public static String cityStations = "";
-    static
-    {
-        stations.put("黄石", "HSN");
-        stations.put("武汉", "WHN");
-    }
+    public static String cityStations = "";// txt的完整内容
 
+    /**
+     * if not find ,return empty String
+     * 
+     * @param context
+     * @param city
+     * @return
+     */
     public static String getCityCode(Activity context, String city)
     {
-        String content = getContent(context);
-        int i = content.indexOf("|" + city + "|");
-        if (i != -1)
+        if (stations.isEmpty())
         {
-            String newContent = content.substring(i + city.length() + 2);
-            int j = newContent.indexOf("|");
-            String code = newContent.substring(0, j);
-            // System.out.println("Code:" + code);
-            return code;
+            getContent(context);
+        }
+        if (stations.containsKey(city))
+        {
+            return stations.get(city);
         }
         return "";
     }
 
-    private static String getContent(Activity context)
+    private static void getContent(Activity context)
     {
-        if (BasicStringUtil.isNotNullString(cityStations))
-        {
-            return cityStations;
-        }
         InputStream in = null;
         InputStreamReader bis = null;
         BufferedReader br = null;
@@ -54,7 +51,7 @@ public class StationDao
 
             while ((message = br.readLine()) != null)
             {
-                cityStations = message;
+                parseStations(message);
             }
         }
         catch (Exception e)
@@ -74,6 +71,26 @@ public class StationDao
                 e.printStackTrace();
             }
         }
-        return cityStations;
+    }
+
+    private static void parseStations(String message) throws Exception
+    {
+        List<String> pairs = PatternUtil.getPatternStrings(message,
+                "[\u4e00-\u9fa5]+\\|[A-Z]+");
+        for (String pair : pairs)
+        {
+            int index = pair.indexOf("|");
+            String name = "";
+            String code = "";
+            if (index != -1)
+            {
+                name = pair.substring(0, index);
+                code = pair.substring(index + 1);
+            }
+            if (!name.equals("") && !code.equals(""))
+            {
+                stations.put(name, code);
+            }
+        }
     }
 }

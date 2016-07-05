@@ -163,4 +163,16 @@ public class TextFormatUtil
         return list;
     }
 
+    public static boolean isNumberRange(String rangeStr)
+    {
+        if (BasicStringUtil.isNullString(rangeStr))
+        {
+            return false;
+        }
+        if (rangeStr.replace(" ", "").matches("\\d+\\.?\\d*[,:]\\d+\\.?\\d*"))
+        {
+            return true;
+        }
+        return false;
+    }
 }

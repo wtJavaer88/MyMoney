@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:gravity="center"
-            android:text="杭州" >
+            android:text="黄石" >
 		
             <requestFocus />
         </EditText>
@@ -37,17 +37,19 @@
         android:layout_marginTop="10dip"  >
 
          <Button
+             android:id="@+id/date_choose_bt"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:onClick="chooseDate"
             android:text="监控日期" />
 
-        <EditText
-            android:id="@+id/date_et"
+        <TextView
+            android:id="@+id/date_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:textColor="@color/black"
             android:gravity="center"
             android:text="2016-05-16" />
 
@@ -86,7 +88,7 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:textColor="@+color/red"
+            android:textColor="@color/red"
             android:gravity="center"
             android:text="监控频率(秒)" />
 
@@ -94,30 +96,46 @@
             android:id="@+id/trains_fre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
+            android:ems="5"
             android:gravity="center"
             android:text="30"
             android:numeric="integer" />
+        
+        <com.wnc.mymoney.ui.widget.ComboBox
+        android:id="@+id/timeComb"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+		android:text="10"
+		android:textColor="@color/red"
+		android:textSize="20dp"
+        android:background="#00000000" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
+        android:layout_marginTop="40dip"
         android:gravity="center"   >
         <Button
 	        android:id="@+id/clearTrans_btn"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:text="清 空"
-	        android:onClick="clearData"
+	        android:text="清空车次"
+	        android:onClick="clearTrains"
 	        />
-	    <Button
+        <Button
 	        android:id="@+id/watch_btn"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:text="监 控"
+	        />
+        <Button
+	        android:id="@+id/clearTrans_btn"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="停 止"
+	        android:onClick="stopSearch"
 	        />
     </LinearLayout>
 

@@ -33,6 +33,15 @@ public class WatchHandler extends Handler
             System.out.println("msg.obj.toString():  " + msg.obj.toString());
             trainActivity.parseResult(msg.obj.toString());
         }
+        else if (msg.what == 22)
+        {
+            System.out.println("已有保存列车班次信息!");
+            String[] trains = (String[]) msg.obj;
+            Intent localIntent = new Intent();
+            localIntent.putExtra("trains", trains);
+            localIntent.setClass(trainActivity, RadioButtonListActivity.class);
+            trainActivity.startActivityForResult(localIntent, 100);
+        }
         else if (msg.what == 2)
         {
             String result = msg.obj.toString();
@@ -63,6 +72,7 @@ public class WatchHandler extends Handler
                     String[] trains = patternStrings
                             .toArray(new String[patternStrings.size()]);
 
+                    trainActivity.putNewTrains(trains);
                     localIntent.putExtra("trains", trains);
                     localIntent.setClass(trainActivity,
                             RadioButtonListActivity.class);
@@ -75,6 +85,10 @@ public class WatchHandler extends Handler
                 }
             }
 
+        }
+        else if (msg.what == 3)
+        {
+            trainActivity.clearErrMsg();
         }
 
     };

@@ -17,6 +17,7 @@ import com.wnc.mymoney.bean.Trade;
 import com.wnc.mymoney.util.CostTypeUtil;
 import com.wnc.mymoney.util.SysInit;
 import com.wnc.mymoney.util.TextFormatUtil;
+import com.wnc.string.PatternUtil;
 
 public class TransactionsDao
 {
@@ -376,13 +377,6 @@ public class TransactionsDao
         return getTradeList(c);
     }
 
-    public static List<Trade> getSearchTransaction(String keyword)
-    {
-        Cursor c = getSearchTradeCursor(keyword);
-
-        return getTradeList(c);
-    }
-
     /**
      * 将创建时间字符串转为时间比较
      * 
@@ -403,32 +397,34 @@ public class TransactionsDao
         haspic = "%" + haspic + "%";
         member = "%" + member + "%";
         categorypath = "%" + categorypath + "%";
-        keyword = "%" + keyword + "%";
         startDay = TextFormatUtil.addSeparatorToDay(startDay);
         endDay = TextFormatUtil.addSeparatorToDay(endDay);
-        return db
-                .rawQuery(
-                        "SELECT T.*,G.PATH,case HASPICTURE when 0 then '无图' else '有图' end PICTURE FROM TRANSACTIONS T  JOIN CATEGORY G ON T.COSTDESC_ID=G.ID"
-                                + " WHERE PICTURE like ? AND MEMBER like ? AND PATH LIKE ?  AND (COST LIKE ? OR PROJECT LIKE ? OR SHOP LIKE ? OR MEMO LIKE ?)  AND isdel=0 AND (date(date(substr(create_time,0,5)|| '-'||substr(create_time,5,2)|| '-' || substr(create_time,7,2))) between date(?) and date(?))   ORDER BY CREATE_LONGTIME ASC",
-                        new String[]
-                        { haspic, member, categorypath, keyword, keyword,
-                                keyword, keyword, startDay, endDay });
-    }
-
-    private static Cursor getSearchTradeCursor(String keyword)
-    {
-        if (db == null)
+        if (!TextFormatUtil.isNumberRange(keyword))
         {
-            Log.e("dao", "Not opened Db !");
-            return null;
+            keyword = "%" + keyword + "%";
+            return db
+                    .rawQuery(
+                            "SELECT T.*,G.PATH,case HASPICTURE when 0 then '无图' else '有图' end PICTURE FROM TRANSACTIONS T  JOIN CATEGORY G ON T.COSTDESC_ID=G.ID"
+                                    + " WHERE PICTURE like ? AND MEMBER like ? AND PATH LIKE ?  AND (COST LIKE ? OR PROJECT LIKE ? OR SHOP LIKE ? OR MEMO LIKE ?)  AND isdel=0 AND (date(date(substr(create_time,0,5)|| '-'||substr(create_time,5,2)|| '-' || substr(create_time,7,2))) between date(?) and date(?))   ORDER BY CREATE_LONGTIME ASC",
+                            new String[]
+                            { haspic, member, categorypath, keyword, keyword,
+                                    keyword, keyword, startDay, endDay });
         }
-        keyword = "%" + keyword + "%";
-        return db
-                .rawQuery(
-                        "SELECT T.*,G.NAME TYPE_NAME,case HASPICTURE when 0 then '无' else '有图' end PICTURE FROM TRANSACTIONS T  JOIN CATEGORY G ON T.COSTDESC_ID=G.ID WHERE isdel=0 AND (MEMBER LIKE ? OR COST LIKE ? OR PROJECT LIKE ? OR SHOP LIKE ? OR MEMO LIKE ? OR PICTURE LIKE ? OR TYPE_NAME LIKE ?)  ORDER BY CREATE_LONGTIME ASC",
-                        new String[]
-                        { keyword, keyword, keyword, keyword, keyword, keyword,
-                                keyword });
+        else
+        {
+            String costMin = PatternUtil.getFirstPattern(
+                    keyword.replace(" ", ""), "\\d+\\.?\\d*");
+            String costMax = PatternUtil.getLastPattern(
+                    keyword.replace(" ", ""), "\\d+\\.?\\d*");
+            // System.out.println("金钱区间::  " + costMin + "  " + costMax);
+            return db
+                    .rawQuery(
+                            "SELECT T.*,G.PATH,case HASPICTURE when 0 then '无图' else '有图' end PICTURE FROM TRANSACTIONS T  JOIN CATEGORY G ON T.COSTDESC_ID=G.ID"
+                                    + " WHERE PICTURE like ? AND MEMBER like ? AND PATH LIKE ?  AND (COST BETWEEN ? AND ?)  AND isdel=0 AND (date(date(substr(create_time,0,5)|| '-'||substr(create_time,5,2)|| '-' || substr(create_time,7,2))) between date(?) and date(?))   ORDER BY CREATE_LONGTIME ASC",
+                            new String[]
+                            { haspic, member, categorypath, costMin, costMax,
+                                    startDay, endDay });
+        }
     }
 
     private static Cursor getDayTradeCursor(String dayStr)

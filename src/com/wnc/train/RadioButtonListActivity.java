@@ -26,7 +26,6 @@ public class RadioButtonListActivity extends Activity
         setContentView(R.layout.train_list);
 
         names = getTrainNames();
-        System.out.println(names);
         radioButtonList = (ListView) findViewById(R.id.list);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_multiple_choice, names);
