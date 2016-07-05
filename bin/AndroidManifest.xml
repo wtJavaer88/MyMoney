@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest android:versionCode="100" android:versionName="2.1.0" package="com.wnc.mymoney"
+<manifest android:versionCode="100" android:versionName="3.6" package="com.wnc.mymoney"
   xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
