@@ -298,9 +298,7 @@ public class TrainTicketActivity extends Activity implements OnClickListener
     {
         if (BasicStringUtil.isNullString(startCityCode, arriveCityCode))
         {
-            reset();
-            noTicket("城市名不正确!");
-            ToastUtil.showShortToast(TrainTicketActivity.this, "城市名不正确!");
+            illegalParamAndReset("城市名不正确!");
             return false;
         }
         return true;
@@ -319,20 +317,27 @@ public class TrainTicketActivity extends Activity implements OnClickListener
         if (BasicStringUtil.isNullString(time)
                 || !BasicNumberUtil.isNumberString(time))
         {
-            ToastUtil.showShortToast(this, "请输入一个数字!");
+            illegalParamAndReset("请输入一个数字!");
             return false;
         }
         if (BasicNumberUtil.getNumber(time) < 10)
         {
-            ToastUtil.showShortToast(this, "监控时间不能小于10秒!");
+            illegalParamAndReset("监控时间不能小于10秒!");
             return false;
         }
         if (BasicNumberUtil.getNumber(time) > 3600)
         {
-            ToastUtil.showShortToast(this, "监控时间不能大于1个小时!");
+            illegalParamAndReset("监控时间不能大于1个小时!");
             return false;
         }
         return true;
+    }
+
+    private void illegalParamAndReset(String msg)
+    {
+        reset();
+        noTicket(msg);
+        ToastUtil.showShortToast(this, msg);
     }
 
     public void enableTrainBt(boolean b)
@@ -354,17 +359,12 @@ public class TrainTicketActivity extends Activity implements OnClickListener
     {
         if (BasicStringUtil.isNullString(result))
         {
-            reset();
-            noTicket("获取数据失败!");
-            ToastUtil.showShortToast(this, "获取数据失败!");
-            enableTrainBt(true);
+            illegalParamAndReset("获取数据失败!");
             return false;
         }
         else if (result.contains("不在预售日期"))
         {
-            reset();
-            noTicket("你选择的日期不在预售期内!");
-            ToastUtil.showLongToast(this, "你选择的日期不在预售日期内!");
+            illegalParamAndReset("你选择的日期不在预售日期内!");
             return false;
         }
 
