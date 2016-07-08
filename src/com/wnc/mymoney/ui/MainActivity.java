@@ -24,6 +24,7 @@ import com.wnc.mymoney.util.SysInit;
 import com.wnc.mymoney.util.TOTAL_RANGE;
 import com.wnc.mymoney.util.TextFormatUtil;
 import com.wnc.train.TrainTicketActivity;
+import com.wnc.train.TrainUIMsgHelper;
 
 public class MainActivity extends Activity
 {
@@ -242,6 +243,8 @@ public class MainActivity extends Activity
         this.unbindService(conn);
 
         BackUpDataUtil.backup(this, BackupTimeModel.TIMELY, NetChannel.EMAIL);
+
+        TrainUIMsgHelper.stopVibrator();
         super.onDestroy();
     }
 

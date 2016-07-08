@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 import train.dao.StationDao;
 import train.model.QueryModel;
-import train.parser.TicParser;
 import train.util.HttpsConnUtil;
 import android.app.Activity;
 import android.content.Intent;
@@ -19,7 +18,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.wnc.basic.BasicDateUtil;
-import com.wnc.basic.BasicNumberUtil;
 import com.wnc.basic.BasicStringUtil;
 import com.wnc.mymoney.R;
 import com.wnc.mymoney.ui.helper.AfterWheelChooseListener;
@@ -42,13 +40,14 @@ public class TrainTicketActivity extends Activity implements OnClickListener
     private TextView result_Tv;
 
     private Handler handler_watch = new WatchHandler(this);
-    final int WATCH_DURATION = 30;
-    final int ERR_SHOW_TIME = 2000;
-    boolean firstWatch = true;
-    boolean abortSearch = false;
+    private final int DEFAULT_WATCH_DURATION = 30;
+    public final int ERR_SHOW_TIME = 2000;// 错误消息显示时间
+    private boolean firstWatch = true;
+    private boolean abortSearch = false;
 
-    String startCityCode;
-    String arriveCityCode;
+    private String startCityCode;
+    private String arriveCityCode;
+    private String url;// WatchHandler中的reWatch中还会用到
 
     private ComboBox t_combobox;
 
@@ -58,9 +57,17 @@ public class TrainTicketActivity extends Activity implements OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ticket_activity);
         initViews();
+        // 对ui助手进行初始化
+        initTrainUIMsgHelper();
     }
 
-    public void initViews()
+    private void initTrainUIMsgHelper()
+    {
+        TrainUIMsgHelper.trainTicketActivity = this;
+        TrainUIMsgHelper.vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+    }
+
+    private void initViews()
     {
         watch_Btn = (Button) findViewById(R.id.watch_btn);
         chooseTrain_Btn = (Button) findViewById(R.id.trains_choose_bt);
@@ -78,7 +85,7 @@ public class TrainTicketActivity extends Activity implements OnClickListener
         date_Tv.setText(TextFormatUtil.addSeparatorToDay(BasicDateUtil
                 .getCurrentDateString()));
 
-        trains_fre_Et.setText("" + WATCH_DURATION);
+        trains_fre_Et.setText("" + DEFAULT_WATCH_DURATION);
         t_combobox.setData(Arrays.asList("10", "20", "30", "40", "50", "60"));
         t_combobox.setListViewOnClickListener(new ListViewItemClickListener()
         {
@@ -96,7 +103,18 @@ public class TrainTicketActivity extends Activity implements OnClickListener
         if (v.getId() == R.id.watch_btn)
         {
             abortSearch = false;
-            enableWatchBt(false);
+            TrainUIMsgHelper.disableAllBt();
+            if (!TrainUIValidator.validTime(trains_fre_Et.getText().toString()))
+            {
+                return;
+            }
+
+            url = getUrl();
+            if (BasicStringUtil.isNullString(url))
+            {
+                return;
+            }
+
             watch();
         }
     }
@@ -120,10 +138,8 @@ public class TrainTicketActivity extends Activity implements OnClickListener
                         }
                         else
                         {
-                            // System.out.println("日期:" + day);
                             date_Tv.setText(day);
                         }
-
                     }
 
                 });
@@ -137,22 +153,21 @@ public class TrainTicketActivity extends Activity implements OnClickListener
     public void stopSearch(View v)
     {
         abortSearch = true;
-        resetFirstWatch();
-        // this.trains_Tv.setText("");
         this.result_Tv.setText("请点击监控开始查询!");
-
-        enableAllBt();
+        TrainUIMsgHelper.stopVibrator();
+        reset();
     }
 
     public void chooseTrains(View v)
     {
-        final String url = getUrl();
-        if (BasicStringUtil.isNullString(url))
+        TrainUIMsgHelper.disableAllBt();
+
+        final String t_url = getUrl();
+        if (BasicStringUtil.isNullString(t_url))
         {
-            enableTrainBt(true);
+            reset();
             return;
         }
-        enableTrainBt(false);
 
         Thread thread = new Thread(new Runnable()
         {
@@ -179,7 +194,7 @@ public class TrainTicketActivity extends Activity implements OnClickListener
                     try
                     {
                         result = HttpsConnUtil.requestHTTPSPage(
-                                TrainTicketActivity.this, url);
+                                TrainTicketActivity.this, t_url);
                         msg.what = 2;
                         msg.obj = result;
                         handler_watch.sendMessage(msg);
@@ -201,34 +216,37 @@ public class TrainTicketActivity extends Activity implements OnClickListener
     {
         startCityCode = getCityCode(startStation_Et.getText().toString());
         arriveCityCode = getCityCode(destStation_Et.getText().toString());
-
-        if (!validStation(startCityCode, arriveCityCode))
+        if (!TrainUIValidator.validStation(startCityCode, arriveCityCode))
         {
             return "";
         }
-        QueryModel queryModel = new QueryModel();
-        return queryModel.build(date_Tv.getText().toString(), startCityCode,
-                arriveCityCode);
+        return new QueryModel().build(date_Tv.getText().toString(),
+                startCityCode, arriveCityCode);
     }
 
-    private void watch()
+    private String getCityCode(String cityName)
     {
-        // 禁用其它按钮
-        enableTrainBt(false);
-        enableDateBt(false);
-
-        if (!validTime())
+        if (BasicStringUtil.isNullString(cityName))
         {
-            return;
+            return "";
         }
+        return StationDao.getCityCode(TrainTicketActivity.this, cityName);
+    }
 
-        final String url = getUrl();
-        if (BasicStringUtil.isNullString(url))
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        TrainUIMsgHelper.enableAllBt();
+        if (requestCode == 100 && data != null)
         {
-            return;
+            String codes = data.getStringExtra("selTrainCodes");
+            this.trains_Tv.setText(codes);
         }
+    }
 
-        runTicket();
+    public void watch()
+    {
+        TrainUIMsgHelper.runMsg();
         Thread thread = new Thread(new Runnable()
         {
             Message msg = new Message();
@@ -278,232 +296,50 @@ public class TrainTicketActivity extends Activity implements OnClickListener
         thread.start();
     }
 
-    private void reWatch(String msg)
-    {
-        noTicket(msg);
-        ToastUtil.showShortToast(this, msg);
-        watch();
-    }
-
-    private String getCityCode(String cityName)
-    {
-        if (BasicStringUtil.isNullString(cityName))
-        {
-            return "";
-        }
-        return StationDao.getCityCode(TrainTicketActivity.this, cityName);
-    }
-
-    private boolean validStation(String startCityCode, String arriveCityCode)
-    {
-        if (BasicStringUtil.isNullString(startCityCode, arriveCityCode))
-        {
-            illegalParamAndReset("城市名不正确!");
-            return false;
-        }
-        return true;
-    }
-
-    private void reset()
-    {
-        // TODO Auto-generated method stub
-        resetFirstWatch();
-        enableAllBt();
-    }
-
-    private boolean validTime()
-    {
-        String time = trains_fre_Et.getText().toString();
-        if (BasicStringUtil.isNullString(time)
-                || !BasicNumberUtil.isNumberString(time))
-        {
-            illegalParamAndReset("请输入一个数字!");
-            return false;
-        }
-        if (BasicNumberUtil.getNumber(time) < 10)
-        {
-            illegalParamAndReset("监控时间不能小于10秒!");
-            return false;
-        }
-        if (BasicNumberUtil.getNumber(time) > 3600)
-        {
-            illegalParamAndReset("监控时间不能大于1个小时!");
-            return false;
-        }
-        return true;
-    }
-
-    private void illegalParamAndReset(String msg)
-    {
-        reset();
-        noTicket(msg);
-        ToastUtil.showShortToast(this, msg);
-    }
-
-    public void enableTrainBt(boolean b)
-    {
-        chooseTrain_Btn.setEnabled(b);
-    }
-
-    public void enableDateBt(boolean b)
-    {
-        chooseDate_Btn.setEnabled(b);
-    }
-
-    public void enableWatchBt(boolean b)
-    {
-        watch_Btn.setEnabled(b);
-    }
-
-    public boolean checkResult(String result)
-    {
-        if (BasicStringUtil.isNullString(result))
-        {
-            illegalParamAndReset("获取数据失败!");
-            return false;
-        }
-        else if (result.contains("不在预售日期"))
-        {
-            illegalParamAndReset("你选择的日期不在预售日期内!");
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * 找到票后, 手机振动
-     */
-    private void vibratorPhone()
-    {
-        Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-        long[] pattern =
-        { 1000, 10000, 3000, 20000, 5000, 30000 }; // OFF/ON/OFF/ON......
-        vibrator.vibrate(pattern, -1);// 禁止循环
-    }
-
-    private void getTicket()
-    {
-        result_Tv.setText("有票!");
-    }
-
-    private void runTicket()
-    {
-        result_Tv.setText("正在检查..." + BasicDateUtil.getCurrentDateTimeString());
-    }
-
-    private void noTicket(String errMsg)
-    {
-        // enableAllBt();
-
-        result_Tv.setText(errMsg);
-        Thread thread = new Thread(new Runnable()
-        {
-            Message msg = new Message();
-
-            @Override
-            public void run()
-            {
-                try
-                {
-
-                    Thread.sleep(ERR_SHOW_TIME);
-                    msg.what = 3;
-                    handler_watch.sendMessage(msg);
-                }
-                catch (Exception ex)
-                {
-                    msg.what = 4;
-                    handler_watch.sendMessage(msg);
-                }
-            }
-        });
-        thread.setDaemon(true);
-        thread.start();
-    }
-
-    private void resetFirstWatch()
+    public void reset()
     {
         this.firstWatch = true;
-    }
-
-    private void enableAllBt()
-    {
-        enableWatchBt(true);
-        enableDateBt(true);
-        enableTrainBt(true);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        enableTrainBt(true);
-        if (requestCode == 100 && data != null)
-        {
-            String codes = data.getStringExtra("selTrainCodes");
-            // System.out.println("back:  " + codes);
-            this.trains_Tv.setText(codes);
-        }
-    }
-
-    public void parseResult(String result)
-    {
-        if (abortSearch)
-        {
-            return;
-        }
-        if (!checkResult(result))
-        {
-            return;
-        }
-
-        TicParser ticParser = new TicParser(result);
-        ticParser.refresh();
-        ticParser.parse();
-
-        for (String train : trains_Tv.getText().toString().split(","))
-        {
-            ticParser.addAssignTrain(train.trim().toUpperCase());
-        }
-        if (ticParser.getTicketInfos().size() > 0)
-        {
-            if (ticParser.checkAvaliable())
-            {
-                if (!abortSearch)
-                {
-                    getTicket();
-                    vibratorPhone();
-                }
-            }
-            else
-            {
-                if (!abortSearch)
-                {
-                    reWatch("指定班次已经没有任何余票!");
-                }
-            }
-        }
-        else
-        {
-            if (!abortSearch)
-            {
-                reWatch("没查到指定的班次!");
-            }
-        }
-
-    }
-
-    public void clearErrMsg()
-    {
-        if (!result_Tv.getText().toString().contains("正在检查"))
-        {
-            result_Tv.setText("");
-        }
+        TrainUIMsgHelper.enableAllBt();
     }
 
     public void putNewTrains(String[] trains)
     {
         CityTrainsHolder.putCityTrains(startCityCode + "-" + arriveCityCode,
                 trains);
+    }
+
+    public String[] getSelTrains()
+    {
+        return trains_Tv.getText().toString().split(",");
+    }
+
+    public TextView getResult_Tv()
+    {
+        return result_Tv;
+    }
+
+    public Button getChooseTrain_Btn()
+    {
+        return chooseTrain_Btn;
+    }
+
+    public Button getChooseDate_Btn()
+    {
+        return chooseDate_Btn;
+    }
+
+    public Button getWatch_Btn()
+    {
+        return watch_Btn;
+    }
+
+    public boolean isAbortSearch()
+    {
+        return abortSearch;
+    }
+
+    public Handler getHandler_watch()
+    {
+        return this.handler_watch;
     }
 }
