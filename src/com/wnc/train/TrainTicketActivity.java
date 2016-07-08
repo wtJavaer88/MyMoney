@@ -12,7 +12,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -27,7 +26,7 @@ import com.wnc.mymoney.ui.widget.ComboBox.ListViewItemClickListener;
 import com.wnc.mymoney.util.TextFormatUtil;
 import com.wnc.mymoney.util.ToastUtil;
 
-public class TrainTicketActivity extends Activity implements OnClickListener
+public class TrainTicketActivity extends Activity
 {
     private Button watch_Btn;
     private Button chooseTrain_Btn;
@@ -76,15 +75,13 @@ public class TrainTicketActivity extends Activity implements OnClickListener
 
         startStation_Et = (EditText) findViewById(R.id.start_et);
         destStation_Et = (EditText) findViewById(R.id.dest_et);
-        date_Tv = (TextView) findViewById(R.id.date_tv);
         trains_fre_Et = (EditText) findViewById(R.id.trains_fre);
+        date_Tv = (TextView) findViewById(R.id.date_tv);
         trains_Tv = (TextView) findViewById(R.id.trains_tv);
         result_Tv = (TextView) findViewById(R.id.result_tv);
-        watch_Btn.setOnClickListener(this);
 
         date_Tv.setText(TextFormatUtil.addSeparatorToDay(BasicDateUtil
                 .getCurrentDateString()));
-
         trains_fre_Et.setText("" + DEFAULT_WATCH_DURATION);
         t_combobox.setData(Arrays.asList("10", "20", "30", "40", "50", "60"));
         t_combobox.setListViewOnClickListener(new ListViewItemClickListener()
@@ -97,26 +94,22 @@ public class TrainTicketActivity extends Activity implements OnClickListener
         });
     }
 
-    @Override
-    public void onClick(View v)
+    public void watchTickets(View v)
     {
-        if (v.getId() == R.id.watch_btn)
+        abortSearch = false;
+        TrainUIMsgHelper.disableAllBt();
+        if (!TrainUIValidator.validTime(trains_fre_Et.getText().toString()))
         {
-            abortSearch = false;
-            TrainUIMsgHelper.disableAllBt();
-            if (!TrainUIValidator.validTime(trains_fre_Et.getText().toString()))
-            {
-                return;
-            }
-
-            url = getUrl();
-            if (BasicStringUtil.isNullString(url))
-            {
-                return;
-            }
-
-            watch();
+            return;
         }
+
+        url = getUrl();
+        if (BasicStringUtil.isNullString(url))
+        {
+            return;
+        }
+
+        watch();
     }
 
     public void chooseDate(View v)

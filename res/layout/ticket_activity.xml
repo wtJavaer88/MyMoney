@@ -129,6 +129,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:text="监 控"
+	        android:onClick="watchTickets"
 	        />
         <Button
 	        android:id="@+id/clearTrans_btn"
