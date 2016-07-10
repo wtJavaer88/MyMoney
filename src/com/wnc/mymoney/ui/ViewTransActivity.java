@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -83,6 +84,7 @@ public class ViewTransActivity extends BaseActivity implements
             ToastUtil.showLongToast(this, "要查看的交易记录为空!");
             finish();
         }
+        Log.i("debug-uuid","view:"+viewedTrade.getUuid());
     }
 
     private void initCombobox()

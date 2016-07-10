@@ -6,7 +6,11 @@ import com.wnc.string.BeanToStringUtil;
 
 public class Trade implements Serializable
 {
-    private int id;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private int id;
     private int type_id;
     private double cost;
 
@@ -23,6 +27,8 @@ public class Trade implements Serializable
     private String modifytime;
     private String createlongtime;
 
+    private String uuid;
+    
     public int getId()
     {
         return this.id;
@@ -152,20 +158,24 @@ public class Trade implements Serializable
     {
         this.createlongtime = createlongtime;
     }
+    public String getUuid() {
+		return uuid;
+	}
 
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+	
     @Override
-    public String toString()
-    {
-        try
-        {
-            return BeanToStringUtil.getBeanString(this);
-        }
-        catch (IllegalAccessException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return "";
-    }
+	public String toString() {
+		return "Trade [id=" + id + ", type_id=" + type_id + ", cost=" + cost
+				+ ", member=" + member + ", costlevel_id=" + costlevel_id
+				+ ", costdesc_id=" + costdesc_id + ", memo=" + memo
+				+ ", project=" + project + ", shop=" + shop + ", haspicture="
+				+ haspicture + ", createtime=" + createtime + ", modifytime="
+				+ modifytime + ", createlongtime=" + createlongtime + ", uuid="
+				+ uuid + "]";
+	}
+
 
 }

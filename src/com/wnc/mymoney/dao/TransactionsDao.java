@@ -29,7 +29,7 @@ public class TransactionsDao
                 null);
     }
 
-    public static boolean insert(Trade trade) throws RuntimeException
+    public static boolean insert(Trade trade)
     {
         if (db == null)
         {
@@ -39,20 +39,21 @@ public class TransactionsDao
         try
         {
             db.execSQL(
-                    "INSERT INTO transactions(ID,TYPE_ID,COSTLEVEL_ID,COSTDESC_ID,MEMBER,SHOP,PROJECT,COST,HASPICTURE,CREATE_TIME,CREATE_LONGTIME,MODIFY_TIME,MEMO) VALUES (NULL,?,?,?,?,?,?,?,?,?,?,?,?)",
+                    "INSERT INTO transactions(ID,TYPE_ID,COSTLEVEL_ID,COSTDESC_ID,MEMBER,SHOP,PROJECT,COST,HASPICTURE,CREATE_TIME,CREATE_LONGTIME,MODIFY_TIME,MEMO,UUID) VALUES (NULL,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                     new Object[]
                     { trade.getType_id(), trade.getCostlevel_id(),
                             trade.getCostdesc_id(), trade.getMember(),
                             trade.getShop(), trade.getProject(),
                             trade.getCost(), trade.getHaspicture(),
                             trade.getCreatetime(), trade.getCreatelongtime(),
-                            trade.getModifytime(), trade.getMemo() });
+                            trade.getModifytime(), trade.getMemo(),
+                            trade.getUuid()});
             trigger();
         }
         catch (Exception ex)
         {
             System.out.println(ex.getMessage());
-            // throw new RuntimeException(ex.getMessage());
+            throw new RuntimeException(ex.getMessage());
         }
         return true;
     }
@@ -134,6 +135,7 @@ public class TransactionsDao
             bean.setCreatelongtime(getStrValue(c, "CREATE_LONGTIME"));
             bean.setModifytime(getStrValue(c, "MODIFY_TIME"));
             bean.setMemo(getStrValue(c, "MEMO"));
+            bean.setUuid(getStrValue(c, "UUID"));
             list.add(bean);
         }
         c.close();
@@ -265,6 +267,7 @@ public class TransactionsDao
             trade.setCreatelongtime(getStrValue(c, "CREATE_LONGTIME"));
             trade.setModifytime(getStrValue(c, "MODIFY_TIME"));
             trade.setMemo(getStrValue(c, "MEMO"));
+            trade.setUuid(getStrValue(c, "UUID"));
             break;
         }
         return trade;
@@ -301,6 +304,7 @@ public class TransactionsDao
             trade.setCreatelongtime(getStrValue(c, "CREATE_LONGTIME"));
             trade.setModifytime(getStrValue(c, "MODIFY_TIME"));
             trade.setMemo(getStrValue(c, "MEMO"));
+            trade.setUuid(getStrValue(c, "UUID"));
             break;
         }
         return trade;
@@ -486,4 +490,19 @@ public class TransactionsDao
         closeDb();
         return true;
     }
+
+	public static boolean checkTradeUUIDExist(String uuid) {
+		if (db == null)
+        {
+            Log.e("dao", "Not opened Db !");
+            return false;
+        }
+		Cursor c = db.rawQuery(
+                 "SELECT * FROM TRANSACTIONS WHERE UUID = ? AND isdel=0",
+                 new String[]{ uuid});
+		while (c != null && c.moveToNext()){
+			return true;
+		}
+		return false;
+	}
 }

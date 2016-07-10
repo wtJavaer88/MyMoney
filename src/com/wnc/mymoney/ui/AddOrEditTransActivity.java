@@ -45,6 +45,8 @@ import com.wnc.mymoney.ui.widget.ComboBox;
 import com.wnc.mymoney.ui.widget.ComboBox.ListViewItemClickListener;
 import com.wnc.mymoney.util.ClipBoardUtil;
 import com.wnc.mymoney.util.CostTypeUtil;
+import com.wnc.mymoney.util.GeneratorUtil;
+import com.wnc.mymoney.util.Md5Utils;
 import com.wnc.mymoney.util.MyAppParams;
 import com.wnc.mymoney.util.SysInit;
 import com.wnc.mymoney.util.TextFormatUtil;
@@ -318,20 +320,7 @@ public class AddOrEditTransActivity extends BaseActivity implements
         TextView add_tag_dialg_ok = (TextView) dlg
                 .findViewById(R.id.add_tag_dialg_ok);
         add_tag_dialg_title.setText("导入消费记录");
-
-        Trade parseTrade = null;
-        try
-        {
-            parseTrade = getParsedTradeFromClipboard();
-            add_tag_dialg_content.setText("时间:" + parseTrade.getCreatetime());
-            add_tag_dialg_content.append(" 金额:" + parseTrade.getCost());
-            add_tag_dialg_content.append(" 成员:" + parseTrade.getMember());
-        }
-        catch (Exception ex)
-        {
-            add_tag_dialg_content.setText("你复制的内容无效!");
-            ToastUtil.showShortToast(getApplicationContext(), "记录格式不对!");
-        }
+        
         add_tag_dialg_no.setOnClickListener(new OnClickListener()
         {
             @Override
@@ -340,28 +329,56 @@ public class AddOrEditTransActivity extends BaseActivity implements
                 dlg.dismiss();
             }
         });
-        final Trade parseTrade2 = parseTrade;
-        add_tag_dialg_ok.setOnClickListener(new OnClickListener()
+        
+        Trade parseTrade = null;
+        try
         {
-            @Override
-            public void onClick(View v)
+            parseTrade = getParsedTradeFromClipboard();
+            add_tag_dialg_content.setText("时间:" + parseTrade.getCreatetime());
+            add_tag_dialg_content.append(" 金额:" + parseTrade.getCost());
+            add_tag_dialg_content.append(" 成员:" + parseTrade.getMember());
+            final Trade parseTrade2 = parseTrade;
+            add_tag_dialg_ok.setOnClickListener(new OnClickListener()
             {
-                if (parseTrade2 != null)
+                @Override
+                public void onClick(View v)
                 {
-                    // importTrade(parseTrade2);
-                    try
+                	
+                    if (parseTrade2 != null)
                     {
-                        setViewsByExistTrade(parseTrade2);
+                        // importTrade(parseTrade2);
+                    	try
+                        {
+                    		TransactionsDao.initDb(getApplicationContext());
+	                    	if(complictTrade(parseTrade2.getUuid())){
+	                    		ToastUtil.showLongToast(getApplicationContext(), "该记录已经保存过!");
+	                    	}
+	                    	else{
+	                    		setViewsByExistTrade(parseTrade2);
+	                    	}
+                        }
+                        catch (Exception ex)
+                        {
+                            ex.printStackTrace();
+                        }
+                    	finally{
+                    		TransactionsDao.closeDb();
+                    	}
                     }
-                    catch (Exception ex)
-                    {
-                        ex.printStackTrace();
-                    }
+                    dlg.dismiss();
                 }
-                dlg.dismiss();
-            }
-        });
 
+				private boolean complictTrade(String uuid) {
+					// TODO 是否在数据库中重复了uuid
+					return !TransactionsDao.checkTradeUUIDExist(uuid);
+				}
+            });
+        }
+        catch (Exception ex)
+        {
+            add_tag_dialg_content.setText("你复制的内容无效!");
+            ToastUtil.showShortToast(getApplicationContext(), "记录格式不对!");
+        }
     }
 
     private void rollbackMemo()
@@ -728,6 +745,7 @@ public class AddOrEditTransActivity extends BaseActivity implements
         {
             trade.setHaspicture(0);
         }
+        trade.setUuid(GeneratorUtil.getUUID());
         return trade;
     }
 
