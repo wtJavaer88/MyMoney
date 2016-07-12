@@ -173,12 +173,11 @@ public class TrainTicketActivity extends Activity
                 // String result =
                 // "\"validateMessagesShowId\":\"_validatorMessage\",\"status\":true,\"httpstatus\":200,\"data\":[{\"queryLeftNewDTO\":{\"train_no\":\"65000K165600\",\"station_train_code\":\"K1656\",\"start_station_telecode\":\"BJQ\",\"start_station_name\":\"深圳东\",\"end_station_telecode\":\"XFN\",\"end_station_name\":\"襄阳\",\"from_station_telecode\":\"HSN\",\"from_station_name\":\"黄石\",\"to_station_telecode\":\"HKN\",\"to_station_name\":\"汉口\",\"start_time\":\"05:36\",\"arrive_time\":\"07:55\",\"day_difference\":\"0\",\"train_class_name\":\"\",\"lishi\":\"02:19\",\"canWebBuy\":\"Y\",\"lishiValue\":\"139\",\"yp_info\":\"1001953130400995000910019500923006550085\",\"control_train_day\":\"20991231\",\"start_train_date\":\"20160704\",\"seat_feature\":\"W3431333\",\"yp_ex\":\"10401030\",\"train_seat_feature\":\"3\",\"seat_types\":\"1413\",\"location_code\":\"Q9\",\"from_station_no\":\"12\",\"to_station_no\":\"14\",\"control_day\":59,\"sale_time\":\"1800\",\"is_support_card\":\"0\",\"controlled_train_flag\":\"0\",\"controlled_train_message\":\"正常车次，不受控\",\"gg_num\":\"--\",\"gr_num\":\"--\",\"qt_num\":\"--\",\"rw_num\":\"9\",\"rz_num\":\"--\",\"tz_num\":\"--\",\"wz_num\":\"有\",\"yb_num\":\"--\",\"yw_num\":\"有\",\"yz_num\":\"有\",\"ze_num\":\"--\",\"zy_num\":\"--\",\"swz_num\":\"--\"},\"secretStr\":\"MjAxNi0wNy0wNSMwMCNLMTY1NiMwMjoxOSMwNTozNiM2NTAwMEsxNjU2MDAjSFNOI0hLTiMwNzo1NSPpu4Tnn7Mj5rGJ5Y%2BjIzEyIzE0IzEwMDE5NTMxMzA0MDA5OTUwMDA5MTAwMTk1MDA5MjMwMDY1NTAwODUjUTkjMTQ2NzYxNjY3Mjg1OSMxNDYyNjE1MjAwMDAwIzFENjUzNTJCNDM2NTgxNkM4MkEyQ0Y2NzgxRjEzQzY5NDA0NjNDRkM1MjdCRjdERDUzNkM2QTY1\",\"buttonTextInfo\":\"预订\"},{\"queryLeftNewDTO\":{\"train_no\":\"5500000Z2710\",\"station_train_code\":\"Z26\",\"start_station_telecode\":\"SNH\",\"start_station_name\":\"上海南\",\"end_station_telecode\":\"WCN\",\"end_station_name\":\"武昌\",\"from_station_telecode\":\"HSN\",\"from_station_name\":\"黄石\",\"to_station_telecode\":\"WCN\",\"to_station_name\":\"武昌\",\"start_time\":\"06:22\",\"arrive_time\":\"07:33\",\"day_difference\":\"0\",\"train_class_name\":\"\",\"lishi\":\"01:11\",\"canWebBuy\":\"Y\",\"lishiValue\":\"71\",\"yp_info\":\"40096500273006250186\",\"control_train_day\":\"20991231\",\"start_train_date\":\"20160704\",\"seat_feature\":\"3343\",\"yp_ex\":\"4030\",\"train_seat_feature\":\"3\",\"seat_types\":\"43\",\"location_code\":\"H3\",\"from_station_no\":\"03\",\"to_station_no\":\"05\",\"control_day\":59,\"sale_time\":\"1800\",\"is_support_card\":\"0\",\"controlled_train_flag\":\"0\",\"controlled_train_message\":\"正常车次，不受控\",\"gg_num\":\"--\",\"gr_num\":\"--\",\"qt_num\":\"--\",\"rw_num\":\"有\",\"rz_num\":\"--\",\"tz_num\":\"--\",\"wz_num\":\"--\",\"yb_num\":\"--\",\"yw_num\":\"有\",\"yz_num\":\"--\",\"ze_num\":\"--\",\"zy_num\":\"--\",\"swz_num\":\"--\"},\"secretStr\":\"MjAxNi0wNy0wNSMwMCNaMjYjMDE6MTEjMDY6MjIjNTUwMDAwMFoyNzEwI0hTTiNXQ04jMDc6MzMj6buE55%2BzI%2BatpuaYjCMwMyMwNSM0MDA5NjUwMDI3MzAwNjI1MDE4NiNIMyMxNDY3NjE2NjcyODU5IzE0NjI2MTUyMDAwMDAjQTZFNDc5RTczRTU0RUU3NzM1QkVFRUI0NDY3NjM3ODRFRTUxNTg0NjQ1MTZDMzZDOTNBRjhCMjE%3D\",\"buttonTextInfo\":\"预订\"},{\"queryLeftNewDTO\":{\"train_no\":\"5e00000Z3210\",\"station_train_code\":\"Z32\",\"start_station_telecode\":\"NGH\",\"start_station_name\":\"宁波\",\"end_station_telecode\":\"WCN\",\"end_station_name\":\"武昌\",\"from_station_telecode\":\"HSN\",\"from_station_name\":\"黄石\",\"to_station_telecode\":\"WCN\",\"to_station_name\":\"武昌\",\"start_time\":\"06:28\",\"arrive_time\":\"07:39\",\"day_difference\":\"0\",\"train_class_name\":\"\",\"lishi\":\"01:11\",\"canWebBuy\":\"Y\",\"lishiValue\":\"71\",\"yp_info\":\"1001653036400965002710016500043006250058\",\"control_train_day\":\"20991231\",\"start_train_date\":\"20160704\",\"seat_feature\":\"W3431333\",\"yp_ex\":\"10401030\",\"train_seat_feature\":\"3\",\"seat_types\":\"1413\",\"location_code\":\"H3\",\"from_station_no\":\"05\",\"to_station_no\":\"07\",\"control_day\":59,\"sale_time\":\"1800\",\"is_support_card\":\"0\",\"controlled_train_flag\":\"0\",\"controlled_train_message\":\"正常车次，不受控\",\"gg_num\":\"--\",\"gr_num\":\"--\",\"qt_num\":\"--\",\"rw_num\":\"有\",\"rz_num\":\"--\",\"tz_num\":\"--\",\"wz_num\":\"有\",\"yb_num\":\"--\",\"yw_num\":\"有\",\"yz_num\":\"4\",\"ze_num\":\"--\",\"zy_num\":\"--\",\"swz_num\":\"--\"},\"secretStr\":\"MjAxNi0wNy0wNSMwMCNaMzIjMDE6MTEjMDY6MjgjNWUwMDAwMFozMjEwI0hTTiNXQ04jMDc6Mzkj6buE55%2BzI%2BatpuaYjCMwNSMwNyMxMDAxNjUzMDM2NDAwOTY1MDAyNzEwMDE2NTAwMDQzMDA2MjUwMDU4I0gzIzE0Njc2MTY2NzI4NTkjMTQ2MjYxNTIwMDAwMCNDQjQxMUQ2MkU0MUM4QTFDOUQ2RTU5MUMyNEUxQ0QwM0NFND";
 
-                if (CityTrainsHolder.containsCityInfo(startCityCode + "-"
-                        + arriveCityCode))
+                if (CityTrainsHolder.containsCityInfo(getTwoCityCodeWithDate()))
                 {
                     msg.what = 22;
-                    msg.obj = CityTrainsHolder.getTrains(startCityCode + "-"
-                            + arriveCityCode);
+                    msg.obj = CityTrainsHolder
+                            .getTrains(getTwoCityCodeWithDate());
                     handler_watch.sendMessage(msg);
 
                 }
@@ -295,10 +294,9 @@ public class TrainTicketActivity extends Activity
         TrainUIMsgHelper.enableAllBt();
     }
 
-    public void putNewTrains(String[] trains)
+    public String getTwoCityCodeWithDate()
     {
-        CityTrainsHolder.putCityTrains(startCityCode + "-" + arriveCityCode,
-                trains);
+        return startCityCode + "-" + arriveCityCode + this.date_Tv.getText();
     }
 
     public String[] getSelTrains()

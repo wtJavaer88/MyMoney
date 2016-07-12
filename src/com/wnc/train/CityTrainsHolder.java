@@ -17,7 +17,7 @@ public class CityTrainsHolder
         return cityTrains.get(key);
     }
 
-    public static void putCityTrains(String key, String[] value)
+    public static void putTrainsBetweenCities(String key, String[] value)
     {
         cityTrains.put(key, value);
     }

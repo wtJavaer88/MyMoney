@@ -1,16 +1,12 @@
 package com.wnc.train;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import train.entity.TicketInfo;
 import train.parser.TicParser;
+import train.util.TrainsHelper;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.widget.TextView;
 
-import com.wnc.basic.BasicNumberUtil;
 import com.wnc.basic.BasicStringUtil;
 import com.wnc.mymoney.util.ToastUtil;
 
@@ -33,8 +29,22 @@ public class WatchHandler extends Handler
         }
         else if (msg.what == 1)
         {
-            // System.out.println("msg.obj.toString():  " + msg.obj.toString());
-            parseResult(msg.obj.toString());
+            System.out.println("msg1.obj.toString():  " + msg.obj.toString());
+            String result = msg.obj.toString();
+            boolean abortSearch = trainActivity.isAbortSearch();
+            if (abortSearch)
+            {
+                return;
+            }
+            if (!checkResult(result))
+            {
+                return;
+            }
+
+            TicParser ticParser = new TicParser(result);
+            ticParser.refresh();
+            ticParser.parse();
+            parseResult(ticParser, abortSearch);
         }
         else if (msg.what == 22)
         {
@@ -44,6 +54,7 @@ public class WatchHandler extends Handler
         {
             // 查列车信息, 然后跳到列表activity
             String result = msg.obj.toString();
+            System.out.println("msg2.obj.toString():  " + msg.obj.toString());
             if (!checkResult(result))
             {
                 return;
@@ -52,25 +63,13 @@ public class WatchHandler extends Handler
             TicParser ticParser = new TicParser(result);
             ticParser.refresh();
             ticParser.parse();
-            List<String> patternStrings = new ArrayList<String>();
+
             if (ticParser.getTicketInfos() != null)
             {
-                for (TicketInfo ticketInfo : ticParser.getTicketInfos())
+                String[] trains = TrainsHelper.getTrainsArr(ticParser);
+                if (trains != null)
                 {
-                    int costTime = getCostMinutes(ticketInfo);
-                    patternStrings.add(ticketInfo.getTrainCode() + "  ["
-                            + ticketInfo.getStartTime() + " -- "
-                            + ticketInfo.getArriveTime() + "] " + costTime
-                            + "分钟");
-
-                }
-
-                if (patternStrings.size() > 0)
-                {
-                    String[] trains = patternStrings
-                            .toArray(new String[patternStrings.size()]);
-
-                    trainActivity.putNewTrains(trains);
+                    holderTrains(trains);
                     showTainList(trains);
                 }
                 else
@@ -88,6 +87,12 @@ public class WatchHandler extends Handler
 
     }
 
+    private void holderTrains(String[] trains)
+    {
+        CityTrainsHolder.putTrainsBetweenCities(
+                trainActivity.getTwoCityCodeWithDate(), trains);
+    }
+
     private void showTainList(String[] trains)
     {
         Intent localIntent = new Intent();
@@ -95,35 +100,6 @@ public class WatchHandler extends Handler
         localIntent.setClass(trainActivity, RadioButtonListActivity.class);
         trainActivity.startActivityForResult(localIntent, 100);
     };
-
-    private int getCostMinutes(TicketInfo ticketInfo)
-    {
-        String startTime = ticketInfo.getStartTime().replace(":", "");
-        String arriveTime = ticketInfo.getArriveTime().replace(":", "");
-        int h = 0;
-        int m = 0;
-        try
-        {
-            if (BasicNumberUtil.isNumberString(startTime)
-                    && BasicNumberUtil.isNumberString(startTime))
-            {
-
-                int start = Integer.parseInt(startTime);
-                int arrive = Integer.parseInt(arriveTime);
-                if (start > arrive)
-                {
-                    arrive = arrive + 2400;
-                }
-                h = (arrive / 100 - start / 100);
-                m = (arrive % 100 - start % 100);
-            }
-        }
-        catch (Exception ex)
-        {
-            System.out.println(ex);
-        }
-        return h * 60 + m;
-    }
 
     private void clearErrMsg()
     {
@@ -134,21 +110,19 @@ public class WatchHandler extends Handler
         }
     }
 
-    private void parseResult(String result)
+    private void parseResult(TicParser ticParser, boolean abortSearch)
     {
-        boolean abortSearch = trainActivity.isAbortSearch();
-        if (abortSearch)
+        // 第一次搜索的时候, 如果之前没有保存列表, 此时就应该保存一份,以免非要点击列表按钮触发
+        if (!CityTrainsHolder.containsCityInfo(trainActivity
+                .getTwoCityCodeWithDate()))
         {
-            return;
-        }
-        if (!checkResult(result))
-        {
-            return;
+            String[] trains = TrainsHelper.getTrainsArr(ticParser);
+            if (trains != null)
+            {
+                holderTrains(trains);
+            }
         }
 
-        TicParser ticParser = new TicParser(result);
-        ticParser.refresh();
-        ticParser.parse();
         for (String train : trainActivity.getSelTrains())
         {
             ticParser.addAssignTrain(train.trim().toUpperCase());

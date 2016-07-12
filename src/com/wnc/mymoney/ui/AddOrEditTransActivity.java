@@ -49,6 +49,7 @@ import com.wnc.mymoney.util.MyAppParams;
 import com.wnc.mymoney.util.SysInit;
 import com.wnc.mymoney.util.TextFormatUtil;
 import com.wnc.mymoney.util.ToastUtil;
+import com.wnc.mymoney.util.UriUtil;
 
 public class AddOrEditTransActivity extends BaseActivity implements
         OnClickListener
@@ -96,14 +97,16 @@ public class AddOrEditTransActivity extends BaseActivity implements
     private final String[] members = MemberDao.getAllMembers().toArray(
             new String[MemberDao.getCounts()]);
     private final String[] picMenu = new String[]
-    { "相机", "相册" };
+    { "相机2", "相册", "录音" };
 
     private File mPhotoFile;
-    private final int COST_RESULT = 1;
+    private final int COST_PANEL_RESULT = 1;
     private final int CAMERA_RESULT = 100;
-    private final int RESULT_LOAD_IMAGE = 200;
+    private final int LOAD_IMAGE_RESULT = 200;
+    private final int VOICE_RESULT = 300;
 
     private String savePicDir = MyAppParams.getInstance().getTmpPicPath();
+    private String saveVoiceDir = MyAppParams.getInstance().getTmpVoicePath();
     private String lastMemoContent = "";
     private int selectedLeftIndex = 0;
     private int selectedRightIndex = 0;
@@ -430,14 +433,7 @@ public class AddOrEditTransActivity extends BaseActivity implements
             @Override
             public void onClick(DialogInterface arg0, int arg1)
             {
-                if (arg1 == 1)
-                {
-                    Intent i = new Intent(
-                            Intent.ACTION_PICK,
-                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(i, RESULT_LOAD_IMAGE);
-                }
-                else
+                if (arg1 == 0)
                 {
                     String state = Environment.getExternalStorageState();
                     if (state.equals(Environment.MEDIA_MOUNTED))
@@ -470,6 +466,19 @@ public class AddOrEditTransActivity extends BaseActivity implements
                         Toast.makeText(getApplication(), "sdcard无效或没有插入!",
                                 Toast.LENGTH_SHORT).show();
                     }
+                }
+                else if (arg1 == 1)
+                {
+                    Intent intent = new Intent(
+                            Intent.ACTION_PICK,
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(intent, LOAD_IMAGE_RESULT);
+                }
+                else if (arg1 == 2)
+                {
+                    Intent intent = new Intent(
+                            MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+                    startActivityForResult(intent, VOICE_RESULT);
                 }
                 arg0.dismiss();
             }
@@ -569,7 +578,7 @@ public class AddOrEditTransActivity extends BaseActivity implements
         Intent localIntent = new Intent(AddOrEditTransActivity.this,
                 CostKeyboardActivity.class);
         localIntent.putExtra("cost", tranCostBT.getText().toString());
-        startActivityForResult(localIntent, COST_RESULT);
+        startActivityForResult(localIntent, COST_PANEL_RESULT);
     }
 
     private String getTradeJson(Trade trade)
@@ -775,7 +784,7 @@ public class AddOrEditTransActivity extends BaseActivity implements
                 System.out.println("img Err!");
             }
         }
-        if (requestCode == this.RESULT_LOAD_IMAGE && resultCode == RESULT_OK
+        if (requestCode == this.LOAD_IMAGE_RESULT && resultCode == RESULT_OK
                 && null != data)
         {
             Uri selectedImage = data.getData();
@@ -794,10 +803,28 @@ public class AddOrEditTransActivity extends BaseActivity implements
 
         }
 
-        if (requestCode == this.COST_RESULT && data != null)
+        if (requestCode == this.COST_PANEL_RESULT && data != null)
         {
             double cost = data.getDoubleExtra("cost", 0d);
             this.tranCostBT.setText(cost + "");
+        }
+
+        if (requestCode == this.VOICE_RESULT && data != null)
+        {
+            try
+            {
+                File amrFile = UriUtil.getFileByUri(data.getData(), this);
+                if (amrFile != null)
+                {
+                    System.out.println("audio file:"
+                            + amrFile.getAbsolutePath());
+                    backupAndInsertVoice(amrFile.getAbsolutePath());
+                }
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -820,6 +847,32 @@ public class AddOrEditTransActivity extends BaseActivity implements
             fileName = "";
             ToastUtil
                     .showLongToast(this, "拷贝过程中出错!destPicPath: " + destPicPath);
+        }
+        else
+        {
+            insertPicToMemo(new File(destPicPath).getName());
+        }
+    }
+
+    /**
+     * 将图片拷贝一遍
+     * 
+     * @param amrPath
+     */
+    private void backupAndInsertVoice(String amrPath)
+    {
+        String fileName = BasicFileUtil.getFileName(amrPath);
+        String destPicPath = saveVoiceDir + fileName;
+        if (BasicFileUtil.isExistFile(destPicPath))
+        {
+            fileName = BasicDateUtil.getCurrentDateTime() + ".amr";
+            destPicPath = saveVoiceDir + fileName;
+        }
+        if (!BasicFileUtil.CopyFile(amrPath, destPicPath))
+        {
+            fileName = "";
+            ToastUtil.showLongToast(this, "拷贝过程中出错!destVoicePath: "
+                    + destPicPath);
         }
         else
         {
