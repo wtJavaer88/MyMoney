@@ -43,7 +43,7 @@ public class TrainUIMsgHelper
             {
                 try
                 {
-
+                    // 过2秒清理textview的错误信息
                     Thread.sleep(trainTicketActivity.ERR_SHOW_TIME);
                     msg.what = 3;
                     trainTicketActivity.getHandler_watch().sendMessage(msg);
@@ -66,11 +66,24 @@ public class TrainUIMsgHelper
         ToastUtil.showShortToast(trainTicketActivity, msg);
     }
 
-    public static void enableAllBt()
+    public static void disableAllUI()
+    {
+        enableTrainBt(false);
+        enableWatchBt(false);
+        enableDateBt(false);
+        enableClearBtn(false);
+        enableTrains_fre_Et(false);
+        enableCombox(false);
+    }
+
+    public static void enableAllUI()
     {
         enableWatchBt(true);
         enableDateBt(true);
         enableTrainBt(true);
+        enableClearBtn(true);
+        enableCombox(true);
+        enableTrains_fre_Et(true);
     }
 
     /**
@@ -84,25 +97,33 @@ public class TrainUIMsgHelper
         vibrator.vibrate(pattern, -1);// 禁止循环
     }
 
-    public static void enableTrainBt(boolean b)
+    private static void enableTrainBt(boolean b)
     {
         trainTicketActivity.getChooseTrain_Btn().setEnabled(b);
     }
 
-    public static void enableDateBt(boolean b)
+    private static void enableDateBt(boolean b)
     {
         trainTicketActivity.getChooseDate_Btn().setEnabled(b);
     }
 
-    public static void enableWatchBt(boolean b)
+    private static void enableWatchBt(boolean b)
     {
         trainTicketActivity.getWatch_Btn().setEnabled(b);
     }
 
-    public static void disableAllBt()
+    private static void enableClearBtn(boolean b)
     {
-        enableTrainBt(false);
-        enableWatchBt(false);
-        enableDateBt(false);
+        trainTicketActivity.getClear_Btn().setEnabled(b);
+    }
+
+    private static void enableTrains_fre_Et(boolean b)
+    {
+        trainTicketActivity.getTrains_fre_Et().setEnabled(b);
+    }
+
+    private static void enableCombox(boolean b)
+    {
+        trainTicketActivity.getCombox().setEnabled(b);
     }
 }

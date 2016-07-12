@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -24,8 +25,9 @@ import com.wnc.mymoney.bean.Trade;
 import com.wnc.mymoney.dao.TransactionsDao;
 import com.wnc.mymoney.ui.helper.HorGestureDetectorListener;
 import com.wnc.mymoney.ui.helper.MyHorizontalGestureDetector;
-import com.wnc.mymoney.ui.widget.ClickablePicRichText;
 import com.wnc.mymoney.ui.widget.ComboBox;
+import com.wnc.mymoney.ui.widget.richtext.ClickablePicRichText;
+import com.wnc.mymoney.ui.widget.richtext.ClickableVoiceRichText;
 import com.wnc.mymoney.util.CostTypeUtil;
 import com.wnc.mymoney.util.MyAppParams;
 import com.wnc.mymoney.util.TextFormatUtil;
@@ -83,6 +85,7 @@ public class ViewTransActivity extends BaseActivity implements
             ToastUtil.showLongToast(this, "要查看的交易记录为空!");
             finish();
         }
+        Log.i("debug-uuid", "view:" + viewedTrade.getUuid());
     }
 
     private void initCombobox()
@@ -190,18 +193,36 @@ public class ViewTransActivity extends BaseActivity implements
                     msg.what = 0;
                     return;
                 }
-                String path = MyAppParams.getInstance().getTmpPicPath()
-                        + segment.trim();
+                String path = null;
+                boolean isVoiceFile = segment.trim().endsWith("amr");
+                if (isVoiceFile)
+                {
+                    path = MyAppParams.getInstance().getTmpVoicePath()
+                            + segment.trim();
+                }
+                else
+                {
+                    path = MyAppParams.getInstance().getTmpPicPath()
+                            + segment.trim();
+                }
                 System.out.println("segment:" + segment);
                 File file = new File(path);
                 if (file != null && file.isFile() && file.exists())
                 {
                     System.out.println("fileOK");
-                    ClickablePicRichText clickablePicRichText = new ClickablePicRichText(
-                            ViewTransActivity.this, MyAppParams.getInstance()
-                                    .getTmpPicPath() + segment);
-                    msg.obj = clickablePicRichText.getPicCharSequence();
-                    picTexts.add(clickablePicRichText);
+                    if (isVoiceFile)
+                    {
+                        ClickableVoiceRichText clickableVoiceRichText = new ClickableVoiceRichText(
+                                ViewTransActivity.this, path);
+                        msg.obj = clickableVoiceRichText.getSequence();
+                    }
+                    else
+                    {
+                        ClickablePicRichText clickablePicRichText = new ClickablePicRichText(
+                                ViewTransActivity.this, path);
+                        msg.obj = clickablePicRichText.getSequence();
+                        picTexts.add(clickablePicRichText);
+                    }
                 }
                 else
                 {
@@ -223,6 +244,7 @@ public class ViewTransActivity extends BaseActivity implements
             if (msg.what == 1)
             {
                 descriptionTV.append((CharSequence) msg.obj);
+                // descriptionTV.append("\n");
             }
         };
     };

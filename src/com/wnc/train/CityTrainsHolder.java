@@ -6,6 +6,8 @@ import java.util.Map;
 public class CityTrainsHolder
 {
     static Map<String, String[]> cityTrains = new HashMap<String, String[]>();
+    public static int[] lastSelIds;
+    public static String lastCityInfo;
 
     public static boolean containsCityInfo(String key)
     {

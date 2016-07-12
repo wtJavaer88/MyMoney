@@ -34,7 +34,11 @@ $RECYCLE.BIN/
 *.class
 *.tmp
 *.dex
-*.ap_
+bin/class/
+bin/dexedLibs/
+bin/res/
+bin/resources.ap_
+bin/classes.dex
 
 # Files that might appear on external disk
 .Spotlight-V100

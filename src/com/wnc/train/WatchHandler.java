@@ -96,7 +96,9 @@ public class WatchHandler extends Handler
     private void showTainList(String[] trains)
     {
         Intent localIntent = new Intent();
-        localIntent.putExtra("trains", trains);
+        localIntent.putExtra(RadioButtonListActivity.EXTRA_TRAINS, trains);
+        localIntent.putExtra(RadioButtonListActivity.EXTRA_CITIES,
+                trainActivity.getTwoCityNameWithDate());
         localIntent.setClass(trainActivity, RadioButtonListActivity.class);
         trainActivity.startActivityForResult(localIntent, 100);
     };

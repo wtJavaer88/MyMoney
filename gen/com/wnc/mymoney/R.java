@@ -1340,7 +1340,7 @@ containing a value of this type.
     public static final class id {
         public static final int MyBt=0x7f06008c;
         public static final int MyTV=0x7f06008d;
-        public static final int add=0x7f0600ab;
+        public static final int add=0x7f0600ac;
         public static final int add_btn=0x7f060049;
         public static final int add_desc_cancel_btn=0x7f060039;
         public static final int add_expense_quickly_btn=0x7f06000b;
@@ -1359,12 +1359,13 @@ containing a value of this type.
         public static final int category_name_tv=0x7f06002f;
         public static final int category_row_ly=0x7f06002d;
         public static final int check_del=0x7f06004a;
-        public static final int clear=0x7f0600a7;
+        public static final int cities_info=0x7f06009b;
+        public static final int clear=0x7f0600a8;
         public static final int clearTrans_btn=0x7f060096;
         public static final int complete_btn=0x7f060048;
         public static final int complete_sort_btn=0x7f060047;
         public static final int container_pie_chart_fl=0x7f060087;
-        public static final int content=0x7f06009c;
+        public static final int content=0x7f06009d;
         public static final int corporation_tips_tv=0x7f06004e;
         public static final int cost_btn=0x7f06002a;
         public static final int cost_rb=0x7f060084;
@@ -1381,20 +1382,20 @@ containing a value of this type.
         public static final int day_of_payout_tv=0x7f06007a;
         public static final int demo_mode_tips_tv=0x7f06002b;
         public static final int dest_et=0x7f06008f;
-        public static final int digit_input_panel_ly=0x7f06009d;
-        public static final int dot=0x7f0600a9;
+        public static final int digit_input_panel_ly=0x7f06009e;
+        public static final int dot=0x7f0600aa;
         public static final int drag_list_item_image=0x7f06004c;
         public static final int drag_list_item_text=0x7f06004b;
-        public static final int eight=0x7f06009f;
-        public static final int equal=0x7f0600ad;
+        public static final int eight=0x7f0600a0;
+        public static final int equal=0x7f0600ae;
         public static final int expense_amount_tv=0x7f060008;
-        public static final int expense_photo=0x7f0600b0;
+        public static final int expense_photo=0x7f0600b1;
         public static final int filedialogitem_img=0x7f060059;
         public static final int filedialogitem_name=0x7f06005a;
         public static final int filedialogitem_path=0x7f06005b;
         public static final int fill=0x7f060001;
-        public static final int five=0x7f0600a2;
-        public static final int four=0x7f0600a1;
+        public static final int five=0x7f0600a3;
+        public static final int four=0x7f0600a2;
         public static final int go_detail_iv=0x7f060072;
         public static final int haspic_btn=0x7f06007e;
         public static final int header_ly=0x7f060052;
@@ -1408,7 +1409,7 @@ containing a value of this type.
         public static final int item_name_tv=0x7f06006b;
         public static final int item_name_tv1=0x7f06006d;
         public static final int item_type_tv=0x7f060074;
-        public static final int list=0x7f06009b;
+        public static final int list=0x7f06009c;
         public static final int list_layout=0x7f06004f;
         public static final int listview_loading_tv=0x7f06005e;
         public static final int lotteryView=0x7f06008b;
@@ -1444,9 +1445,9 @@ containing a value of this type.
         public static final int nav_yeartrans_tv=0x7f06001a;
         public static final int next_btn=0x7f060063;
         public static final int next_date_range_btn=0x7f06008a;
-        public static final int nine=0x7f0600a0;
-        public static final int ok=0x7f0600ac;
-        public static final int one=0x7f0600a4;
+        public static final int nine=0x7f0600a1;
+        public static final int ok=0x7f0600ad;
+        public static final int one=0x7f0600a5;
         public static final int other_drag_list=0x7f06004d;
         public static final int payout_amount_tv=0x7f060055;
         public static final int photo_flag_iv=0x7f06006e;
@@ -1470,14 +1471,14 @@ containing a value of this type.
         public static final int search_layout=0x7f06003b;
         public static final int search_pie_btn=0x7f06003d;
         public static final int search_rl=0x7f06005f;
-        public static final int seven=0x7f06009e;
-        public static final int six=0x7f0600a3;
+        public static final int seven=0x7f06009f;
+        public static final int six=0x7f0600a4;
         public static final int sort_btn=0x7f060045;
         public static final int start_et=0x7f06008e;
         public static final int stroke=0x7f060000;
-        public static final int subtract=0x7f0600aa;
+        public static final int subtract=0x7f0600ab;
         public static final int summary_tv=0x7f06003c;
-        public static final int three=0x7f0600a6;
+        public static final int three=0x7f0600a7;
         public static final int timeComb=0x7f060095;
         public static final int time_rb=0x7f060083;
         public static final int title_tv=0x7f060042;
@@ -1500,7 +1501,7 @@ containing a value of this type.
         public static final int trans_rows_ly=0x7f06007c;
         public static final int trans_type_flag_tv=0x7f060029;
         public static final int transfer_arrow_iv=0x7f06006c;
-        public static final int two=0x7f0600a5;
+        public static final int two=0x7f0600a6;
         public static final int type_rb=0x7f060085;
         public static final int unread_msg_num_ly=0x7f060023;
         public static final int vw1=0x7f060058;
@@ -1511,10 +1512,10 @@ containing a value of this type.
         public static final int week_icon_iv=0x7f060015;
         public static final int week_income_amount_tv=0x7f060018;
         public static final int week_row_rl=0x7f060014;
-        public static final int wordmean_s=0x7f0600af;
-        public static final int wordname_s=0x7f0600ae;
+        public static final int wordmean_s=0x7f0600b0;
+        public static final int wordname_s=0x7f0600af;
         public static final int year_tv=0x7f060006;
-        public static final int zero=0x7f0600a8;
+        public static final int zero=0x7f0600a9;
     }
     public static final class integer {
         public static final int config_longAnimTime=0x7f0a0002;

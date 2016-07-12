@@ -31,6 +31,8 @@ public class TrainTicketActivity extends Activity
     private Button watch_Btn;
     private Button chooseTrain_Btn;
     private Button chooseDate_Btn;
+    private Button clear_Btn;
+
     private EditText startStation_Et;
     private EditText destStation_Et;
     private TextView date_Tv;
@@ -71,6 +73,7 @@ public class TrainTicketActivity extends Activity
         watch_Btn = (Button) findViewById(R.id.watch_btn);
         chooseTrain_Btn = (Button) findViewById(R.id.trains_choose_bt);
         chooseDate_Btn = (Button) findViewById(R.id.date_choose_bt);
+        clear_Btn = (Button) findViewById(R.id.clearTrans_btn);
         t_combobox = (ComboBox) findViewById(R.id.timeComb);
 
         startStation_Et = (EditText) findViewById(R.id.start_et);
@@ -97,7 +100,7 @@ public class TrainTicketActivity extends Activity
     public void watchTickets(View v)
     {
         abortSearch = false;
-        TrainUIMsgHelper.disableAllBt();
+        TrainUIMsgHelper.disableAllUI();
         if (!TrainUIValidator.validTime(trains_fre_Et.getText().toString()))
         {
             return;
@@ -153,7 +156,7 @@ public class TrainTicketActivity extends Activity
 
     public void chooseTrains(View v)
     {
-        TrainUIMsgHelper.disableAllBt();
+        TrainUIMsgHelper.disableAllUI();
 
         final String t_url = getUrl();
         if (BasicStringUtil.isNullString(t_url))
@@ -228,10 +231,11 @@ public class TrainTicketActivity extends Activity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        TrainUIMsgHelper.enableAllBt();
-        if (requestCode == 100 && data != null)
+        TrainUIMsgHelper.enableAllUI();
+        if (requestCode == RadioButtonListActivity.RETURN_CODE && data != null)
         {
-            String codes = data.getStringExtra("selTrainCodes");
+            String codes = data
+                    .getStringExtra(RadioButtonListActivity.EXTRA_TRAIN_CODES);
             this.trains_Tv.setText(codes);
         }
     }
@@ -291,12 +295,18 @@ public class TrainTicketActivity extends Activity
     public void reset()
     {
         this.firstWatch = true;
-        TrainUIMsgHelper.enableAllBt();
+        TrainUIMsgHelper.enableAllUI();
     }
 
     public String getTwoCityCodeWithDate()
     {
         return startCityCode + "-" + arriveCityCode + this.date_Tv.getText();
+    }
+
+    public String getTwoCityNameWithDate()
+    {
+        return this.startStation_Et.getText() + " - "
+                + this.destStation_Et.getText() + "  " + this.date_Tv.getText();
     }
 
     public String[] getSelTrains()
@@ -324,6 +334,21 @@ public class TrainTicketActivity extends Activity
         return watch_Btn;
     }
 
+    public Button getClear_Btn()
+    {
+        return clear_Btn;
+    }
+
+    public EditText getTrains_fre_Et()
+    {
+        return this.trains_fre_Et;
+    }
+
+    public ComboBox getCombox()
+    {
+        return t_combobox;
+    }
+
     public boolean isAbortSearch()
     {
         return abortSearch;
@@ -333,4 +358,5 @@ public class TrainTicketActivity extends Activity
     {
         return this.handler_watch;
     }
+
 }

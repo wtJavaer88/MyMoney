@@ -45,6 +45,7 @@ import com.wnc.mymoney.ui.widget.ComboBox;
 import com.wnc.mymoney.ui.widget.ComboBox.ListViewItemClickListener;
 import com.wnc.mymoney.util.ClipBoardUtil;
 import com.wnc.mymoney.util.CostTypeUtil;
+import com.wnc.mymoney.util.GeneratorUtil;
 import com.wnc.mymoney.util.MyAppParams;
 import com.wnc.mymoney.util.SysInit;
 import com.wnc.mymoney.util.TextFormatUtil;
@@ -322,19 +323,6 @@ public class AddOrEditTransActivity extends BaseActivity implements
                 .findViewById(R.id.add_tag_dialg_ok);
         add_tag_dialg_title.setText("导入消费记录");
 
-        Trade parseTrade = null;
-        try
-        {
-            parseTrade = getParsedTradeFromClipboard();
-            add_tag_dialg_content.setText("时间:" + parseTrade.getCreatetime());
-            add_tag_dialg_content.append(" 金额:" + parseTrade.getCost());
-            add_tag_dialg_content.append(" 成员:" + parseTrade.getMember());
-        }
-        catch (Exception ex)
-        {
-            add_tag_dialg_content.setText("你复制的内容无效!");
-            ToastUtil.showShortToast(getApplicationContext(), "记录格式不对!");
-        }
         add_tag_dialg_no.setOnClickListener(new OnClickListener()
         {
             @Override
@@ -343,28 +331,61 @@ public class AddOrEditTransActivity extends BaseActivity implements
                 dlg.dismiss();
             }
         });
-        final Trade parseTrade2 = parseTrade;
-        add_tag_dialg_ok.setOnClickListener(new OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                if (parseTrade2 != null)
-                {
-                    // importTrade(parseTrade2);
-                    try
-                    {
-                        setViewsByExistTrade(parseTrade2);
-                    }
-                    catch (Exception ex)
-                    {
-                        ex.printStackTrace();
-                    }
-                }
-                dlg.dismiss();
-            }
-        });
 
+        Trade parseTrade = null;
+        try
+        {
+            parseTrade = getParsedTradeFromClipboard();
+            add_tag_dialg_content.setText("时间:" + parseTrade.getCreatetime());
+            add_tag_dialg_content.append(" 金额:" + parseTrade.getCost());
+            add_tag_dialg_content.append(" 成员:" + parseTrade.getMember());
+            final Trade parseTrade2 = parseTrade;
+            add_tag_dialg_ok.setOnClickListener(new OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+
+                    if (parseTrade2 != null)
+                    {
+                        // importTrade(parseTrade2);
+                        try
+                        {
+                            TransactionsDao.initDb(getApplicationContext());
+                            if (complictTrade(parseTrade2.getUuid()))
+                            {
+                                ToastUtil.showLongToast(
+                                        getApplicationContext(), "该记录已经保存过!");
+                            }
+                            else
+                            {
+                                setViewsByExistTrade(parseTrade2);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            ex.printStackTrace();
+                        }
+                        finally
+                        {
+                            TransactionsDao.closeDb();
+                        }
+                    }
+                    dlg.dismiss();
+                }
+
+                private boolean complictTrade(String uuid)
+                {
+                    // TODO 是否在数据库中重复了uuid
+                    return !TransactionsDao.checkTradeUUIDExist(uuid);
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            add_tag_dialg_content.setText("你复制的内容无效!");
+            ToastUtil.showShortToast(getApplicationContext(), "记录格式不对!");
+        }
     }
 
     private void rollbackMemo()
@@ -376,39 +397,47 @@ public class AddOrEditTransActivity extends BaseActivity implements
     {
         Trade trade = getTradeFromViews();
 
-        if (checkBeforeSave(trade))
+        try
         {
-            TransactionsDao.initDb(this);
-            boolean b = false;
-            if (isAdd)
+            if (checkBeforeSave(trade))
             {
-                if (b = TransactionsDao.insert(trade))
+                TransactionsDao.initDb(this);
+                boolean b = false;
+                if (isAdd)
                 {
-                    Log.i("addTrade", getTradeJson(trade));
-                    lockView();
+                    if (b = TransactionsDao.insert(trade))
+                    {
+                        Log.i("addTrade", getTradeJson(trade));
+                        lockView();
+                    }
                 }
-            }
-            else
-            {
-                Log.i("updateTrade", "before:" + getTradeJson(modifyTrade));
-                if (b = TransactionsDao.update(trade))
+                else
                 {
-                    Log.i("updateTrade", "after:" + getTradeJson(trade));
-                    finish();
+                    Log.i("updateTrade", "before:" + getTradeJson(modifyTrade));
+                    if (b = TransactionsDao.update(trade))
+                    {
+                        Log.i("updateTrade", "after:" + getTradeJson(trade));
+                        finish();
+                    }
                 }
-            }
 
-            if (b)
-            {
-                ToastUtil.showShortToast(this, "保存成功!");
-                SysInit.changeMember(getMember());
-                backupPicsInTrade(trade);
+                if (b)
+                {
+                    ToastUtil.showShortToast(this, "保存成功!");
+                    SysInit.changeMember(getMember());
+                    backupPicsInTrade(trade);
+                }
+                else
+                {
+                    ToastUtil.showShortToast(this, "保存失败!");
+                }
+                TransactionsDao.closeDb();
             }
-            else
-            {
-                ToastUtil.showShortToast(this, "保存失败!");
-            }
-            TransactionsDao.closeDb();
+        }
+        catch (Exception ex)
+        {
+            Log.e("saveErr", ex.getMessage());
+            ToastUtil.showLongToast(this, "保存失败,出现异常!");
         }
     }
 
@@ -737,6 +766,7 @@ public class AddOrEditTransActivity extends BaseActivity implements
         {
             trade.setHaspicture(0);
         }
+        trade.setUuid(GeneratorUtil.getUUID());
         return trade;
     }
 

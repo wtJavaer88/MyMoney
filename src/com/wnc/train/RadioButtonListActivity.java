@@ -6,11 +6,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.wnc.mymoney.R;
+import com.wnc.mymoney.util.ToastUtil;
 
 public class RadioButtonListActivity extends Activity
 {
+    public static int RETURN_CODE = 100;
     private ListView radioButtonList;
     private String[] names
     // = new String[]
@@ -18,6 +21,9 @@ public class RadioButtonListActivity extends Activity
     // "梁实秋", "亨利米勒", "海明威", "菲兹杰拉德", "凯鲁亚克", "杰克伦敦", "小仲马", "杜拉斯", "福楼拜",
     // "雨果", "巴尔扎克", "莎士比亚", "劳伦斯", "毛姆", "柯南道尔", "笛福" }
     ;
+    public static final String EXTRA_TRAINS = "trains";
+    public static final String EXTRA_CITIES = "cities_info";
+    public static final String EXTRA_TRAIN_CODES = "selTrainCodes";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -30,6 +36,38 @@ public class RadioButtonListActivity extends Activity
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_multiple_choice, names);
         radioButtonList.setAdapter(adapter);
+        setChecked();
+        setCitiesInfo();
+    }
+
+    private void setChecked()
+    {
+        if (CityTrainsHolder.lastSelIds != null && sameQueryAsLast())
+        {
+            for (int id : CityTrainsHolder.lastSelIds)
+            {
+                radioButtonList.setItemChecked(id, true);
+            }
+        }
+        else
+        {
+            // 重新选择的情况下, 清空原有的
+            CityTrainsHolder.lastSelIds = null;
+        }
+        CityTrainsHolder.lastCityInfo = getIntent()
+                .getStringExtra(EXTRA_CITIES);
+    }
+
+    private boolean sameQueryAsLast()
+    {
+        return CityTrainsHolder.lastCityInfo.equals(getIntent().getStringExtra(
+                EXTRA_CITIES));
+    }
+
+    private void setCitiesInfo()
+    {
+        ((TextView) findViewById(R.id.cities_info))
+                .setText(CityTrainsHolder.lastCityInfo);
     }
 
     private String[] getTrainNames()
@@ -40,7 +78,7 @@ public class RadioButtonListActivity extends Activity
     public void showSelectAuthors(View v)
     {
         // long[] authorsId = radioButtonList.getCheckItemIds();
-        long[] authorsId = getListSelectededItemIds(radioButtonList);
+        int[] authorsId = getListSelectededItemIds(radioButtonList);
         String name = "";
         String message;
         if (authorsId.length > 0)
@@ -48,7 +86,7 @@ public class RadioButtonListActivity extends Activity
             // 用户至少选择了一位作家
             for (int i = 0; i < authorsId.length; i++)
             {
-                String originalName = names[(int) authorsId[i]];
+                String originalName = names[authorsId[i]];
                 name += ", "
                         + originalName.substring(0, originalName.indexOf(" "));
             }
@@ -58,22 +96,44 @@ public class RadioButtonListActivity extends Activity
         else
         {
             message = "请至少选择一趟车！";
+            ToastUtil.showLongToast(this, message);
             return;
         }
-        // Toast.makeText(RadioButtonListActivity.this, message,
-        // Toast.LENGTH_LONG)
-        // .show();
+
         Intent intent = new Intent();
-        intent.putExtra("selTrainCodes", message);// 放入返回值
-        setResult(0, intent);// 放入回传的值,并添加一个Code,方便区分返回的数据
+        CityTrainsHolder.lastSelIds = authorsId;
+        intent.putExtra(EXTRA_TRAIN_CODES, message);// 放入返回值
+        setResult(RETURN_CODE, intent);// 放入回传的值,并添加一个Code,方便区分返回的数据
         finish();
     }
 
+    public void selAll(View v)
+    {
+        for (int i = 0; i < radioButtonList.getCount(); i++)
+        {
+            if (!radioButtonList.isItemChecked(i))
+            {
+                radioButtonList.setItemChecked(i, true);
+            }
+        }
+    }
+
+    public void diselAll(View v)
+    {
+        for (int i = 0; i < radioButtonList.getCount(); i++)
+        {
+            if (radioButtonList.isItemChecked(i))
+            {
+                radioButtonList.setItemChecked(i, false);
+            }
+        }
+    }
+
     // 避免使用getCheckItemIds()方法
-    public long[] getListSelectededItemIds(ListView listView)
+    public int[] getListSelectededItemIds(ListView listView)
     {
 
-        long[] ids = new long[listView.getCount()];// getCount()即获取到ListView所包含的item总个数
+        int[] ids = new int[listView.getCount()];// getCount()即获取到ListView所包含的item总个数
         // 定义用户选中Item的总个数
         int checkedTotal = 0;
         for (int i = 0; i < listView.getCount(); i++)
@@ -88,7 +148,7 @@ public class RadioButtonListActivity extends Activity
         if (checkedTotal < listView.getCount())
         {
             // 定义选中的Item的ID数组
-            final long[] selectedIds = new long[checkedTotal];
+            final int[] selectedIds = new int[checkedTotal];
             // 数组复制 ids
             System.arraycopy(ids, 0, selectedIds, 0, checkedTotal);
             return selectedIds;
