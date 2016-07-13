@@ -103,11 +103,12 @@
         
         <com.wnc.mymoney.ui.widget.ComboBox
         android:id="@+id/timeComb"
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="60dp"
-		android:text="10"
+        android:layout_marginLeft="15dp"
+		android:text="点我选择"
 		android:textColor="@color/red"
-		android:textSize="20dp"
+		android:textSize="18dp"
         android:background="#00000000" />
 
     </LinearLayout>

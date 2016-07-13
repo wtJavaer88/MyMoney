@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.wnc.basic.BasicDateUtil;
+import com.wnc.basic.BasicNumberUtil;
 import com.wnc.basic.BasicStringUtil;
 import com.wnc.mymoney.R;
 import com.wnc.mymoney.ui.helper.AfterWheelChooseListener;
@@ -86,13 +87,18 @@ public class TrainTicketActivity extends Activity
         date_Tv.setText(TextFormatUtil.addSeparatorToDay(BasicDateUtil
                 .getCurrentDateString()));
         trains_fre_Et.setText("" + DEFAULT_WATCH_DURATION);
-        t_combobox.setData(Arrays.asList("10", "20", "30", "40", "50", "60"));
+        t_combobox.setData(Arrays.asList("点我选择", "10", "20", "30", "40", "50",
+                "60"));
         t_combobox.setListViewOnClickListener(new ListViewItemClickListener()
         {
             @Override
             public void onItemClick(int position)
             {
-                trains_fre_Et.setText(t_combobox.getText());
+                if (BasicNumberUtil.isNumberString(t_combobox.getText()
+                        .toString()))
+                {
+                    trains_fre_Et.setText(t_combobox.getText());
+                }
             }
         });
     }
@@ -144,6 +150,7 @@ public class TrainTicketActivity extends Activity
     public void clearTrains(View v)
     {
         this.trains_Tv.setText("");
+        CityTrainsHolder.lastSelIds = null;
     }
 
     public void stopSearch(View v)

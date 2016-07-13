@@ -194,7 +194,6 @@ public class MonthPieChartActivity extends BaseActivity implements
             chartProp.setPercent(percents.get(i));
             chartProp.setName(TextFormatUtil.getPercentWithName(
                     percents.get(i), percents.get(i) * sum, this.names.get(i)));
-
         }
         this.pieView.initPercents();
     }
@@ -204,7 +203,6 @@ public class MonthPieChartActivity extends BaseActivity implements
         float sum = 0;
         for (CostChartTotal total : totals)
         {
-            System.out.println(total.getType() + "  total.getType()");
             this.names.add(CostTypeUtil.getCostTypeName(total.getType()));
             sum += total.getCost();
         }

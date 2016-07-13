@@ -98,7 +98,7 @@ public class AddOrEditTransActivity extends BaseActivity implements
     private final String[] members = MemberDao.getAllMembers().toArray(
             new String[MemberDao.getCounts()]);
     private final String[] picMenu = new String[]
-    { "相机2", "相册", "录音" };
+    { "相机", "相册", "录音" };
 
     private File mPhotoFile;
     private final int COST_PANEL_RESULT = 1;

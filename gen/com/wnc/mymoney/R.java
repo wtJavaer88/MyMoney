@@ -1350,7 +1350,6 @@ containing a value of this type.
         public static final int add_tag_dialg_title=0x7f060024;
         public static final int add_trans_save_and_new_btn=0x7f06003a;
         public static final int add_trans_save_btn=0x7f060038;
-        public static final int author=0x7f060099;
         public static final int back_btn=0x7f060041;
         public static final int balance_amount_tv=0x7f060057;
         public static final int budget_status_bv=0x7f060004;
@@ -1404,6 +1403,7 @@ containing a value of this type.
         public static final int id_listview=0x7f060040;
         public static final int id_txt=0x7f06003f;
         public static final int income_amount_tv=0x7f060007;
+        public static final int info=0x7f060099;
         public static final int item_icon_iv=0x7f06006a;
         public static final int item_id_tv=0x7f060073;
         public static final int item_name_tv=0x7f06006b;

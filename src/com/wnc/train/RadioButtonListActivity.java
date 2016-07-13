@@ -42,17 +42,20 @@ public class RadioButtonListActivity extends Activity
 
     private void setChecked()
     {
-        if (CityTrainsHolder.lastSelIds != null && sameQueryAsLast())
+        if (CityTrainsHolder.lastSelIds != null)
         {
-            for (int id : CityTrainsHolder.lastSelIds)
+            if (sameQueryAsLast())
             {
-                radioButtonList.setItemChecked(id, true);
+                for (int id : CityTrainsHolder.lastSelIds)
+                {
+                    radioButtonList.setItemChecked(id, true);
+                }
             }
-        }
-        else
-        {
-            // 重新选择的情况下, 清空原有的
-            CityTrainsHolder.lastSelIds = null;
+            else
+            {
+                // 重新选择的情况下, 清空原有的
+                CityTrainsHolder.lastSelIds = null;
+            }
         }
         CityTrainsHolder.lastCityInfo = getIntent()
                 .getStringExtra(EXTRA_CITIES);
@@ -75,18 +78,17 @@ public class RadioButtonListActivity extends Activity
         return getIntent().getStringArrayExtra("trains");
     }
 
-    public void showSelectAuthors(View v)
+    public void showSelectTrains(View v)
     {
-        // long[] authorsId = radioButtonList.getCheckItemIds();
-        int[] authorsId = getListSelectededItemIds(radioButtonList);
+        int[] trainsId = getListSelectededItemIds(radioButtonList);
         String name = "";
         String message;
-        if (authorsId.length > 0)
+        if (trainsId.length > 0)
         {
-            // 用户至少选择了一位作家
-            for (int i = 0; i < authorsId.length; i++)
+            // 用户至少选择了一趟火车
+            for (int i = 0; i < trainsId.length; i++)
             {
-                String originalName = names[authorsId[i]];
+                String originalName = names[trainsId[i]];
                 name += ", "
                         + originalName.substring(0, originalName.indexOf(" "));
             }
@@ -101,7 +103,7 @@ public class RadioButtonListActivity extends Activity
         }
 
         Intent intent = new Intent();
-        CityTrainsHolder.lastSelIds = authorsId;
+        CityTrainsHolder.lastSelIds = trainsId;
         intent.putExtra(EXTRA_TRAIN_CODES, message);// 放入返回值
         setResult(RETURN_CODE, intent);// 放入回传的值,并添加一个Code,方便区分返回的数据
         finish();
@@ -132,13 +134,11 @@ public class RadioButtonListActivity extends Activity
     // 避免使用getCheckItemIds()方法
     public int[] getListSelectededItemIds(ListView listView)
     {
-
-        int[] ids = new int[listView.getCount()];// getCount()即获取到ListView所包含的item总个数
+        int[] ids = new int[listView.getCount()];
         // 定义用户选中Item的总个数
         int checkedTotal = 0;
         for (int i = 0; i < listView.getCount(); i++)
         {
-            // 如果这个Item是被选中的
             if (listView.isItemChecked(i))
             {
                 ids[checkedTotal++] = i;

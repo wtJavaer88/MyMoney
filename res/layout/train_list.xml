@@ -27,7 +27,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="showSelectAuthors"
+        android:onClick="showSelectTrains"
         android:text="确定"
         android:textSize="25sp" />
     </LinearLayout>
