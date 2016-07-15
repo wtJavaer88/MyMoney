@@ -35,11 +35,12 @@ public class ClickFileIntentFactory
         {
             return MyIntentUtil.getPdfFileIntent(filePath);
         }
-        else if (filePath.endsWith(".amr") || filePath.endsWith(".mp3"))
+        else if (FileTypeUtil.isVoiceFile(filePath))
         {
             return MyIntentUtil.getAudioFileIntent(filePath);
         }
 
         throw new IllegalArgumentException(filePath + "该文件类型找不到对应的Intent");
     }
+
 }

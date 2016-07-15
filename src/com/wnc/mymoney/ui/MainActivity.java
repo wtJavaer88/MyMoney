@@ -242,10 +242,15 @@ public class MainActivity extends Activity
         // stopService(serviceIntent);
         this.unbindService(conn);
 
-        BackUpDataUtil.backup(this, BackupTimeModel.TIMELY, NetChannel.EMAIL);
+        backupData();
 
         TrainUIMsgHelper.stopVibrator();
         super.onDestroy();
+    }
+
+    private void backupData()
+    {
+        BackUpDataUtil.backup(this, BackupTimeModel.TIMELY, NetChannel.EMAIL);
     }
 
     private ServiceConnection conn = new ServiceConnection()

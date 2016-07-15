@@ -33,7 +33,7 @@ import com.wnc.basic.BasicDateUtil;
 import com.wnc.basic.BasicFileUtil;
 import com.wnc.basic.BasicStringUtil;
 import com.wnc.mymoney.R;
-import com.wnc.mymoney.backup.BackUpDataUtil;
+import com.wnc.mymoney.backup.BackupFilesHolder;
 import com.wnc.mymoney.bean.MyWheelBean;
 import com.wnc.mymoney.bean.Trade;
 import com.wnc.mymoney.dao.CategoryDao;
@@ -45,6 +45,7 @@ import com.wnc.mymoney.ui.widget.ComboBox;
 import com.wnc.mymoney.ui.widget.ComboBox.ListViewItemClickListener;
 import com.wnc.mymoney.util.ClipBoardUtil;
 import com.wnc.mymoney.util.CostTypeUtil;
+import com.wnc.mymoney.util.FileTypeUtil;
 import com.wnc.mymoney.util.GeneratorUtil;
 import com.wnc.mymoney.util.MyAppParams;
 import com.wnc.mymoney.util.SysInit;
@@ -425,7 +426,10 @@ public class AddOrEditTransActivity extends BaseActivity implements
                 {
                     ToastUtil.showShortToast(this, "保存成功!");
                     SysInit.changeMember(getMember());
-                    backupPicsInTrade(trade);
+                    if (trade.getHaspicture() == 1)
+                    {
+                        backupFilesInTrade(trade);
+                    }
                 }
                 else
                 {
@@ -641,19 +645,19 @@ public class AddOrEditTransActivity extends BaseActivity implements
         return true;
     }
 
-    private void backupPicsInTrade(Trade trade)
+    private void backupFilesInTrade(Trade trade)
     {
-        if (trade.getHaspicture() == 1)
+        for (String segment : TextFormatUtil.getSegmentsInMemo(trade.getMemo()))
         {
-            for (String segment : TextFormatUtil.getSegmentsInMemo(trade
-                    .getMemo()))
+            if (FileTypeUtil.isPicFile(segment.trim().toLowerCase()))
             {
-                if (segment.trim().length() > 0
-                        && segment.trim().startsWith("/"))
-                {
-                    BackUpDataUtil.addBackupFile(MyAppParams.getInstance()
-                            .getTmpPicPath() + segment);
-                }
+                BackupFilesHolder.addBackupFile(MyAppParams.getInstance()
+                        .getTmpPicPath() + segment);
+            }
+            else if (FileTypeUtil.isVoiceFile(segment.trim().toLowerCase()))
+            {
+                BackupFilesHolder.addBackupFile(MyAppParams.getInstance()
+                        .getTmpVoicePath() + segment);
             }
         }
     }

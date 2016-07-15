@@ -12,6 +12,9 @@ import com.wnc.mymoney.dao.MemberDao;
 public class SysInit
 {
     static Activity context;
+    /**
+     * 只有数据库做了一点点修改, 就可以设为true
+     */
     public static boolean canBackUpDb = false;
     public static String lastMember = "";
 

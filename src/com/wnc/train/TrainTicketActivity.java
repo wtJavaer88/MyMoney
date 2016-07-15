@@ -34,8 +34,8 @@ public class TrainTicketActivity extends Activity
     private Button chooseDate_Btn;
     private Button clear_Btn;
 
-    private EditText startStation_Et;
-    private EditText destStation_Et;
+    private EditText fromStation_Et;
+    private EditText toStation_Et;
     private TextView date_Tv;
     private TextView trains_Tv;
     private EditText trains_fre_Et;
@@ -47,8 +47,8 @@ public class TrainTicketActivity extends Activity
     private boolean firstWatch = true;
     private boolean abortSearch = false;
 
-    private String startCityCode;
-    private String arriveCityCode;
+    private String fromCityCode;
+    private String toCityCode;
     private String url;// WatchHandler中的reWatch中还会用到
 
     private ComboBox t_combobox;
@@ -77,8 +77,8 @@ public class TrainTicketActivity extends Activity
         clear_Btn = (Button) findViewById(R.id.clearTrans_btn);
         t_combobox = (ComboBox) findViewById(R.id.timeComb);
 
-        startStation_Et = (EditText) findViewById(R.id.start_et);
-        destStation_Et = (EditText) findViewById(R.id.dest_et);
+        fromStation_Et = (EditText) findViewById(R.id.from_et);
+        toStation_Et = (EditText) findViewById(R.id.to_et);
         trains_fre_Et = (EditText) findViewById(R.id.trains_fre);
         date_Tv = (TextView) findViewById(R.id.date_tv);
         trains_Tv = (TextView) findViewById(R.id.trains_tv);
@@ -216,14 +216,14 @@ public class TrainTicketActivity extends Activity
 
     private String getUrl()
     {
-        startCityCode = getCityCode(startStation_Et.getText().toString());
-        arriveCityCode = getCityCode(destStation_Et.getText().toString());
-        if (!TrainUIValidator.validStation(startCityCode, arriveCityCode))
+        fromCityCode = getCityCode(fromStation_Et.getText().toString());
+        toCityCode = getCityCode(toStation_Et.getText().toString());
+        if (!TrainUIValidator.validStation(fromCityCode, toCityCode))
         {
             return "";
         }
         return new QueryModel().build(date_Tv.getText().toString(),
-                startCityCode, arriveCityCode);
+                fromCityCode, toCityCode);
     }
 
     private String getCityCode(String cityName)
@@ -307,13 +307,13 @@ public class TrainTicketActivity extends Activity
 
     public String getTwoCityCodeWithDate()
     {
-        return startCityCode + "-" + arriveCityCode + this.date_Tv.getText();
+        return fromCityCode + "-" + toCityCode + this.date_Tv.getText();
     }
 
     public String getTwoCityNameWithDate()
     {
-        return this.startStation_Et.getText() + " - "
-                + this.destStation_Et.getText() + "  " + this.date_Tv.getText();
+        return this.fromStation_Et.getText() + " - "
+                + this.toStation_Et.getText() + "  " + this.date_Tv.getText();
     }
 
     public String[] getSelTrains()

@@ -15,4 +15,10 @@ public class FileTypeUtil
                 || filePath.endsWith(".xml") || filePath.endsWith(".css")
                 || filePath.endsWith(".cs");
     }
+
+    public static boolean isVoiceFile(String filePath)
+    {
+        return filePath.endsWith(".amr") || filePath.endsWith(".mp3")
+                || filePath.endsWith(".wma") || filePath.endsWith(".ogg");
+    }
 }

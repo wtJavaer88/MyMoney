@@ -20,7 +20,7 @@ public class NetBackupFactory
         case ALL:
             return new AllNetBackup(channel, activity);
         }
-        ToastUtil.showLongToast(activity, "参数不合法! " + model);
+        ToastUtil.showLongToast(activity, "BackupTimeModel参数不合法! " + model);
         return new NullNetBackup();
     }
 }

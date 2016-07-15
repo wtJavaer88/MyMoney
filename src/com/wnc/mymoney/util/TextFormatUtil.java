@@ -152,6 +152,12 @@ public class TextFormatUtil
         return accumStr.toString();
     }
 
+    /***
+     * 从备注中分割出文件,规则是"[文件名]",括号左右可能会有纯备注文字
+     * 
+     * @param memo
+     * @return
+     */
     public static String[] getSegmentsInMemo(String memo)
     {
         String[] list = new String[]

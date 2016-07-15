@@ -5,7 +5,7 @@ import java.util.List;
 
 import android.app.Activity;
 
-import com.wnc.mymoney.backup.BackUpDataUtil;
+import com.wnc.mymoney.backup.BackupFilesHolder;
 import com.wnc.mymoney.backup.NetChannel;
 
 public class TimelyNetBackup extends AbstractNetBackup
@@ -21,7 +21,7 @@ public class TimelyNetBackup extends AbstractNetBackup
     @Override
     protected List<File> getBackupList()
     {
-        return BackUpDataUtil.getBackupFiles();
+        return BackupFilesHolder.getBackupFiles();
     }
 
 }

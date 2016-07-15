@@ -1,9 +1,7 @@
 package com.wnc.mymoney.backup;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,35 +17,14 @@ public class BackUpDataUtil
 {
     static final String subjectDb = "money.db";
     static final int maxBackupCount = 10;
-    static List<File> backupFiles = new ArrayList<File>();
 
-    public static void clearBackupPics()
-    {
-        backupFiles.clear();
-    }
-
+    /**
+     * 打开应用的时候清空上次临时文件
+     */
     public static void clearTmpZips()
     {
         BasicFileUtil.deleteFolder(MyAppParams.getInstance().getZipPath());
         BasicFileUtil.makeDirectory(MyAppParams.getInstance().getZipPath());
-    }
-
-    public static List<File> getBackupFiles()
-    {
-        return backupFiles;
-    }
-
-    public static void addBackupFile(String f)
-    {
-        System.out.println("backupFile:" + f);
-        if (BasicFileUtil.isExistFile(f))
-        {
-            backupFiles.add(new File(f));
-        }
-        else
-        {
-            Log.e("pic", "备份文件[" + f + "]路径不存在!");
-        }
     }
 
     public static void backup(Activity activity, BackupTimeModel model,
@@ -59,8 +36,8 @@ public class BackUpDataUtil
         }
 
         String newdb = backupDatabase(activity);
-        addBackupFile(newdb);
-        addBackupFile(getLatestLog());
+        BackupFilesHolder.addBackupFile(newdb);
+        BackupFilesHolder.addBackupFile(getLatestLog());
 
         NetBackupFactory.getNetBackup(model, channel, activity).backup();
 

@@ -10,7 +10,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.wnc.basic.BasicDateUtil;
-import com.wnc.mymoney.backup.BackUpDataUtil;
+import com.wnc.mymoney.backup.BackupFilesHolder;
 import com.wnc.mymoney.backup.NetChannel;
 import com.wnc.mymoney.backup.ZipPathFactory;
 import com.wnc.mymoney.util.ZipUtils;
@@ -40,21 +40,21 @@ public abstract class AbstractNetBackup implements FilesZip
     {
         String destZip = ZipPathFactory.getZipPath(this);
         List<File> list = getBackupList();
-        boolean b = false;
+        boolean backCode = false;
         if (channel == NetChannel.EMAIL)
         {
-            b = zipAndSendEmail(list, destZip);
+            backCode = zipAndSendEmail(list, destZip);
         }
         else if (channel == NetChannel.SHARE)
         {
-            b = zipAndShare(list, destZip);
+            backCode = zipAndShare(list, destZip);
         }
 
-        if (b)
+        if (backCode)
         {
-            BackUpDataUtil.clearBackupPics();
+            BackupFilesHolder.clearBackupPics();
         }
-        return b;
+        return backCode;
     }
 
     protected abstract List<File> getBackupList();

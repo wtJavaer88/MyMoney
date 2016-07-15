@@ -1380,7 +1380,6 @@ containing a value of this type.
         public static final int day_of_income_tv=0x7f060079;
         public static final int day_of_payout_tv=0x7f06007a;
         public static final int demo_mode_tips_tv=0x7f06002b;
-        public static final int dest_et=0x7f06008f;
         public static final int digit_input_panel_ly=0x7f06009e;
         public static final int dot=0x7f0600aa;
         public static final int drag_list_item_image=0x7f06004c;
@@ -1395,6 +1394,7 @@ containing a value of this type.
         public static final int fill=0x7f060001;
         public static final int five=0x7f0600a3;
         public static final int four=0x7f0600a2;
+        public static final int from_et=0x7f06008e;
         public static final int go_detail_iv=0x7f060072;
         public static final int haspic_btn=0x7f06007e;
         public static final int header_ly=0x7f060052;
@@ -1474,7 +1474,6 @@ containing a value of this type.
         public static final int seven=0x7f06009f;
         public static final int six=0x7f0600a4;
         public static final int sort_btn=0x7f060045;
-        public static final int start_et=0x7f06008e;
         public static final int stroke=0x7f060000;
         public static final int subtract=0x7f0600ab;
         public static final int summary_tv=0x7f06003c;
@@ -1483,6 +1482,7 @@ containing a value of this type.
         public static final int time_rb=0x7f060083;
         public static final int title_tv=0x7f060042;
         public static final int titlebar_right_btn=0x7f060043;
+        public static final int to_et=0x7f06008f;
         public static final int today_datestr_tv=0x7f060011;
         public static final int today_expense_amount_tv=0x7f060012;
         public static final int today_icon_fl=0x7f06000d;
