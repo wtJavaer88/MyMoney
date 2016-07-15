@@ -99,16 +99,19 @@ public class AddOrEditTransActivity extends BaseActivity implements
     private final String[] members = MemberDao.getAllMembers().toArray(
             new String[MemberDao.getCounts()]);
     private final String[] picMenu = new String[]
-    { "相机", "相册", "录音" };
+    { "相机", "相册", "录音", "录像" };
 
     private File mPhotoFile;
     private final int COST_PANEL_RESULT = 1;
     private final int CAMERA_RESULT = 100;
     private final int LOAD_IMAGE_RESULT = 200;
     private final int VOICE_RESULT = 300;
+    private final int VIDEO_RESULT = 400;
 
     private String savePicDir = MyAppParams.getInstance().getTmpPicPath();
     private String saveVoiceDir = MyAppParams.getInstance().getTmpVoicePath();
+    private String saveVideoDir = MyAppParams.getInstance().getTmpVideoPath();
+
     private String lastMemoContent = "";
     private int selectedLeftIndex = 0;
     private int selectedRightIndex = 0;
@@ -513,6 +516,12 @@ public class AddOrEditTransActivity extends BaseActivity implements
                             MediaStore.Audio.Media.RECORD_SOUND_ACTION);
                     startActivityForResult(intent, VOICE_RESULT);
                 }
+                else if (arg1 == 3)
+                {
+                    Intent intent = new Intent(AddOrEditTransActivity.this,
+                            MovieActivity.class);
+                    startActivityForResult(intent, VIDEO_RESULT);
+                }
                 arg0.dismiss();
             }
         });
@@ -658,6 +667,11 @@ public class AddOrEditTransActivity extends BaseActivity implements
             {
                 BackupFilesHolder.addBackupFile(MyAppParams.getInstance()
                         .getTmpVoicePath() + segment);
+            }
+            else if (FileTypeUtil.isVideoFile(segment.trim().toLowerCase()))
+            {
+                BackupFilesHolder.addBackupFile(MyAppParams.getInstance()
+                        .getTmpVideoPath() + segment);
             }
         }
     }
@@ -810,7 +824,7 @@ public class AddOrEditTransActivity extends BaseActivity implements
             {
                 System.out.println("mPhotoFile::"
                         + this.mPhotoFile.getAbsolutePath());
-                insertPicToMemo(this.mPhotoFile.getName());
+                insertFileToMemo(this.mPhotoFile.getName());
 
             }
             else
@@ -833,8 +847,7 @@ public class AddOrEditTransActivity extends BaseActivity implements
             String picturePath = cursor.getString(columnIndex);
             cursor.close();
             System.out.println("picturePath::" + picturePath);
-            backupAndInsertPic(picturePath);
-
+            backupAndInsertMemo(savePicDir, picturePath, ".jpg");
         }
 
         if (requestCode == this.COST_PANEL_RESULT && data != null)
@@ -852,7 +865,8 @@ public class AddOrEditTransActivity extends BaseActivity implements
                 {
                     System.out.println("audio file:"
                             + amrFile.getAbsolutePath());
-                    backupAndInsertVoice(amrFile.getAbsolutePath());
+                    backupAndInsertMemo(saveVoiceDir,
+                            amrFile.getAbsolutePath(), ".amr");
                 }
             }
             catch (Exception e)
@@ -860,61 +874,45 @@ public class AddOrEditTransActivity extends BaseActivity implements
                 e.printStackTrace();
             }
         }
+        if (requestCode == this.VIDEO_RESULT && data != null)
+        {
+            String moviePath = data.getStringExtra(MovieActivity.RECORDED_PATH);
+            System.out.println("返回的moviePath:" + moviePath);
+            if (BasicFileUtil.isExistFile(moviePath))
+            {
+                insertFileToMemo(BasicFileUtil.getFileName(moviePath));
+            }
+        }
     }
 
-    /**
-     * 将图片拷贝一遍
+    /*
+     * 将备注的文件拷贝一遍
      * 
-     * @param picturePath
+     * @param moviePath
      */
-    private void backupAndInsertPic(String picturePath)
+    private void backupAndInsertMemo(String saveDir, String memoFilePath,
+            String suffixType)
     {
-        String fileName = BasicFileUtil.getFileName(picturePath);
-        String destPicPath = savePicDir + fileName;
+        System.out.println("备注文件:" + memoFilePath);
+        String fileName = BasicFileUtil.getFileName(memoFilePath);
+        String destPicPath = saveDir + fileName;
         if (BasicFileUtil.isExistFile(destPicPath))
         {
-            fileName = BasicDateUtil.getCurrentDateTime() + ".jpg";
-            destPicPath = savePicDir + fileName;
+            fileName = BasicDateUtil.getCurrentDateTime() + suffixType;
+            destPicPath = saveDir + fileName;
         }
-        if (!BasicFileUtil.CopyFile(picturePath, destPicPath))
+        if (!BasicFileUtil.CopyFile(memoFilePath, destPicPath))
         {
             fileName = "";
-            ToastUtil
-                    .showLongToast(this, "拷贝过程中出错!destPicPath: " + destPicPath);
+            ToastUtil.showLongToast(this, "拷贝过程中出错!destPath: " + destPicPath);
         }
         else
         {
-            insertPicToMemo(new File(destPicPath).getName());
+            insertFileToMemo(new File(destPicPath).getName());
         }
     }
 
-    /**
-     * 将图片拷贝一遍
-     * 
-     * @param amrPath
-     */
-    private void backupAndInsertVoice(String amrPath)
-    {
-        String fileName = BasicFileUtil.getFileName(amrPath);
-        String destPicPath = saveVoiceDir + fileName;
-        if (BasicFileUtil.isExistFile(destPicPath))
-        {
-            fileName = BasicDateUtil.getCurrentDateTime() + ".amr";
-            destPicPath = saveVoiceDir + fileName;
-        }
-        if (!BasicFileUtil.CopyFile(amrPath, destPicPath))
-        {
-            fileName = "";
-            ToastUtil.showLongToast(this, "拷贝过程中出错!destVoicePath: "
-                    + destPicPath);
-        }
-        else
-        {
-            insertPicToMemo(new File(destPicPath).getName());
-        }
-    }
-
-    private void insertPicToMemo(String imgPath)
+    private void insertFileToMemo(String imgPath)
     {
         if (BasicStringUtil.isNullString(imgPath))
         {

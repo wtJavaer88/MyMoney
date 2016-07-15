@@ -16,6 +16,7 @@ public class MyAppParams
     private String backupDbPath;
     private String tmpPicPath;
     private String tmpVoicePath;
+    private String tmpVideoPath;
     private String zipPath;
 
     private static int screenWidth;
@@ -28,12 +29,18 @@ public class MyAppParams
         this.localLogPath = this.workPath + "log/";
         this.backupDbPath = this.workPath + "backupdb/";
         this.tmpPicPath = this.workPath + "tempimg/";
+
         this.tmpVoicePath = this.workPath + "tempamr/";
+        this.tmpVideoPath = this.workPath + "tempMP4/";
         this.zipPath = this.workPath + "zip/";
+
         BasicFileUtil.makeDirectory(this.localLogPath);
         BasicFileUtil.makeDirectory(this.backupDbPath);
+
         BasicFileUtil.makeDirectory(this.tmpPicPath);
         BasicFileUtil.makeDirectory(this.tmpVoicePath);
+        BasicFileUtil.makeDirectory(this.tmpVideoPath);
+
         BasicFileUtil.makeDirectory(this.zipPath);
     }
 
@@ -141,5 +148,10 @@ public class MyAppParams
     public String getAppPath()
     {
         return this.appPath;
+    }
+
+    public String getTmpVideoPath()
+    {
+        return this.tmpVideoPath;
     }
 }

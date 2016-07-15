@@ -39,6 +39,10 @@ public class ClickFileIntentFactory
         {
             return MyIntentUtil.getAudioFileIntent(filePath);
         }
+        else if (FileTypeUtil.isVideoFile(filePath))
+        {
+            return MyIntentUtil.getVideoFileIntent(filePath);
+        }
 
         throw new IllegalArgumentException(filePath + "该文件类型找不到对应的Intent");
     }

@@ -21,4 +21,10 @@ public class FileTypeUtil
         return filePath.endsWith(".amr") || filePath.endsWith(".mp3")
                 || filePath.endsWith(".wma") || filePath.endsWith(".ogg");
     }
+
+    public static boolean isVideoFile(String filePath)
+    {
+        return filePath.endsWith(".3gp") || filePath.endsWith(".mp4")
+                || filePath.endsWith(".wmv") || filePath.endsWith(".avi");
+    }
 }

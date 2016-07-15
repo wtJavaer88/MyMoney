@@ -50,7 +50,7 @@ public class CostKeyboardActivity extends Activity
         return true;
     }
 
-    public void setResultAndFinish()
+    private void setResultAndFinish()
     {
         Intent intent = new Intent();
         intent.putExtra("cost", this.simulator.getResult());// 放入返回值

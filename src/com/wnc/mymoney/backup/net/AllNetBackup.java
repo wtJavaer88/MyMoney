@@ -28,6 +28,7 @@ public class AllNetBackup extends AbstractNetBackup
                 add(new File(MyAppParams.getInstance().getLocalLogPath()));
                 add(new File(MyAppParams.getInstance().getTmpPicPath()));
                 add(new File(MyAppParams.getInstance().getTmpVoicePath()));
+                add(new File(MyAppParams.getInstance().getTmpVideoPath()));
             }
         };
         return list;
