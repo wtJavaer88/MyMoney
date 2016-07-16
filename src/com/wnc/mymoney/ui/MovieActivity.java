@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 import com.wnc.mymoney.R;
+import com.wnc.mymoney.ui.helper.MovieRecorder;
 
 public class MovieActivity extends Activity
 {

@@ -1,4 +1,4 @@
-package com.wnc.mymoney.ui;
+package com.wnc.mymoney.ui.helper;
 
 import java.io.IOException;
 import java.util.Timer;

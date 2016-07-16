@@ -381,7 +381,7 @@ public class AddOrEditTransActivity extends BaseActivity implements
                 private boolean complictTrade(String uuid)
                 {
                     // TODO 是否在数据库中重复了uuid
-                    return !TransactionsDao.checkTradeUUIDExist(uuid);
+                    return TransactionsDao.checkTradeUUIDExist(uuid);
                 }
             });
         }
