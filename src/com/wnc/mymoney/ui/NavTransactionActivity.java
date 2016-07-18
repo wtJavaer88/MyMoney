@@ -233,7 +233,7 @@ public class NavTransactionActivity extends BaseActivity implements
         }
         if (this.TOTAL_RANGE_TYPE == TOTAL_RANGE.CURRYEAR)
         {
-
+            // 分组的ListView
             QExListView lv = new QExListView(this);
             lv.setGroupIndicator(null);// 取消箭头
             expanseLV = lv;

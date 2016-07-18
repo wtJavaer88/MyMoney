@@ -2,13 +2,13 @@ package com.wnc.srt;
 
 import java.util.List;
 
-public class Main
+public class MainAss
 {
     public static void main(String[] args)
     {
-        String srtFile = "C:\\Users\\cpr216\\Downloads\\字幕\\[zmk.tw]Person.of.Interest.S01.720p.HDTV.x264-TvT[chs&amp;amp;eng]"
-                + "\\Person.of.Interest.S01E01.720p.HDTV.x264-IMMERSE.chs&eng.srt";
-        List<SrtInfo> srtInfos = new SrtPicker(srtFile).getSrtInfos();
+        String srtFile = "C:\\Users\\cpr216\\Downloads\\字幕\\Person.of.Interest.S03"
+                + "\\S03E01.ass";
+        List<SrtInfo> srtInfos = PickerFactory.getPicker(srtFile).getSrtInfos();
         DataHolder.appendData(srtFile, srtInfos);
         System.out.println(DataHolder.getClosestSrt(0, 0, 9));
         System.out.println(DataHolder.getNext());
@@ -24,7 +24,6 @@ public class Main
         }
         catch (Exception e)
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         System.out.println(DataHolder.getNext());

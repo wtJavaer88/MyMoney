@@ -182,29 +182,4 @@ public class TextFormatUtil
         return false;
     }
 
-    public static String getFileNameNoExtend(String filePath)
-    {
-        int dotPos = filePath.lastIndexOf(".");
-        int separatorPos = filePath.lastIndexOf("\\");
-        if (dotPos != -1)
-        {
-            if (separatorPos != -1)
-            {
-                return filePath.substring(separatorPos + 1, dotPos);
-            }
-            else
-            {
-                return filePath.substring(0, dotPos);
-            }
-        }
-        else
-        {
-            if (separatorPos != -1)
-            {
-                return filePath.substring(separatorPos + 1);
-            }
-
-        }
-        return filePath;
-    }
 }

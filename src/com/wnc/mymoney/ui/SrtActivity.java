@@ -17,24 +17,24 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import com.wnc.basic.BasicFileUtil;
+import com.wnc.basic.BasicStringUtil;
 import com.wnc.mymoney.R;
 import com.wnc.mymoney.ui.helper.AfterWheelChooseListener;
 import com.wnc.mymoney.ui.helper.HorGestureDetectorListener;
 import com.wnc.mymoney.ui.helper.MyHorizontalGestureDetector;
 import com.wnc.mymoney.ui.helper.WheelDialogShowUtil;
-import com.wnc.mymoney.util.TextFormatUtil;
 import com.wnc.mymoney.util.ToastUtil;
 import com.wnc.srt.DataHolder;
+import com.wnc.srt.Picker;
+import com.wnc.srt.PickerFactory;
 import com.wnc.srt.SrtInfo;
-import com.wnc.srt.SrtPicker;
 
 public class SrtActivity extends Activity implements OnClickListener,
         HorGestureDetectorListener
 {
     TextView chsTv;
     TextView engTv;
-    TextView fromTv;
-    TextView toTv;
+    TextView timelineTv;
     final String srtFolder = Environment.getExternalStorageDirectory()
             .getPath() + "/wnc/app/srt/";
     Map<Integer, String> srtFilePathes = new HashMap<Integer, String>();
@@ -55,8 +55,12 @@ public class SrtActivity extends Activity implements OnClickListener,
     {
         chsTv = (TextView) findViewById(R.id.chs_tv);
         engTv = (TextView) findViewById(R.id.eng_tv);
-        fromTv = (TextView) findViewById(R.id.from_tv);
-        toTv = (TextView) findViewById(R.id.to_tv);
+        timelineTv = (TextView) findViewById(R.id.timeline_tv);
+        if (BasicStringUtil.isNotNullString(DataHolder.fileKey))
+        {
+            initFileTv(DataHolder.fileKey);
+            getSrtAndSetContent(RIGHT);
+        }
 
         chsTv.setOnClickListener(this);
         engTv.setOnClickListener(this);
@@ -67,6 +71,23 @@ public class SrtActivity extends Activity implements OnClickListener,
         findViewById(R.id.btnSkip).setOnClickListener(this);
         findViewById(R.id.btnChoose).setOnClickListener(this);
         findViewById(R.id.btnSkip).setOnClickListener(this);
+
+    }
+
+    private void initFileTv(String srtFilePath)
+    {
+        if (BasicFileUtil.isExistFile(srtFilePath))
+        {
+            File f = new File(srtFilePath);
+            String folder = f.getParent();
+            int i = folder.lastIndexOf("/");
+            if (i != -1)
+            {
+                folder = folder.substring(i + 1);
+                ((TextView) findViewById(R.id.file_tv)).setText(folder + " / "
+                        + f.getName());
+            }
+        }
     }
 
     final int LEFT = 1;
@@ -78,7 +99,8 @@ public class SrtActivity extends Activity implements OnClickListener,
         {
             if (!DataHolder.map.containsKey(srtFile))
             {
-                List<SrtInfo> srtInfos = SrtPicker.getSrtInfos(srtFile);
+                Picker picker = PickerFactory.getPicker(srtFile);
+                List<SrtInfo> srtInfos = picker.getSrtInfos();
                 DataHolder.appendData(srtFile, srtInfos);
                 getSrtAndSetContent(RIGHT);
             }
@@ -175,7 +197,7 @@ public class SrtActivity extends Activity implements OnClickListener,
             for (File f2 : listFiles)
             {
                 srtFilePathes.put(1000 * i + j, f2.getAbsolutePath());
-                arr[j++] = TextFormatUtil.getFileNameNoExtend(f2.getName());
+                arr[j++] = f2.getName();
             }
             rightArr[i] = arr;
             i++;
@@ -194,11 +216,12 @@ public class SrtActivity extends Activity implements OnClickListener,
                                     .toString());
                             String srtFilePath = srtFilePathes.get(1000
                                     * selectedLeftIndex + selectedRightIndex);
-                            ((TextView) findViewById(R.id.file_tv))
-                                    .setText(tvFolderFiles.get(
-                                            selectedLeftIndex).getName()
-                                            + " / "
-                                            + new File(srtFilePath).getName());
+                            // ((TextView) findViewById(R.id.file_tv))
+                            // .setText(tvFolderFiles.get(
+                            // selectedLeftIndex).getName()
+                            // + " / "
+                            // + new File(srtFilePath).getName());
+                            initFileTv(srtFilePath);
                             parseSrt(srtFilePath);
                         }
 
@@ -246,8 +269,8 @@ public class SrtActivity extends Activity implements OnClickListener,
     {
         chsTv.setText(srt.getChs());
         engTv.setText(srt.getEng());
-        fromTv.setText(srt.getFromTime().toString());
-        toTv.setText(srt.getToTime().toString());
+        timelineTv.setText(srt.getFromTime().toString() + " ---> "
+                + srt.getToTime().toString());
     }
 
     @Override

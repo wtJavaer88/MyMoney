@@ -7,10 +7,10 @@ import com.wnc.basic.BasicNumberUtil;
 import com.wnc.string.PatternUtil;
 import com.wnc.tools.FileOp;
 
-public class SrtPicker implements Picker
+public class AssPicker implements Picker
 {
 
-    public SrtPicker(String srtFile)
+    public AssPicker(String srtFile)
     {
         this.srtFile = srtFile;
     }
@@ -21,47 +21,37 @@ public class SrtPicker implements Picker
     public List<SrtInfo> getSrtInfos()
     {
         List<SrtInfo> srtInfos = new ArrayList<SrtInfo>();
-
-        List<String> segments = FileOp.readFrom(srtFile, "GBK");
-        int index = 0;
+        int index = -1;
+        List<String> segments = FileOp.readFrom(srtFile, "UNICODE");
         TimeInfo fromTime = null;
         TimeInfo toTime = null;
         String chs = null;
         String eng = null;
-        int indexLineNumber = 0;
 
         for (int i = 0; i < segments.size(); i++)
         {
             String str = segments.get(i);
-            if (isIndexLine(str))
+            String[] parts = str.split(",");
+            if (valid(parts))
             {
-                indexLineNumber = i;
-                index = BasicNumberUtil.getNumber(str.trim());
-            }
-            if (i == indexLineNumber + 1)
-            {
-                fromTime = parseTimeInfo(PatternUtil.getFirstPattern(str,
-                        "\\d{2}:\\d{2}:\\d{2},\\d{3}"));
-                toTime = parseTimeInfo(PatternUtil.getLastPattern(str,
-                        "\\d{2}:\\d{2}:\\d{2},\\d{3}"));
-            }
-            if (i == indexLineNumber + 2)
-            {
-                chs = str;
-            }
-            if (i == indexLineNumber + 3)
-            {
-                eng = str;
-            }
-            if (i == indexLineNumber + 4)
-            {
-                if (index > 0 && fromTime != null && toTime != null
-                        && chs != null && eng != null)
+                String dialogue = parts[9];
+                index++;
+                fromTime = parseTimeInfo(parts[1]);
+                toTime = parseTimeInfo(parts[2]);
+                int pos = dialogue.indexOf("\\N");
+                if (pos != -1)
                 {
-                    // System.out.println("一段字幕" + index + "已经结束...");
+                    chs = dialogue.substring(0, pos)
+                            .replaceAll("\\{.*?\\}", "");
+                    eng = dialogue.substring(pos + 2).replaceAll("\\{.*?\\}",
+                            "");
+                }
+                if (fromTime != null && toTime != null && chs != null
+                        && eng != null)
+                {
                     // System.out.println("CHS:" + chs + " ENG:" + eng);
-                    // System.out.println("FROMTIME:" + fromTime + " TOTIME:" +
-                    // toTime);
+                    // System.out.println("FROMTIME:" + fromTime + " TOTIME:"
+                    // + toTime);
                     SrtInfo srtInfo = new SrtInfo();
                     srtInfo.setSrtIndex(index);
                     srtInfo.setFromTime(fromTime);
@@ -69,7 +59,6 @@ public class SrtPicker implements Picker
                     srtInfo.setChs(chs);
                     srtInfo.setEng(eng);
                     srtInfos.add(srtInfo);
-                    index = 0;
                     fromTime = null;
                     toTime = null;
                     chs = null;
@@ -81,30 +70,38 @@ public class SrtPicker implements Picker
                             + srtFile + "> Line " + i + "...");
                 }
             }
+
         }
         return srtInfos;
+
+    }
+
+    private boolean valid(String[] parts)
+    {
+        if (parts.length >= 9 && parts[0].startsWith("Dialogue:")
+                && parts[1].matches("\\d:\\d{2}:\\d{2}\\.\\d{2}")
+                && parts[2].matches("\\d:\\d{2}:\\d{2}\\.\\d{2}"))
+        {
+            return true;
+        }
+        return false;
     }
 
     private TimeInfo parseTimeInfo(String timeStr)
     {
         int hour = BasicNumberUtil.getNumber(PatternUtil.getFirstPattern(
-                timeStr, "\\d{2}:").replace(":", ""));
+                timeStr, "\\d+:").replace(":", ""));
         int minute = BasicNumberUtil.getNumber(PatternUtil.getLastPattern(
-                timeStr, "\\d{2}:").replace(":", ""));
+                timeStr, "\\d+:").replace(":", ""));
         int second = BasicNumberUtil.getNumber(PatternUtil.getFirstPattern(
-                timeStr, "\\d{2},").replace(",", ""));
-        int millSecond = BasicNumberUtil.getNumber(PatternUtil.getFirstPattern(
-                timeStr, "\\d{3}"));
+                timeStr, "\\d{2}\\.").replace(".", ""));
+        int millSecond = BasicNumberUtil.getNumber(PatternUtil.getLastPattern(
+                timeStr, "\\d+"));
         TimeInfo timeInfo = new TimeInfo();
         timeInfo.setHour(hour);
         timeInfo.setMinute(minute);
         timeInfo.setSecond(second);
         timeInfo.setMillSecond(millSecond);
         return timeInfo;
-    }
-
-    private boolean isIndexLine(String string)
-    {
-        return string.matches("\\d+");
     }
 }
