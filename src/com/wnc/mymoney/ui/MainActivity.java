@@ -163,7 +163,7 @@ public class MainActivity extends Activity
                 intoTransTotalActivity(TOTAL_RANGE.CURRYEAR);
                 break;
             case R.id.nav_account_tv:
-                createNewExpand();
+                intoSrtActivity();
                 break;
             case R.id.nav_report_tv:
                 toPieChart();
@@ -181,6 +181,13 @@ public class MainActivity extends Activity
                 break;
             }
         }
+    }
+
+    private void intoSrtActivity()
+    {
+        Intent localIntent = new Intent();
+        localIntent.setClass(this, SrtActivity.class);
+        startActivity(localIntent);
     }
 
     private void intoTrainActivity()

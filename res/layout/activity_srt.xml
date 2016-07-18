@@ -1,0 +1,102 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity" >
+
+     <LinearLayout android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="10dp">
+	    <Button
+	        android:id="@+id/btnChoose"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentTop="true"
+	        android:text="剧集" />
+	    
+	     <TextView
+            android:id="@+id/file_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:text="疑犯追踪第1季第1集" />
+	   
+    </LinearLayout>
+    
+     <LinearLayout android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content">
+         
+          <Button
+	        android:id="@+id/btnFirst"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentTop="true"
+	        android:text="第一条" />
+          <Button
+	        android:id="@+id/btnLast"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentTop="true"
+	        android:text="最后一条" />
+          
+           <Button
+	        android:id="@+id/btnPre"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentTop="true"
+	        android:text="上一条" />
+           
+            <Button
+	        android:id="@+id/btnNext"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentTop="true"
+	        android:text="下一条" />
+            <Button
+	        android:id="@+id/btnSkip"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentTop="true"
+	        android:text="跳转" />
+         </LinearLayout>
+
+      <LinearLayout android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="10dp">
+          <TextView
+            android:id="@+id/from_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="center"
+            android:textColor="@color/black"
+			android:singleLine="false"
+			
+            android:text="00:01:01,122" />
+     <TextView
+            android:id="@+id/to_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:singleLine="false"
+            android:text="00:01:04,233" />
+      </LinearLayout>
+     
+     <TextView
+            android:id="@+id/chs_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/black"
+			android:singleLine="false"
+            android:text="0时0分0秒" />
+     <TextView
+            android:id="@+id/eng_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+			android:layout_marginLeft="10dp"
+			android:layout_marginTop="10dp"
+            android:textColor="@color/black"
+            android:singleLine="false"
+            android:text="0时0分0秒" />
+</LinearLayout>

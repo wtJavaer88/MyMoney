@@ -79,7 +79,7 @@
      <RelativeLayout android:layout_width="fill_parent" android:layout_height="@dimen/dimen_50_dip" >
         <LinearLayout android:layout_width="fill_parent" android:layout_height="fill_parent">
             <TextView android:id="@+id/nav_yeartrans_tv" android:background="@drawable/nav_year_trans_btn" android:text="流水" style="@style/new_nav_text_tv" />
-            <TextView android:id="@+id/nav_account_tv" android:background="@drawable/nav_account_btn" android:text="账户" style="@style/new_nav_text_tv" />
+            <TextView android:id="@+id/nav_account_tv" android:background="@drawable/nav_account_btn" android:text="字幕" style="@style/new_nav_text_tv" />
             <TextView android:id="@+id/nav_report_tv" android:background="@drawable/nav_report_btn" android:text="图表" style="@style/new_nav_text_tv" />
             <TextView android:id="@+id/nav_budget_tv" android:background="@drawable/nav_budget_btn" android:text="买票" style="@style/new_nav_text_tv" />
             <TextView android:id="@+id/nav_setting_tv" android:background="@drawable/nav_setting_btn" android:text="更多" style="@style/new_nav_text_tv" />
