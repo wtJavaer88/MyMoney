@@ -50,7 +50,30 @@ public class TimeInfo
     @Override
     public String toString()
     {
-        return "TimeInfo [hour=" + hour + ", minute=" + minute + ", second="
-                + second + ", millSecond=" + millSecond + "]";
+        return align(hour, 2) + ":" + align(minute, 2) + ":" + align(second, 2)
+                + "," + align(millSecond, 3);
+    }
+
+    private String align(int i, int len)
+    {
+        if (len == 2)
+        {
+            if (i < 10)
+            {
+                return "0" + i;
+            }
+        }
+        else if (len == 3)
+        {
+            if (i < 10)
+            {
+                return "00" + i;
+            }
+            else if (i < 100)
+            {
+                return "0" + i;
+            }
+        }
+        return i + "";
     }
 }

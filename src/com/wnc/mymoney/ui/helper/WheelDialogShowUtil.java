@@ -160,6 +160,73 @@ public class WheelDialogShowUtil
         dialog.show();
     }
 
+    public static void showTimeDialog(Context context,
+            final AfterWheelChooseListener listener)
+    {
+        final AlertDialog dialog = new AlertDialog.Builder(context).create();
+        // dialog.setTitle(title);
+
+        final List<String[]> arrList = new ArrayList<String[]>();
+        arrList.add(DateTimeSelectArrUtil.getHours());
+        arrList.add(DateTimeSelectArrUtil.getMinutes());
+        arrList.add(DateTimeSelectArrUtil.getSeconds());
+
+        LinearLayout llContent = new LinearLayout(context);
+        llContent.setOrientation(LinearLayout.HORIZONTAL);
+
+        final List<WheelView> wheelviews = new ArrayList<WheelView>();
+
+        for (int i = 0; i < 3; i++)
+        {
+            WheelView wheelview = new WheelView(context);
+            wheelview.setVisibleItems(7);
+            if (i > 0)
+            {
+                wheelview.setCyclic(true);
+            }
+            else
+            {
+                wheelview.setCyclic(false);
+            }
+            String[] data = arrList.get(i);
+            wheelview.setAdapter(new ArrayWheelAdapter<String>(data));
+
+            wheelview.setTextSize(40);
+            llContent.addView(wheelview, new LinearLayout.LayoutParams(
+                    LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1));
+            wheelviews.add(wheelview);
+        }
+
+        // 设置对话框点击事件 积极
+        dialog.setButton(AlertDialog.BUTTON_POSITIVE, "确定",
+                new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        listener.afterWheelChoose(wheelviews.get(0)
+                                .getCurrentItem(), wheelviews.get(1)
+                                .getCurrentItem(), wheelviews.get(2)
+                                .getCurrentItem());
+                        dialog.dismiss();
+                    }
+
+                });
+
+        // 设置对话框点击事件 消极
+        dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "取消",
+                new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                    }
+                });
+        dialog.setView(llContent);
+        dialog.show();
+    }
+
     private static String getFormatDateStr(List<WheelView> wheelviews,
             List<String[]> arrList)
     {
@@ -347,7 +414,6 @@ public class WheelDialogShowUtil
             @Override
             public void onChanged(WheelView wheel, int oldValue, int newValue)
             {
-
                 // 设置右侧的 WheelView 的适配器
                 wheelRight.setAdapter(new ArrayWheelAdapter<String>(
                         right[newValue]));

@@ -68,7 +68,7 @@ public class SrtPicker
                 }
                 else
                 {
-                    System.out.println("Cause A Err, Not Match In File<"
+                    System.out.println("Cause An Err, Not Matched In File<"
                             + srtFile + "> Line " + i + "...");
                 }
             }

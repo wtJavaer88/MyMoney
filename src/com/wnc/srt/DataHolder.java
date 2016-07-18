@@ -23,12 +23,23 @@ public class DataHolder
         return getSrtByIndex();
     }
 
+    public static SrtInfo getFirst()
+    {
+        srtIndex = 0;
+        return getSrtByIndex();
+    }
+
+    public static SrtInfo getLast()
+    {
+        checkExist();
+        List<SrtInfo> list = map.get(fileKey);
+        srtIndex = list.size() - 1;
+        return getSrtByIndex();
+    }
+
     private static SrtInfo getSrtByIndex()
     {
-        if (!map.containsKey(fileKey))
-        {
-            throw new RuntimeException("找不到该文件的字幕!");
-        }
+        checkExist();
         List<SrtInfo> list = map.get(fileKey);
         if (srtIndex == -1)
         {
@@ -43,32 +54,38 @@ public class DataHolder
         return list.get(srtIndex);
     }
 
-    public static SrtInfo getClosestSrt(int hour, int minute, int second)
+    private static void checkExist()
     {
-        if (map.containsKey(fileKey))
+        if (!map.containsKey(fileKey))
         {
-            long l = hour * 3600 + minute * 60 + second;
-            List<SrtInfo> list = map.get(fileKey);
-            for (SrtInfo info : list)
-            {
-                if (formatSeconds(info.getFromTime()) >= l
-                        || formatSeconds(info.getToTime()) >= l)
-                {
-                    setSrtIndex(info);
-                    return info;
-                }
-            }
-            // 返回最后一个
-            SrtInfo srtInfo = list.get(list.size() - 1);
-            setSrtIndex(srtInfo);
-            return srtInfo;
+            throw new RuntimeException("找不到该文件的字幕!");
         }
-        throw new RuntimeException("找不到该文件的字幕!");
     }
 
-    private static void setSrtIndex(SrtInfo srtInfo)
+    public static SrtInfo getClosestSrt(int hour, int minute, int second)
     {
-        srtIndex = srtInfo.getSrtIndex() - 1;
+        checkExist();
+        long l = hour * 3600 + minute * 60 + second;
+        List<SrtInfo> list = map.get(fileKey);
+        SrtInfo srtInfo = null;
+        for (int i = 0; i < list.size(); i++)
+        {
+            SrtInfo info = list.get(i);
+            if (formatSeconds(info.getFromTime()) >= l
+                    || formatSeconds(info.getToTime()) >= l)
+            {
+                srtInfo = info;
+                srtIndex = i;
+                break;
+            }
+        }
+        // 返回最后一个
+        if (srtInfo == null)
+        {
+            srtInfo = list.get(list.size() - 1);
+            srtIndex = list.size() - 1;
+        }
+        return srtInfo;
     }
 
     private static long formatSeconds(TimeInfo fromTime)
@@ -82,5 +99,10 @@ public class DataHolder
         map.put(srtFile, srtInfos);
         fileKey = srtFile;
         srtIndex = -1;
+    }
+
+    public static void setFileKey(String srtFile)
+    {
+        fileKey = srtFile;
     }
 }
