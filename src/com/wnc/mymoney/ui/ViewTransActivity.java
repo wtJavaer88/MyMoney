@@ -27,8 +27,10 @@ import com.wnc.mymoney.ui.helper.HorGestureDetectorListener;
 import com.wnc.mymoney.ui.helper.MyHorizontalGestureDetector;
 import com.wnc.mymoney.ui.widget.ComboBox;
 import com.wnc.mymoney.ui.widget.richtext.ClickablePicRichText;
+import com.wnc.mymoney.ui.widget.richtext.ClickableVideoRichText;
 import com.wnc.mymoney.ui.widget.richtext.ClickableVoiceRichText;
 import com.wnc.mymoney.util.CostTypeUtil;
+import com.wnc.mymoney.util.FileTypeUtil;
 import com.wnc.mymoney.util.MyAppParams;
 import com.wnc.mymoney.util.TextFormatUtil;
 import com.wnc.mymoney.util.ToastUtil;
@@ -193,35 +195,46 @@ public class ViewTransActivity extends BaseActivity implements
                     msg.what = 0;
                     return;
                 }
-                String path = null;
-                boolean isVoiceFile = segment.trim().endsWith("amr");
+                String path = "";
+                boolean isVoiceFile = FileTypeUtil.isVoiceFile(segment);
+                boolean isPicFile = FileTypeUtil.isPicFile(segment);
+                boolean isVideoFile = FileTypeUtil.isVideoFile(segment);
                 if (isVoiceFile)
                 {
                     path = MyAppParams.getInstance().getTmpVoicePath()
                             + segment.trim();
                 }
-                else
+                else if(isPicFile)
                 {
                     path = MyAppParams.getInstance().getTmpPicPath()
                             + segment.trim();
                 }
-                System.out.println("segment:" + segment);
+                else if(isVideoFile)
+                {
+                    path = MyAppParams.getInstance().getTmpVideoPath()
+                            + segment.trim();
+                }
                 File file = new File(path);
                 if (file != null && file.isFile() && file.exists())
                 {
-                    System.out.println("fileOK");
                     if (isVoiceFile)
                     {
                         ClickableVoiceRichText clickableVoiceRichText = new ClickableVoiceRichText(
                                 ViewTransActivity.this, path);
                         msg.obj = clickableVoiceRichText.getSequence();
                     }
-                    else
+                    else if(isPicFile)
                     {
                         ClickablePicRichText clickablePicRichText = new ClickablePicRichText(
                                 ViewTransActivity.this, path);
                         msg.obj = clickablePicRichText.getSequence();
                         picTexts.add(clickablePicRichText);
+                    }
+                    else if(isVideoFile)
+                    {
+                    	ClickableVideoRichText clickableVideoRichText = new ClickableVideoRichText(
+                                ViewTransActivity.this, path);
+                        msg.obj = clickableVideoRichText.getSequence();
                     }
                 }
                 else
@@ -243,8 +256,9 @@ public class ViewTransActivity extends BaseActivity implements
         {
             if (msg.what == 1)
             {
-                descriptionTV.append((CharSequence) msg.obj);
-                // descriptionTV.append("\n");
+            	CharSequence result = msg.obj == null?"":(CharSequence)msg.obj;
+                descriptionTV.append(result);
+                descriptionTV.append(" ");
             }
         };
     };
