@@ -59,7 +59,7 @@ public class SrtActivity extends Activity implements OnClickListener,
         if (BasicStringUtil.isNotNullString(DataHolder.fileKey))
         {
             initFileTv(DataHolder.fileKey);
-            getSrtAndSetContent(RIGHT);
+            getSrtAndSetContent(CURRENT);
         }
 
         chsTv.setOnClickListener(this);
@@ -90,6 +90,7 @@ public class SrtActivity extends Activity implements OnClickListener,
         }
     }
 
+    final int CURRENT = 0;
     final int LEFT = 1;
     final int RIGHT = 2;
 
@@ -106,9 +107,8 @@ public class SrtActivity extends Activity implements OnClickListener,
             }
             else
             {
-                DataHolder.srtIndex = -1;
-                DataHolder.setFileKey(srtFile);
-                getSrtAndSetContent(RIGHT);
+                DataHolder.switchFile(srtFile);
+                getSrtAndSetContent(CURRENT);
             }
         }
         else
@@ -252,6 +252,9 @@ public class SrtActivity extends Activity implements OnClickListener,
                 break;
             case RIGHT:
                 srt = DataHolder.getNext();
+                break;
+            case CURRENT:
+                srt = DataHolder.getCurrent();
                 break;
             }
             if (srt != null)

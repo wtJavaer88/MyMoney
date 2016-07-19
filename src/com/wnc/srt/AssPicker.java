@@ -22,7 +22,7 @@ public class AssPicker implements Picker
     {
         List<SrtInfo> srtInfos = new ArrayList<SrtInfo>();
         int index = -1;
-        List<String> segments = FileOp.readFrom(srtFile, "UNICODE");
+        List<String> segments = FileOp.readFrom(srtFile, "GBK");
         TimeInfo fromTime = null;
         TimeInfo toTime = null;
         String chs = null;

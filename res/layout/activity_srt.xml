@@ -5,21 +5,37 @@
     android:orientation="vertical"
     tools:context=".MainActivity" >
 
-     <LinearLayout android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="10dp">
-	    <Button
+     <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="10dp">
+	    <!-- <Button
 	        android:id="@+id/btnChoose"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_alignParentTop="true"
-	        android:text="剧集" />
+	        android:text="剧集" /> -->
+	     <Button
+	          android:id="@+id/btnChoose"
+	          android:textSize="@dimen/dimen_15_dip" android:textStyle="bold" 
+	          android:textColor="@color/white" android:gravity="center" android:layout_gravity="center" 
+	          android:background="@drawable/main_add_expense_quickly_new" 
+	          android:paddingBottom="@dimen/dimen_6_dip" 
+	          android:layout_width="60dp" 
+	          android:layout_height="@dimen/dimen_60_dip" 
+	          android:layout_marginRight="@dimen/dimen_5_dip" 
+	          android:shadowColor="@color/black" 
+	          android:shadowDx="0.0" 
+	          android:shadowDy="2.0" 
+	          android:shadowRadius="1.0"
+	          android:text="剧集" />
+	        
 	    
 	     <TextView
             android:id="@+id/file_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:textColor="@color/black"
-            android:gravity="center"
+            android:textColor="#b5e61e"
+            android:textSize="15dp"
+            android:gravity="left"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="20dp"
             android:text="疑犯追踪第1季第1集" />
 	   
     </LinearLayout>
@@ -28,18 +44,32 @@
          
           <Button
 	        android:id="@+id/btnFirst"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignParentTop="true"
+	       android:textSize="@dimen/dimen_15_dip" android:textStyle="bold" android:textColor="@color/white" android:gravity="center" android:layout_gravity="center" 
+	          android:background="@drawable/main_add_expense_quickly_new" 
+	          android:paddingBottom="@dimen/dimen_6_dip" 
+	          android:layout_width="80dp" 
+	          android:layout_height="@dimen/dimen_60_dip" 
+	          android:layout_marginRight="@dimen/dimen_5_dip" 
+	          android:shadowColor="@color/black" 
+	          android:shadowDx="0.0" 
+	          android:shadowDy="2.0" 
+	          android:shadowRadius="1.0"
 	        android:text="第一条" />
           <Button
 	        android:id="@+id/btnLast"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignParentTop="true"
+	        android:textSize="@dimen/dimen_15_dip" android:textStyle="bold" android:textColor="@color/white" android:gravity="center" android:layout_gravity="center" 
+	          android:background="@drawable/main_add_expense_quickly_new" 
+	          android:paddingBottom="@dimen/dimen_6_dip" 
+	          android:layout_width="100dp" 
+	          android:layout_height="@dimen/dimen_60_dip" 
+	          android:layout_marginRight="@dimen/dimen_5_dip" 
+	          android:shadowColor="@color/black" 
+	          android:shadowDx="0.0" 
+	          android:shadowDy="2.0" 
+	          android:shadowRadius="1.0"
 	        android:text="最后一条" />
           
-           <Button
+          <!--  <Button
 	        android:id="@+id/btnPre"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
@@ -51,52 +81,51 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentTop="true"
-	        android:text="下一条" />
+	        android:text="下一条" /> -->
             <Button
 	        android:id="@+id/btnSkip"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignParentTop="true"
+	        android:textSize="@dimen/dimen_15_dip" android:textStyle="bold" android:textColor="@color/white" android:gravity="center" android:layout_gravity="center" 
+	          android:background="@drawable/main_add_expense_quickly_new" 
+	          android:paddingBottom="@dimen/dimen_6_dip" 
+	          android:layout_width="60dp" 
+	          android:layout_height="@dimen/dimen_60_dip" 
+	          android:layout_marginRight="@dimen/dimen_5_dip" 
+	          android:shadowColor="@color/black" 
+	          android:shadowDx="0.0" 
+	          android:shadowDy="2.0" 
+	          android:shadowRadius="1.0"
 	        android:text="跳转" />
          </LinearLayout>
 
-      <LinearLayout android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="10dp">
+
           <TextView
-            android:id="@+id/from_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:gravity="center"
-            android:textColor="@color/black"
-			android:singleLine="false"
-			
-            android:text="00:01:01,122" />
-     <TextView
-            android:id="@+id/to_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:gravity="center"
-            android:singleLine="false"
-            android:text="00:01:04,233" />
-      </LinearLayout>
-     
+              android:id="@+id/timeline_tv"
+              android:layout_marginTop="10dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:text="00:00:00,000 --->  00:00:00,000"
+              android:textColor="@color/white"  />
+
      <TextView
             android:id="@+id/chs_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
-            android:textColor="@color/black"
+            android:textColor="#820072"
 			android:singleLine="false"
-            android:text="0时0分0秒" />
+			android:textSize="40dp"
+            android:text="" />
+      
      <TextView
             android:id="@+id/eng_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 			android:layout_marginLeft="10dp"
 			android:layout_marginTop="10dp"
-            android:textColor="@color/black"
+           android:textColor="#820072"
             android:singleLine="false"
-            android:text="0时0分0秒" />
+            android:textSize="40dp"
+           android:text="" />
 </LinearLayout>

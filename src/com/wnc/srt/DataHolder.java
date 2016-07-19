@@ -10,6 +10,7 @@ public class DataHolder
     public static int srtIndex = -1;// 正常的浏览从0开始
 
     public static Map<String, List<SrtInfo>> map = new HashMap<String, List<SrtInfo>>();
+    public static Map<String, Integer> indexMap = new HashMap<String, Integer>();
 
     public static SrtInfo getNext()
     {
@@ -29,6 +30,11 @@ public class DataHolder
         return getSrtByIndex();
     }
 
+    public static SrtInfo getCurrent()
+    {
+        return getSrtByIndex();
+    }
+
     public static SrtInfo getLast()
     {
         checkExist();
@@ -40,18 +46,27 @@ public class DataHolder
     private static SrtInfo getSrtByIndex()
     {
         checkExist();
+        indexMap.put(fileKey, srtIndex);
         List<SrtInfo> list = map.get(fileKey);
         if (srtIndex == -1)
         {
             srtIndex = 0;
+            indexMap.put(fileKey, srtIndex);
             throw new RuntimeException("下标越界!");
         }
         if (srtIndex == list.size())
         {
             srtIndex = list.size() - 1;
+            indexMap.put(fileKey, srtIndex);
             throw new RuntimeException("下标越界!");
         }
         return list.get(srtIndex);
+    }
+
+    public static void switchFile(String file)
+    {
+        fileKey = file;
+        srtIndex = indexMap.get(fileKey) == null ? -1 : indexMap.get(fileKey);
     }
 
     private static void checkExist()
@@ -65,7 +80,7 @@ public class DataHolder
     public static SrtInfo getClosestSrt(int hour, int minute, int second)
     {
         checkExist();
-        long l = hour * 3600 + minute * 60 + second;
+        long l = TimeHelper.getTime(hour, minute, second, 0);
         List<SrtInfo> list = map.get(fileKey);
         SrtInfo srtInfo = null;
         for (int i = 0; i < list.size(); i++)
@@ -88,17 +103,16 @@ public class DataHolder
         return srtInfo;
     }
 
-    private static long formatSeconds(TimeInfo fromTime)
+    private static long formatSeconds(TimeInfo timeInfo)
     {
-        return fromTime.getHour() * 3600 + fromTime.getMinute() * 60
-                + fromTime.getSecond();
+        return TimeHelper.getTime(timeInfo.getHour(), timeInfo.getMinute(),
+                timeInfo.getSecond(), timeInfo.getMillSecond());
     }
 
     public static void appendData(String srtFile, List<SrtInfo> srtInfos)
     {
         map.put(srtFile, srtInfos);
-        fileKey = srtFile;
-        srtIndex = -1;
+        switchFile(srtFile);
     }
 
     public static void setFileKey(String srtFile)
