@@ -6,11 +6,16 @@ import java.util.Map;
 
 public class DataHolder
 {
-    public static String fileKey = "";
-    public static int srtIndex = -1;// 正常的浏览从0开始
+    private static String fileKey = "";
+    private static int srtIndex = -1;// 正常的浏览从0开始
 
     public static Map<String, List<SrtInfo>> map = new HashMap<String, List<SrtInfo>>();
     public static Map<String, Integer> indexMap = new HashMap<String, Integer>();
+
+    public static String getFileKey()
+    {
+        return fileKey;
+    }
 
     public static SrtInfo getNext()
     {

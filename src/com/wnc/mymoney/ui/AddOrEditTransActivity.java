@@ -110,7 +110,6 @@ public class AddOrEditTransActivity extends BaseActivity implements
 
     private String savePicDir = MyAppParams.getInstance().getTmpPicPath();
     private String saveVoiceDir = MyAppParams.getInstance().getTmpVoicePath();
-    private String saveVideoDir = MyAppParams.getInstance().getTmpVideoPath();
 
     private String lastMemoContent = "";
     private int selectedLeftIndex = 0;

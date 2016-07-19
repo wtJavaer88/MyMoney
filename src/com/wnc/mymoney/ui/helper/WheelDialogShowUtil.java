@@ -160,7 +160,7 @@ public class WheelDialogShowUtil
         dialog.show();
     }
 
-    public static void showTimeDialog(Context context,
+    public static void showTimeDialog(Context context, int[] defaultIndex,
             final AfterWheelChooseListener listener)
     {
         final AlertDialog dialog = new AlertDialog.Builder(context).create();
@@ -190,7 +190,7 @@ public class WheelDialogShowUtil
             }
             String[] data = arrList.get(i);
             wheelview.setAdapter(new ArrayWheelAdapter<String>(data));
-
+            wheelview.setCurrentItem(defaultIndex[i]);
             wheelview.setTextSize(40);
             llContent.addView(wheelview, new LinearLayout.LayoutParams(
                     LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1));

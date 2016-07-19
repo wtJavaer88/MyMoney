@@ -22,12 +22,14 @@ import com.wnc.mymoney.R;
 import com.wnc.mymoney.ui.helper.AfterWheelChooseListener;
 import com.wnc.mymoney.ui.helper.HorGestureDetectorListener;
 import com.wnc.mymoney.ui.helper.MyHorizontalGestureDetector;
+import com.wnc.mymoney.ui.helper.SrtVoiceHelper;
 import com.wnc.mymoney.ui.helper.WheelDialogShowUtil;
 import com.wnc.mymoney.util.ToastUtil;
 import com.wnc.srt.DataHolder;
 import com.wnc.srt.Picker;
 import com.wnc.srt.PickerFactory;
 import com.wnc.srt.SrtInfo;
+import com.wnc.srt.SrtTextHelper;
 
 public class SrtActivity extends Activity implements OnClickListener,
         HorGestureDetectorListener
@@ -37,8 +39,13 @@ public class SrtActivity extends Activity implements OnClickListener,
     TextView timelineTv;
     final String srtFolder = Environment.getExternalStorageDirectory()
             .getPath() + "/wnc/app/srt/";
+    final int DELTA_UNIQUE = 1000;
     Map<Integer, String> srtFilePathes = new HashMap<Integer, String>();
     private GestureDetector gestureDetector;
+    int[] defaultTimePoint =
+    { 0, 0, 0 };
+    int[] defaultMoviePoint =
+    { 0, 0 };
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -56,9 +63,9 @@ public class SrtActivity extends Activity implements OnClickListener,
         chsTv = (TextView) findViewById(R.id.chs_tv);
         engTv = (TextView) findViewById(R.id.eng_tv);
         timelineTv = (TextView) findViewById(R.id.timeline_tv);
-        if (BasicStringUtil.isNotNullString(DataHolder.fileKey))
+        if (BasicStringUtil.isNotNullString(DataHolder.getFileKey()))
         {
-            initFileTv(DataHolder.fileKey);
+            initFileTv(DataHolder.getFileKey());
             getSrtAndSetContent(CURRENT);
         }
 
@@ -134,15 +141,41 @@ public class SrtActivity extends Activity implements OnClickListener,
         case R.id.btnLast:
             getSrtAndSetContent(R.id.btnLast);
             break;
-
         }
+    }
+
+    public void playVoice(View v)
+    {
+        String voicePath = SrtTextHelper.getSrtVoiceLocation(
+                DataHolder.getFileKey(), DataHolder.getCurrent());
+        if (voicePath != null && BasicFileUtil.isExistFile(voicePath))
+        {
+            try
+            {
+                if (!SrtVoiceHelper.isPlaying())
+                {
+                    SrtVoiceHelper.playAndHideBt(voicePath, v);
+                }
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+                ToastUtil.showShortToast(this, "出现异常" + e.getMessage());
+            }
+        }
+        else
+        {
+            System.out.println(voicePath);
+            ToastUtil.showShortToast(this, "音频文件不存在!");
+        }
+
     }
 
     private void showSkipWheel()
     {
         try
         {
-            WheelDialogShowUtil.showTimeDialog(this,
+            WheelDialogShowUtil.showTimeDialog(this, defaultTimePoint,
                     new AfterWheelChooseListener()
                     {
                         @Override
@@ -153,6 +186,9 @@ public class SrtActivity extends Activity implements OnClickListener,
                                 int h = Integer.parseInt(objs[0].toString());
                                 int m = Integer.parseInt(objs[1].toString());
                                 int s = Integer.parseInt(objs[2].toString());
+                                defaultTimePoint[0] = h;
+                                defaultTimePoint[1] = m;
+                                defaultTimePoint[2] = s;
                                 setContent(DataHolder.getClosestSrt(h, m, s));
                             }
                             catch (Exception e)
@@ -175,52 +211,54 @@ public class SrtActivity extends Activity implements OnClickListener,
     private void showChooseWheel()
     {
         File srtFolderFile = new File(srtFolder);
-
-        final List<File> tvFolderFiles = new ArrayList<File>();
-        for (File f : srtFolderFile.listFiles())
-        {
-            if (f.isDirectory())
-            {
-                tvFolderFiles.add(f);
-            }
-        }
-        int tvs = tvFolderFiles.size();
-        final String[] leftArr = new String[tvs];
-        final String[][] rightArr = new String[tvs][];
-        int i = 0;
-        for (File folder : tvFolderFiles)
-        {
-            leftArr[i] = folder.getName().substring(0, 10);
-            File[] listFiles = folder.listFiles();
-            String[] arr = new String[listFiles.length];
-            int j = 0;
-            for (File f2 : listFiles)
-            {
-                srtFilePathes.put(1000 * i + j, f2.getAbsolutePath());
-                arr[j++] = f2.getName();
-            }
-            rightArr[i] = arr;
-            i++;
-        }
         try
         {
+
+            final List<File> tvFolderFiles = new ArrayList<File>();
+            for (File f : srtFolderFile.listFiles())
+            {
+                if (f.isDirectory())
+                {
+                    tvFolderFiles.add(f);
+                }
+            }
+            int tvs = tvFolderFiles.size();
+            final String[] leftArr = new String[tvs];
+            final String[][] rightArr = new String[tvs][];
+            int i = 0;
+            for (File folder : tvFolderFiles)
+            {
+                // 文件夹最大只取10位
+                leftArr[i] = BasicStringUtil.subString(folder.getName(), 0, 10);
+                File[] listFiles = folder.listFiles();
+                String[] arr = new String[listFiles.length];
+                int j = 0;
+                for (File f2 : listFiles)
+                {
+                    srtFilePathes.put(DELTA_UNIQUE * i + j,
+                            f2.getAbsolutePath());
+                    // 文件名最大只取8位
+                    arr[j++] = BasicStringUtil.subString(
+                            SrtTextHelper.getFileNameNoExtend(f2.getName()), 0,
+                            8);
+                }
+                rightArr[i] = arr;
+                i++;
+            }
             WheelDialogShowUtil.showSelectDialog(this, "选择剧集", leftArr,
-                    rightArr, 0, 0, new AfterWheelChooseListener()
+                    rightArr, defaultMoviePoint[0], defaultMoviePoint[1],
+                    new AfterWheelChooseListener()
                     {
                         @Override
                         public void afterWheelChoose(Object... objs)
                         {
-                            int selectedLeftIndex = Integer.valueOf(objs[0]
+                            defaultMoviePoint[0] = Integer.valueOf(objs[0]
                                     .toString());
-                            int selectedRightIndex = Integer.valueOf(objs[1]
+                            defaultMoviePoint[1] = Integer.valueOf(objs[1]
                                     .toString());
-                            String srtFilePath = srtFilePathes.get(1000
-                                    * selectedLeftIndex + selectedRightIndex);
-                            // ((TextView) findViewById(R.id.file_tv))
-                            // .setText(tvFolderFiles.get(
-                            // selectedLeftIndex).getName()
-                            // + " / "
-                            // + new File(srtFilePath).getName());
+                            String srtFilePath = srtFilePathes.get(DELTA_UNIQUE
+                                    * defaultMoviePoint[0]
+                                    + defaultMoviePoint[1]);
                             initFileTv(srtFilePath);
                             parseSrt(srtFilePath);
                         }

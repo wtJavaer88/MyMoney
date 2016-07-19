@@ -41,10 +41,10 @@ public class AssPicker implements Picker
                 int pos = dialogue.indexOf("\\N");
                 if (pos != -1)
                 {
-                    chs = dialogue.substring(0, pos)
-                            .replaceAll("\\{.*?\\}", "");
-                    eng = dialogue.substring(pos + 2).replaceAll("\\{.*?\\}",
-                            "");
+                    chs = SrtTextHelper
+                            .getClearText(dialogue.substring(0, pos));
+                    eng = SrtTextHelper.getClearText(dialogue
+                            .substring(pos + 2));
                 }
                 if (fromTime != null && toTime != null && chs != null
                         && eng != null)

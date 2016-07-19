@@ -47,11 +47,11 @@ public class SrtPicker implements Picker
             }
             if (i == indexLineNumber + 2)
             {
-                chs = str.replaceAll("\\{.*?\\}", "");
+                chs = SrtTextHelper.getClearText(str);
             }
             if (i == indexLineNumber + 3)
             {
-                eng = str.replaceAll("\\{.*?\\}", "");
+                eng = SrtTextHelper.getClearText(str);
             }
             if (i == indexLineNumber + 4)
             {
