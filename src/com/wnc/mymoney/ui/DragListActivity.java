@@ -145,7 +145,7 @@ public class DragListActivity extends Activity implements OnClickListener
         dlg.getWindow().setGravity(Gravity.CENTER);
         dlg.getWindow().setLayout((int) (1000 * 0.8),
                 android.view.WindowManager.LayoutParams.WRAP_CONTENT);
-        dlg.getWindow().setContentView(R.layout.add_new_member);
+        dlg.getWindow().setContentView(R.layout.setting_add_tags_dialg);
         TextView add_tag_dialg_title = (TextView) dlg
                 .findViewById(R.id.add_tag_dialg_title);
         final EditText add_tag_dialg_content = (EditText) dlg
@@ -154,6 +154,10 @@ public class DragListActivity extends Activity implements OnClickListener
                 .findViewById(R.id.add_tag_dialg_no);
         TextView add_tag_dialg_ok = (TextView) dlg
                 .findViewById(R.id.add_tag_dialg_ok);
+
+        add_tag_dialg_title.setText("添加成员");
+        add_tag_dialg_content.setHint("输入成员名或简称");
+
         add_tag_dialg_no.setOnClickListener(new OnClickListener()
         {
             @Override

@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.wnc.basic.BasicDateUtil;
-import com.wnc.mymoney.util.SysInit;
+import com.wnc.mymoney.backup.BackUpDataUtil;
 
 public class MemberDao
 {
@@ -112,7 +112,7 @@ public class MemberDao
 
     private static void trigger()
     {
-        SysInit.canBackUpDb = true;
+        BackUpDataUtil.canBackUpDb = true;
     }
 
     private static String getStrValue(Cursor c, String columnName)

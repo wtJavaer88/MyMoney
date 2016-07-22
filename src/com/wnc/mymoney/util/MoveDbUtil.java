@@ -1,6 +1,8 @@
 package com.wnc.mymoney.util;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,51 +16,77 @@ import com.wnc.basic.BasicFileUtil;
 
 public class MoveDbUtil
 {
-    public static void moveDb(String DB_NAME, final Context context)
+    public static boolean moveAssertDb(String DB_NAME, final Context context)
     {
-        File dbFile = context.getDatabasePath(DB_NAME);
+        return moveAssertDb(DB_NAME, DB_NAME, context);
+    }
+
+    public static boolean moveAssertDb(String ASSERT_DB_NAME,
+            String DEST_DB_NAME, final Context context)
+    {
+        File dbFile = context.getDatabasePath(DEST_DB_NAME);
         String DB_PATH = dbFile.getPath();
         File folder = dbFile.getParentFile();
         if (!folder.exists())
         {
             if (!folder.exists())
             {
-                Log.i("", "db文件夹不存在");
+                Log.i("movedb", "db文件夹不存在");
                 folder.mkdir();
             }
         }
-        BasicFileUtil.deleteFile(DB_PATH);
-        if (!BasicFileUtil.isExistFile(DB_PATH))
+
+        AssetManager assetManager = context.getAssets();
+        Log.i("moveDb", ASSERT_DB_NAME + "数据初始完毕!");
+        Log.i("moveDb", "开始移动Assert数据库" + ASSERT_DB_NAME + "!!!!");
+        try
         {
-            AssetManager assetManager = context.getAssets();
-            copy(DB_PATH, DB_NAME, assetManager);
-            Log.i("moveDb", DB_NAME + "数据初始完毕!");
-            // ToastUtil.showShortToast(context, "数据初始完毕!");
+            return copy(DB_PATH, assetManager.open(ASSERT_DB_NAME));
         }
-        else
+        catch (IOException e)
         {
-            Log.i("moveDb", "数据文件已经存在!");
-            // ToastUtil.showShortToast(context, "数据文件已经存在!");
+            e.printStackTrace();
         }
+        return false;
     }
 
-    private static void copy(String DB_PATH, String DB_NAME,
-            AssetManager assetManager)
+    /**
+     * 从Sd中找个文件替换应用数据库文件
+     * 
+     * @param SdCard_DB_PATH
+     * @param DEST_DB_FILE
+     * @return
+     */
+
+    public static boolean moveSdCardDb(String SdCard_DB_PATH, File DEST_DB_FILE)
     {
-        Log.i("moveDb", "开始移动" + DB_NAME + "数据库!!!!");
-        InputStream is = null;
+        try
+        {
+            return copy(DEST_DB_FILE.getAbsolutePath(), new FileInputStream(
+                    new File(SdCard_DB_PATH)));
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // 复制前先删除源文件
+    private static boolean copy(String DEST_DB_PATH, InputStream is)
+    {
         OutputStream os = null;
         try
         {
-            is = assetManager.open(DB_NAME);
-            os = new FileOutputStream(DB_PATH);
-
+            BasicFileUtil.deleteFile(DEST_DB_PATH);
+            os = new FileOutputStream(DEST_DB_PATH);
             byte[] buffer = new byte[1024];
             int length;
             while ((length = is.read(buffer)) != -1)
             {
                 os.write(buffer, 0, length);
             }
+            return true;
         }
         catch (Exception e)
         {
@@ -75,9 +103,9 @@ public class MoveDbUtil
             }
             catch (IOException e)
             {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
+        return false;
     }
 }

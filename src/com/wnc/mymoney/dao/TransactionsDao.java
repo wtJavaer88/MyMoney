@@ -11,11 +11,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.wnc.basic.BasicNumberUtil;
+import com.wnc.mymoney.backup.BackUpDataUtil;
 import com.wnc.mymoney.bean.CostChartTotal;
 import com.wnc.mymoney.bean.DayTranTotal;
 import com.wnc.mymoney.bean.Trade;
 import com.wnc.mymoney.util.CostTypeUtil;
-import com.wnc.mymoney.util.SysInit;
 import com.wnc.mymoney.util.TextFormatUtil;
 import com.wnc.string.PatternUtil;
 
@@ -60,7 +60,7 @@ public class TransactionsDao
 
     private static void trigger()
     {
-        SysInit.canBackUpDb = true;
+        BackUpDataUtil.canBackUpDb = true;
     }
 
     public static boolean update(Trade trade)

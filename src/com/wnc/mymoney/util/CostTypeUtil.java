@@ -5,6 +5,7 @@ import android.util.Log;
 import com.wnc.mymoney.R;
 import com.wnc.mymoney.bean.Category;
 import com.wnc.mymoney.dao.CategoryDao;
+import com.wnc.mymoney.ui.helper.MyAppParams;
 
 public class CostTypeUtil
 {

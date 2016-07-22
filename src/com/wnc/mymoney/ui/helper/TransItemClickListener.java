@@ -26,7 +26,6 @@ import com.wnc.mymoney.ui.SearchTransactionActivity;
 import com.wnc.mymoney.ui.ShowCostDetailActivity;
 import com.wnc.mymoney.ui.ViewTransActivity;
 import com.wnc.mymoney.util.ClipBoardUtil;
-import com.wnc.mymoney.util.MyAppParams;
 import com.wnc.mymoney.util.ToastUtil;
 
 public class TransItemClickListener implements OnItemClickListener,

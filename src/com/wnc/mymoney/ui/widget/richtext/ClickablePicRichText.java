@@ -10,8 +10,8 @@ import android.text.Spanned;
 import android.text.style.ImageSpan;
 import android.util.Log;
 
+import com.wnc.mymoney.ui.helper.MyAppParams;
 import com.wnc.mymoney.util.BitmapHelper;
-import com.wnc.mymoney.util.MyAppParams;
 
 public class ClickablePicRichText implements RichText
 {

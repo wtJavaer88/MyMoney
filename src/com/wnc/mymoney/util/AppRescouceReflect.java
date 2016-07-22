@@ -1,5 +1,7 @@
 package com.wnc.mymoney.util;
 
+import com.wnc.mymoney.ui.helper.MyAppParams;
+
 import android.app.Activity;
 
 public class AppRescouceReflect

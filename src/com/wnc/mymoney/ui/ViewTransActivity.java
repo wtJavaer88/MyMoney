@@ -24,6 +24,7 @@ import com.wnc.mymoney.R;
 import com.wnc.mymoney.bean.Trade;
 import com.wnc.mymoney.dao.TransactionsDao;
 import com.wnc.mymoney.ui.helper.HorGestureDetectorListener;
+import com.wnc.mymoney.ui.helper.MyAppParams;
 import com.wnc.mymoney.ui.helper.MyHorizontalGestureDetector;
 import com.wnc.mymoney.ui.widget.ComboBox;
 import com.wnc.mymoney.ui.widget.richtext.ClickablePicRichText;
@@ -31,7 +32,6 @@ import com.wnc.mymoney.ui.widget.richtext.ClickableVideoRichText;
 import com.wnc.mymoney.ui.widget.richtext.ClickableVoiceRichText;
 import com.wnc.mymoney.util.CostTypeUtil;
 import com.wnc.mymoney.util.FileTypeUtil;
-import com.wnc.mymoney.util.MyAppParams;
 import com.wnc.mymoney.util.TextFormatUtil;
 import com.wnc.mymoney.util.ToastUtil;
 

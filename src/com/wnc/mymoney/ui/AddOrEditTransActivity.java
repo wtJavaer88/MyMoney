@@ -40,6 +40,8 @@ import com.wnc.mymoney.dao.CategoryDao;
 import com.wnc.mymoney.dao.MemberDao;
 import com.wnc.mymoney.dao.TransactionsDao;
 import com.wnc.mymoney.ui.helper.AfterWheelChooseListener;
+import com.wnc.mymoney.ui.helper.MyAppParams;
+import com.wnc.mymoney.ui.helper.Setting;
 import com.wnc.mymoney.ui.helper.WheelDialogShowUtil;
 import com.wnc.mymoney.ui.widget.ComboBox;
 import com.wnc.mymoney.ui.widget.ComboBox.ListViewItemClickListener;
@@ -47,8 +49,6 @@ import com.wnc.mymoney.util.ClipBoardUtil;
 import com.wnc.mymoney.util.CostTypeUtil;
 import com.wnc.mymoney.util.FileTypeUtil;
 import com.wnc.mymoney.util.GeneratorUtil;
-import com.wnc.mymoney.util.MyAppParams;
-import com.wnc.mymoney.util.SysInit;
 import com.wnc.mymoney.util.TextFormatUtil;
 import com.wnc.mymoney.util.ToastUtil;
 import com.wnc.mymoney.util.UriUtil;
@@ -234,7 +234,7 @@ public class AddOrEditTransActivity extends BaseActivity implements
             this.tradeTimeBT.setText(BasicDateUtil.getCurrentDateTimeString());
             reSetCategoryTV(this.defaultOutLevelName + "-->"
                     + this.defaultOutDescTypeName);
-            this.tradeMemberBT.setText(SysInit.getLastMember());
+            this.tradeMemberBT.setText(Setting.getLastMember());
             this.tranCostBT.setText("0.0");
 
             showMoneyPanel();
@@ -318,8 +318,11 @@ public class AddOrEditTransActivity extends BaseActivity implements
         dlg.getWindow().setContentView(R.layout.setting_add_tags_dialg);
         TextView add_tag_dialg_title = (TextView) dlg
                 .findViewById(R.id.add_tag_dialg_title);
-        TextView add_tag_dialg_content = (TextView) dlg
+
+        EditText add_tag_dialg_content = (EditText) dlg
                 .findViewById(R.id.add_tag_dialg_content);
+        add_tag_dialg_content.setEnabled(false);
+
         TextView add_tag_dialg_no = (TextView) dlg
                 .findViewById(R.id.add_tag_dialg_no);
         TextView add_tag_dialg_ok = (TextView) dlg
@@ -427,7 +430,7 @@ public class AddOrEditTransActivity extends BaseActivity implements
                 if (b)
                 {
                     ToastUtil.showShortToast(this, "保存成功!");
-                    SysInit.changeMember(getMember());
+                    Setting.setMember(getMember());
                     if (trade.getHaspicture() == 1)
                     {
                         backupFilesInTrade(trade);

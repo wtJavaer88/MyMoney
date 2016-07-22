@@ -13,6 +13,7 @@ import com.wnc.basic.BasicDateUtil;
 import com.wnc.mymoney.backup.BackupFilesHolder;
 import com.wnc.mymoney.backup.NetChannel;
 import com.wnc.mymoney.backup.ZipPathFactory;
+import com.wnc.mymoney.ui.helper.Setting;
 import com.wnc.mymoney.util.ZipUtils;
 
 public abstract class AbstractNetBackup implements FilesZip
@@ -101,7 +102,7 @@ public abstract class AbstractNetBackup implements FilesZip
 
             Intent intent = new Intent(Intent.ACTION_SEND);
             String[] tos =
-            { "529801034@qq.com" };
+            { Setting.getEmail() };
             String[] ccs =
             {};
             String[] bccs =

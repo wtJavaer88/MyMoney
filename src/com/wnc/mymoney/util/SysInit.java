@@ -8,15 +8,11 @@ import android.util.Log;
 import com.wnc.mymoney.backup.BackUpDataUtil;
 import com.wnc.mymoney.dao.CategoryDao;
 import com.wnc.mymoney.dao.MemberDao;
+import com.wnc.mymoney.ui.helper.MyAppParams;
 
 public class SysInit
 {
     static Activity context;
-    /**
-     * 只有数据库做了一点点修改, 就可以设为true
-     */
-    public static boolean canBackUpDb = false;
-    public static String lastMember = "";
 
     public static void init(Activity context2)
     {
@@ -36,7 +32,6 @@ public class SysInit
             createDbAndFullData();
         }
         initGlobalMap();
-        lastMember = getLastMemberFromShare();
     }
 
     private static void initGlobalMap()
@@ -51,8 +46,7 @@ public class SysInit
 
     private static void createDbAndFullData()
     {
-        MoveDbUtil.moveDb("money.db", context);
-
+        MoveDbUtil.moveAssertDb("money.db", context);
     }
 
     private static boolean isFirstRun()
@@ -76,29 +70,4 @@ public class SysInit
         return false;
     }
 
-    public static void changeMember(String member)
-    {
-        if (member.equals(lastMember))
-        {
-            return;
-        }
-        SharedPreferences sharedPreferences = context.getSharedPreferences(
-                "share", context.MODE_PRIVATE);
-        Editor editor = sharedPreferences.edit();
-        editor.putString("lastMember", member);
-        editor.commit();
-        lastMember = member;
-    }
-
-    public static String getLastMember()
-    {
-        return lastMember;
-    }
-
-    public static String getLastMemberFromShare()
-    {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(
-                "share", context.MODE_PRIVATE);
-        return sharedPreferences.getString("lastMember", "柏");
-    }
 }

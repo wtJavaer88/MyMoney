@@ -19,7 +19,7 @@
         android:layout_height="2dp"
         android:background="#6cd2c5" />
 
-    <TextView
+    <EditText
         android:id="@+id/add_tag_dialg_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -19,6 +19,7 @@ import com.wnc.mymoney.backup.NetChannel;
 import com.wnc.mymoney.dao.OnStartUpDataUtil;
 import com.wnc.mymoney.dao.TransactionsDao;
 import com.wnc.mymoney.service.LogService;
+import com.wnc.mymoney.ui.helper.Setting;
 import com.wnc.mymoney.util.AppRescouceReflect;
 import com.wnc.mymoney.util.SysInit;
 import com.wnc.mymoney.util.TOTAL_RANGE;
@@ -40,7 +41,7 @@ public class MainActivity extends Activity
         setContentView(R.layout.activity_main);
 
         SysInit.init(this);
-
+        Setting.init(this);
         Intent intent = new Intent(this, LogService.class);
         /** 进入Activity开始服务 */
         bindService(intent, conn, Context.BIND_AUTO_CREATE);
@@ -210,7 +211,7 @@ public class MainActivity extends Activity
         try
         {
             Intent localIntent = new Intent();
-            localIntent.setClass(this, DragListActivity.class);
+            localIntent.setClass(this, SettingActivity.class);
             startActivity(localIntent);
         }
         catch (Exception ex)

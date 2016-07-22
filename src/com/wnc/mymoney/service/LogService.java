@@ -33,7 +33,7 @@ import android.os.PowerManager.WakeLock;
 import android.util.Log;
 
 import com.wnc.basic.BasicFileUtil;
-import com.wnc.mymoney.util.MyAppParams;
+import com.wnc.mymoney.ui.helper.MyAppParams;
 
 /**
  * 日志服务，日志默认会存储在SDcar里如果没有SDcard会存储在内存中的安装目录下面。 1.本服务默认在SDcard中每天生成一个日志文件,

@@ -9,7 +9,6 @@ import android.media.MediaRecorder.OnErrorListener;
 import android.media.MediaRecorder.OnInfoListener;
 import android.view.SurfaceView;
 
-import com.wnc.mymoney.util.MyAppParams;
 
 public class MovieRecorder extends Thread
 {

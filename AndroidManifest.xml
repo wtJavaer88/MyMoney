@@ -51,6 +51,7 @@
         <activity android:name="com.wnc.train.RadioButtonListActivity"></activity>
         <activity android:name="com.wnc.mymoney.ui.MovieActivity"></activity>
         <activity android:name="com.wnc.mymoney.ui.SrtActivity"></activity>
+        <activity android:name="com.wnc.mymoney.ui.SettingActivity"></activity>
         
         <service android:name="com.wnc.mymoney.service.LogService">
         </service>
