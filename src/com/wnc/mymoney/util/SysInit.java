@@ -46,7 +46,7 @@ public class SysInit
 
     private static void createDbAndFullData()
     {
-        MoveDbUtil.moveAssertDb("money.db", context);
+        MoveDbUtil.moveEmptyMoneyDb(context);
     }
 
     private static boolean isFirstRun()

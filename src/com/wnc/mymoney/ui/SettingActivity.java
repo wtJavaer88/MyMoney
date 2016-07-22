@@ -113,7 +113,7 @@ public class SettingActivity extends Activity implements OnClickListener
             {
                 BackUpDataUtil.backupDatabase(this);
             }
-            if (MoveDbUtil.moveAssertDb("empty_money.db", "money.db", this))
+            if (MoveDbUtil.moveEmptyMoneyDb(this))
             {
                 ToastUtil.showShortToast(getApplicationContext(), "清空数据成功!");
             }

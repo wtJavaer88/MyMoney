@@ -72,6 +72,11 @@ public class MoveDbUtil
         return false;
     }
 
+    public static boolean moveEmptyMoneyDb(final Context context)
+    {
+        return MoveDbUtil.moveAssertDb("empty_money.db", "money.db", context);
+    }
+
     // 复制前先删除源文件
     private static boolean copy(String DEST_DB_PATH, InputStream is)
     {
