@@ -5,20 +5,31 @@ import java.io.FileInputStream;
 
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
-import android.view.View;
 
 public class SrtVoiceHelper
 {
-    static MediaPlayer player = new MediaPlayer();
+    static MediaPlayer player;
     static boolean isPlaying = false;
 
-    public static void playAndHideBt(String voicePath, final View v)
+    public static void play(String voicePath,
+            final PlayCompleteEvent playCompleteEvent, int type)
             throws Exception
     {
+        if (player != null && player.isPlaying())
+        {
+            player.stop();
+            isPlaying = false;
+            if (type == 1)
+            {
+                return;
+            }
+        }
+
         if (!isPlaying)
         {
             File file = new File(voicePath);
             FileInputStream fis = new FileInputStream(file);
+            player = new MediaPlayer();
             player.setDataSource(fis.getFD());
             player.prepare();
             player.setOnCompletionListener(new OnCompletionListener()
@@ -27,25 +38,14 @@ public class SrtVoiceHelper
                 public void onCompletion(MediaPlayer mp)
                 {
                     isPlaying = false;
-                    mp.reset();
-                    if (v != null)
-                    {
-                        v.setVisibility(View.VISIBLE);
-                    }
+                    player.reset();
+                    player.release();
+                    player = null;
+                    playCompleteEvent.onComplete();
                 }
             });
             player.start();
             isPlaying = true;
-            if (v != null)
-            {
-                v.setVisibility(View.INVISIBLE);
-            }
         }
-    }
-
-    // 提供给外部使用, 在播放前先判断一下是否可以
-    public static boolean isPlaying()
-    {
-        return isPlaying;
     }
 }

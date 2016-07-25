@@ -64,7 +64,7 @@ public class TrainsHelper
         }
         catch (Exception ex)
         {
-            Log.e("err", "计算列车时间失败:" + ex.getMessage());
+            Log.e("train", "计算列车时间失败:" + ex.getMessage());
         }
         return h * 60 + m;
     }

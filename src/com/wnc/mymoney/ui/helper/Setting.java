@@ -21,6 +21,8 @@ public class Setting
 
     private final static String BUDGET = "M004";
 
+    private final static String AUTOPLAYVOICE = "M005";
+
     final public static void init(Activity context2)
     {
         context = context2;
@@ -58,6 +60,11 @@ public class Setting
         changeValue(BUDGET, budget);
     }
 
+    public static void setAutoPlayVoice(String autoplay)
+    {
+        changeValue(AUTOPLAYVOICE, autoplay);
+    }
+
     public static String getLastMember()
     {
         return getShareDataByKey(LAST_MEMBER, DEFAULT_MEMBER);
@@ -86,6 +93,11 @@ public class Setting
     public static String getBackupWay()
     {
         return getShareDataByKey(BACKUP_WAY, "邮箱");
+    }
+
+    public static String getAutoPlayVoice()
+    {
+        return getShareDataByKey(AUTOPLAYVOICE, "false");
     }
 
     private static void changeValue(String key, String value)

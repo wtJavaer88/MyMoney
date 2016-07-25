@@ -66,10 +66,12 @@ public class SettingActivity extends Activity implements OnClickListener
                 if (state)
                 {
                     ToastUtil.showShortToast(getApplicationContext(), "开关开启");
+                    Setting.setAutoPlayVoice("true");
                 }
                 else
                 {
                     ToastUtil.showShortToast(getApplicationContext(), "开关关闭");
+                    Setting.setAutoPlayVoice("false");
                 }
             }
         });

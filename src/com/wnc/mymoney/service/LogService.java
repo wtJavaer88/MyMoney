@@ -424,12 +424,15 @@ public class LogService extends Service
         commandList.add(getLogPath());
         commandList.add("-v");
         commandList.add("time");
+        commandList.add("-s");
         commandList.add("*:I");
-
         // commandList.add("*:E");// 过滤所有的错误信息
 
         // 过滤指定TAG的信息
-        // commandList.add("MyAPP:V");
+        // commandList.add("backup:E");
+        // commandList.add("dao:E");
+        // commandList.add("srt:E");
+        // commandList.add("train:E");
         // commandList.add("*:S");
         try
         {
