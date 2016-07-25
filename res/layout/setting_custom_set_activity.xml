@@ -38,10 +38,15 @@
         <LinearLayout android:id="@+id/backstyle_set_ly" android:layout_marginTop="@dimen/dimen_10_dip" android:layout_marginBottom="@dimen/dimen_10_dip" style="@style/common_row_new_layout">
             <ImageView android:layout_gravity="center_vertical" android:background="@drawable/setting_others_set_icon" style="@style/setting_item_icon" />
             <TextView android:text="备份方式" style="@style/common_row_label_new" />
-            <TextView style="@style/common_row_default_item_name_new" android:text="每次邮箱备份"/>
+            <TextView android:id="@+id/backstyle_tv" style="@style/common_row_default_item_name_new" android:text="每次邮箱备份"/>
             <ImageView android:layout_gravity="center_vertical" style="@style/go_detail_new" />
         </LinearLayout>
-        
+        <LinearLayout android:id="@+id/budget_set_ly" android:layout_marginTop="@dimen/dimen_10_dip" android:layout_marginBottom="@dimen/dimen_10_dip" style="@style/common_row_new_layout">
+            <ImageView android:layout_gravity="center_vertical" android:background="@drawable/setting_others_set_icon" style="@style/setting_item_icon" />
+            <TextView android:text="预算设置" style="@style/common_row_label_new" />
+            <TextView android:id="@+id/budget_tv" style="@style/common_row_default_item_name_new" android:text="500,2000"/>
+            <ImageView android:layout_gravity="center_vertical" style="@style/go_detail_new" />
+        </LinearLayout>
         <LinearLayout android:id="@+id/voiceauto_set_ly" android:layout_marginTop="@dimen/dimen_10_dip" android:layout_marginBottom="@dimen/dimen_10_dip" style="@style/common_row_new_layout">
             <ImageView android:layout_gravity="center_vertical" android:background="@drawable/setting_others_set_icon" style="@style/setting_item_icon" />
             <TextView android:text="音频自动播放" style="@style/common_row_label_new" />

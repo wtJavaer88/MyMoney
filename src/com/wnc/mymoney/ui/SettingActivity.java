@@ -16,179 +16,276 @@ import com.wnc.basic.BasicStringUtil;
 import com.wnc.mymoney.R;
 import com.wnc.mymoney.backup.BackUpDataUtil;
 import com.wnc.mymoney.ui.helper.MyAppParams;
+import com.wnc.mymoney.ui.helper.PositiveEvent;
 import com.wnc.mymoney.ui.helper.Setting;
 import com.wnc.mymoney.ui.widget.MyToggle;
 import com.wnc.mymoney.ui.widget.MyToggle.OnToggleStateListener;
+import com.wnc.mymoney.util.ConfirmUtil;
 import com.wnc.mymoney.util.MoveDbUtil;
 import com.wnc.mymoney.util.ToastUtil;
 
 public class SettingActivity extends Activity implements OnClickListener
 {
-	// 自定义开关对象
-	private MyToggle toggle;
+    // 自定义开关对象
+    private MyToggle toggle;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
 
-		requestWindowFeature(Window.FEATURE_NO_TITLE);// 去掉标题栏
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);// 设置全屏
+        requestWindowFeature(Window.FEATURE_NO_TITLE);// 去掉标题栏
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);// 设置全屏
 
-		setContentView(R.layout.setting_custom_set_activity);
-		initView();
-	}
+        setContentView(R.layout.setting_custom_set_activity);
+        initView();
+    }
 
-	private void initView()
-	{
-		findViewById(R.id.members_set_ly).setOnClickListener(this);
-		findViewById(R.id.email_set_ly).setOnClickListener(this);
-		findViewById(R.id.cacheclear_set_ly).setOnClickListener(this);
-		findViewById(R.id.dataclear_set_ly).setOnClickListener(this);
-		findViewById(R.id.datarecover_set_ly).setOnClickListener(this);
+    private void initView()
+    {
+        findViewById(R.id.members_set_ly).setOnClickListener(this);
+        findViewById(R.id.email_set_ly).setOnClickListener(this);
+        findViewById(R.id.cacheclear_set_ly).setOnClickListener(this);
+        findViewById(R.id.dataclear_set_ly).setOnClickListener(this);
+        findViewById(R.id.datarecover_set_ly).setOnClickListener(this);
+        findViewById(R.id.backstyle_set_ly).setOnClickListener(this);
+        findViewById(R.id.budget_set_ly).setOnClickListener(this);
+        emailTextSet();
+        budgetTextSet();
+        backupTextSet();
+        toggle = (MyToggle) findViewById(R.id.toggle);
+        toggle.setImageRes(R.drawable.btn_switch, R.drawable.btn_switch,
+                R.drawable.btn_slip);
+        toggle.setToggleState(true);
+        toggle.setOnToggleStateListener(new OnToggleStateListener()
+        {
+            @Override
+            public void onToggleState(boolean state)
+            {
+                if (state)
+                {
+                    ToastUtil.showShortToast(getApplicationContext(), "开关开启");
+                }
+                else
+                {
+                    ToastUtil.showShortToast(getApplicationContext(), "开关关闭");
+                }
+            }
+        });
+    }
 
-		emailTextSet();
+    public void intoActivity(Class clazz)
+    {
+        try
+        {
+            Intent localIntent = new Intent();
+            localIntent.setClass(this, clazz);
+            startActivity(localIntent);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
 
-		toggle = (MyToggle) findViewById(R.id.toggle);
-		toggle.setImageRes(R.drawable.btn_switch, R.drawable.btn_switch, R.drawable.btn_slip);
-		toggle.setToggleState(true);
-		toggle.setOnToggleStateListener(new OnToggleStateListener()
-		{
-			@Override
-			public void onToggleState(boolean state)
-			{
-				if (state)
-				{
-					ToastUtil.showShortToast(getApplicationContext(), "开关开启");
-				}
-				else
-				{
-					ToastUtil.showShortToast(getApplicationContext(), "开关关闭");
-				}
-			}
-		});
-	}
+    @Override
+    public void onClick(View v)
+    {
+        switch (v.getId())
+        {
+        case R.id.backstyle_set_ly:
+            intoActivity(BackupSetActivity.class);
+            break;
+        case R.id.members_set_ly:
+            intoActivity(DragListActivity.class);
+            break;
+        case R.id.email_set_ly:
+            emailDialogOpen();
+            break;
+        case R.id.cacheclear_set_ly:
+            ConfirmUtil.confirmDelete(this, "确定要清除缓存吗?", new PositiveEvent()
+            {
+                @Override
+                public void onPositive()
+                {
+                    if (BackUpDataUtil.clearAllTmpZips())
+                    {
+                        ToastUtil.showShortToast(getApplicationContext(),
+                                "清除缓存成功");
+                    }
+                    else
+                    {
+                        ToastUtil.showShortToast(getApplicationContext(),
+                                "清除缓存失败!");
+                    }
+                }
+            });
+            break;
+        case R.id.dataclear_set_ly:
+            ConfirmUtil.confirmDelete(this, "确定要清空数据吗?", new PositiveEvent()
+            {
+                @Override
+                public void onPositive()
+                {
+                    // 先备份源Db文件
+                    if (BackUpDataUtil.canBackUpDb)
+                    {
+                        BackUpDataUtil.backupDatabase(getApplicationContext());
+                    }
+                    if (MoveDbUtil.moveEmptyMoneyDb(getApplicationContext()))
+                    {
+                        ToastUtil.showShortToast(getApplicationContext(),
+                                "清空数据成功!");
+                    }
+                    else
+                    {
+                        ToastUtil.showShortToast(getApplicationContext(),
+                                "清空数据失败!");
+                    }
+                }
+            });
+            break;
 
-	public void intoMemberActivity()
-	{
-		try
-		{
-			Intent localIntent = new Intent();
-			localIntent.setClass(this, DragListActivity.class);
-			startActivity(localIntent);
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-		}
-	}
+        case R.id.datarecover_set_ly:
+            intoActivity(LocalDbActivity.class);
+            break;
+        case R.id.budget_set_ly:
+            budgetDialogOpen();
+            break;
+        }
+    }
 
-	public void intoLocalDbActivity()
-	{
-		try
-		{
-			Intent localIntent = new Intent();
-			localIntent.setClass(this, LocalDbActivity.class);
-			startActivity(localIntent);
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-		}
-	}
+    protected void emailDialogOpen()
+    {
+        final Dialog dlg = new Dialog(this, R.style.dialog);
+        dlg.show();
+        dlg.getWindow().setGravity(Gravity.CENTER);
+        dlg.getWindow().setLayout((int) (MyAppParams.getScreenWidth() * 0.8),
+                android.view.WindowManager.LayoutParams.WRAP_CONTENT);
+        dlg.getWindow().setContentView(R.layout.setting_add_tags_dialg);
+        TextView add_tag_dialg_title = (TextView) dlg
+                .findViewById(R.id.add_tag_dialg_title);
+        final EditText add_tag_dialg_content = (EditText) dlg
+                .findViewById(R.id.add_tag_dialg_content);
+        TextView add_tag_dialg_no = (TextView) dlg
+                .findViewById(R.id.add_tag_dialg_no);
+        TextView add_tag_dialg_ok = (TextView) dlg
+                .findViewById(R.id.add_tag_dialg_ok);
 
-	@Override
-	public void onClick(View v)
-	{
+        add_tag_dialg_title.setText("设置邮箱");
+        add_tag_dialg_content.setHint("输入邮箱");
+        add_tag_dialg_content.setText(Setting.getEmail());
 
-		switch (v.getId())
-		{
-		case R.id.members_set_ly:
-			intoMemberActivity();
-			break;
-		case R.id.email_set_ly:
-			emailDialogOpen();
-			break;
-		case R.id.cacheclear_set_ly:
-			if (BackUpDataUtil.clearAllTmpZips())
-			{
-				ToastUtil.showShortToast(getApplicationContext(), "清除缓存成功");
-			}
-			else
-			{
-				ToastUtil.showShortToast(getApplicationContext(), "清除缓存失败!");
-			}
-			break;
-		case R.id.dataclear_set_ly:
-			// 先备份源Db文件
-			if (BackUpDataUtil.canBackUpDb)
-			{
-				BackUpDataUtil.backupDatabase(this);
-			}
-			if (MoveDbUtil.moveEmptyMoneyDb(this))
-			{
-				ToastUtil.showShortToast(getApplicationContext(), "清空数据成功!");
-			}
-			else
-			{
-				ToastUtil.showShortToast(getApplicationContext(), "清空数据失败!");
-			}
-			break;
-		case R.id.datarecover_set_ly:
-			intoLocalDbActivity();
-			break;
-		}
-	}
+        add_tag_dialg_no.setOnClickListener(new OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                dlg.dismiss();
+            }
+        });
 
-	protected void emailDialogOpen()
-	{
-		final Dialog dlg = new Dialog(this, R.style.dialog);
-		dlg.show();
-		dlg.getWindow().setGravity(Gravity.CENTER);
-		dlg.getWindow().setLayout((int) (MyAppParams.getScreenWidth() * 0.8), android.view.WindowManager.LayoutParams.WRAP_CONTENT);
-		dlg.getWindow().setContentView(R.layout.setting_add_tags_dialg);
-		TextView add_tag_dialg_title = (TextView) dlg.findViewById(R.id.add_tag_dialg_title);
-		final EditText add_tag_dialg_content = (EditText) dlg.findViewById(R.id.add_tag_dialg_content);
-		TextView add_tag_dialg_no = (TextView) dlg.findViewById(R.id.add_tag_dialg_no);
-		TextView add_tag_dialg_ok = (TextView) dlg.findViewById(R.id.add_tag_dialg_ok);
+        add_tag_dialg_ok.setOnClickListener(new OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                String content = add_tag_dialg_content.getText().toString();
+                if (BasicStringUtil.isNotNullString(content)
+                        && BasicStringUtil.isEmailString(content))
+                {
+                    Setting.setEmail(content);
+                    emailTextSet();
+                    ToastUtil
+                            .showShortToast(getApplicationContext(), "设置邮箱成功!");
+                    dlg.dismiss();
+                }
+                else
+                {
+                    ToastUtil.showShortToast(getApplicationContext(),
+                            "请输入一个邮箱!");
+                }
+            }
 
-		add_tag_dialg_title.setText("设置邮箱");
-		add_tag_dialg_content.setHint("输入邮箱");
-		add_tag_dialg_content.setText(Setting.getEmail());
+        });
+    }
 
-		add_tag_dialg_no.setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				dlg.dismiss();
-			}
-		});
+    protected void budgetDialogOpen()
+    {
+        final Dialog dlg = new Dialog(this, R.style.dialog);
+        dlg.show();
+        dlg.getWindow().setGravity(Gravity.CENTER);
+        dlg.getWindow().setLayout((int) (MyAppParams.getScreenWidth() * 0.8),
+                android.view.WindowManager.LayoutParams.WRAP_CONTENT);
+        dlg.getWindow().setContentView(R.layout.setting_add_tags_dialg);
+        TextView add_tag_dialg_title = (TextView) dlg
+                .findViewById(R.id.add_tag_dialg_title);
+        final EditText add_tag_dialg_content = (EditText) dlg
+                .findViewById(R.id.add_tag_dialg_content);
+        TextView add_tag_dialg_no = (TextView) dlg
+                .findViewById(R.id.add_tag_dialg_no);
+        TextView add_tag_dialg_ok = (TextView) dlg
+                .findViewById(R.id.add_tag_dialg_ok);
 
-		add_tag_dialg_ok.setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				String content = add_tag_dialg_content.getText().toString();
-				if (BasicStringUtil.isNotNullString(content) && BasicStringUtil.isEmailString(content))
-				{
-					Setting.setEmail(content);
-					emailTextSet();
-					ToastUtil.showShortToast(getApplicationContext(), "设置邮箱成功!");
-					dlg.dismiss();
-				}
-				else
-				{
-					ToastUtil.showShortToast(getApplicationContext(), "请输入一个邮箱!");
-				}
-			}
+        add_tag_dialg_title.setText("设置预算");
+        add_tag_dialg_content.setHint("设置预算,逗号分隔");
+        add_tag_dialg_content.setText(Setting.getBudget());
 
-		});
-	}
+        add_tag_dialg_no.setOnClickListener(new OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                dlg.dismiss();
+            }
+        });
 
-	private void emailTextSet()
-	{
-		((TextView) findViewById(R.id.email_tv)).setText(Setting.getEmail());
-	}
+        add_tag_dialg_ok.setOnClickListener(new OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                String content = add_tag_dialg_content.getText().toString();
+                if (BasicStringUtil.isNotNullString(content)
+                        && content.matches("\\d+[\\,， ]{1}\\d+"))
+                {
+                    Setting.setBudget(content);
+                    budgetTextSet();
+                    ToastUtil
+                            .showShortToast(getApplicationContext(), "设置预算成功!");
+                    dlg.dismiss();
+                }
+                else
+                {
+                    ToastUtil.showLongToast(getApplicationContext(),
+                            "请输入一个预算,如500,2000(分别代表周和月)!");
+                }
+            }
+
+        });
+    }
+
+    private void emailTextSet()
+    {
+        ((TextView) findViewById(R.id.email_tv)).setText(Setting.getEmail());
+    }
+
+    private void budgetTextSet()
+    {
+        ((TextView) findViewById(R.id.budget_tv)).setText(Setting.getBudget());
+    }
+
+    private void backupTextSet()
+    {
+        if (Setting.getBackupAuto().equals("true"))
+        {
+            ((TextView) findViewById(R.id.backstyle_tv)).setText(Setting
+                    .getBackupTimeModel() + Setting.getBackupWay() + "备份");
+        }
+        else
+        {
+            ((TextView) findViewById(R.id.backstyle_tv)).setText("手动备份!");
+        }
+    }
 }

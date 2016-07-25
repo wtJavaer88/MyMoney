@@ -24,14 +24,15 @@ import com.wnc.mymoney.util.AppRescouceReflect;
 import com.wnc.mymoney.util.SysInit;
 import com.wnc.mymoney.util.TOTAL_RANGE;
 import com.wnc.mymoney.util.TextFormatUtil;
+import com.wnc.string.PatternUtil;
 import com.wnc.train.TrainTicketActivity;
 import com.wnc.train.TrainUIMsgHelper;
 
 public class MainActivity extends Activity
 {
 
-    private static final int LIMIT_PERMONTH = 2000;
-    private static final int LIMIT_PERWEEK = 500;
+    private int LIMIT_PERMONTH = 0;
+    private int LIMIT_PERWEEK = 0;
     LogService serviceIntent;
 
     @Override
@@ -46,8 +47,21 @@ public class MainActivity extends Activity
         /** 进入Activity开始服务 */
         bindService(intent, conn, Context.BIND_AUTO_CREATE);
 
+        try
+        {
+            LIMIT_PERMONTH = Integer.parseInt(PatternUtil.getLastPattern(
+                    Setting.getBudget(), "\\d+"));
+            LIMIT_PERWEEK = Integer.parseInt(PatternUtil.getFirstPattern(
+                    Setting.getBudget(), "\\d+"));
+        }
+        catch (NumberFormatException e)
+        {
+            e.printStackTrace();
+        }
+
         initComponents();
         setViews(false);
+
     }
 
     private void initComponents()
@@ -258,7 +272,15 @@ public class MainActivity extends Activity
 
     private void backupData()
     {
-        BackUpDataUtil.backup(this, BackupTimeModel.TIMELY, NetChannel.EMAIL);
+        boolean isAuto = Boolean.valueOf(Setting.getBackupAuto());
+        if (isAuto)
+        {
+            BackupTimeModel timeModel = Setting.getBackupTimeModel().equals(
+                    "每次") ? BackupTimeModel.TIMELY : BackupTimeModel.DAILY;
+            NetChannel way = Setting.getBackupWay().equals("邮箱") ? NetChannel.EMAIL
+                    : NetChannel.SHARE;
+            BackUpDataUtil.backup(this, timeModel, way);
+        }
     }
 
     private ServiceConnection conn = new ServiceConnection()

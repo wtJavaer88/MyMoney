@@ -12,7 +12,7 @@ public class BackupFilesHolder
 {
     static List<File> backupFiles = new ArrayList<File>();
 
-    public static void clearBackupPics()
+    public static void clearBackupFiles()
     {
         backupFiles.clear();
     }

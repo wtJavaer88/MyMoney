@@ -53,6 +53,8 @@
         <activity android:name="com.wnc.mymoney.ui.SrtActivity"></activity>
         <activity android:name="com.wnc.mymoney.ui.SettingActivity"></activity>
         <activity android:name="com.wnc.mymoney.ui.LocalDbActivity"></activity>
+        <activity android:name="com.wnc.mymoney.ui.BackupSetActivity"></activity>
+        
         <service android:name="com.wnc.mymoney.service.LogService">
         </service>
     </application>

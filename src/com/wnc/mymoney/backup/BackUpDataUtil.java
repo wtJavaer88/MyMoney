@@ -14,124 +14,133 @@ import com.wnc.mymoney.util.ToastUtil;
 
 public class BackUpDataUtil
 {
-	/**
-	 * 只有数据库做了一点点修改, 就可以设为true
-	 */
-	public static boolean canBackUpDb = false;
-	static final String subjectDb = "money.db";
-	static final int maxBackupCount = 10;
+    /**
+     * 只有数据库做了一点点修改, 就可以设为true
+     */
+    public static boolean canBackUpDb = false;
+    static final String subjectDb = "money.db";
+    static final int maxBackupCount = 10;
 
-	static String zipdir = MyAppParams.getInstance().getZipPath();
-	static int keepdays = 3;
+    static String zipdir = MyAppParams.getInstance().getZipPath();
+    static int keepdays = 3;
 
-	/**
-	 * 打开应用的时候清空3天前的临时zip文件
-	 */
-	public static void clearTmpZips()
-	{
-		if (!BasicFileUtil.isExistFolder(zipdir))
-		{
-			Log.i("tmpDel", "dir not exist");
-			return;
-		}
-		File[] files = new File(zipdir).listFiles();
-		long currentTimeMillis = System.currentTimeMillis();
-		for (File file : files)
-		{
-			if (file.isFile() && file.lastModified() < currentTimeMillis - keepdays * 24 * 3600L * 1000)
-			{
-				Log.i("tmpDel", "删除" + file.getName());
-				file.delete();
-			}
-		}
-	}
+    /**
+     * 打开应用的时候清空3天前的临时zip文件
+     */
+    public static void clearTmpZips()
+    {
+        if (!BasicFileUtil.isExistFolder(zipdir))
+        {
+            Log.i("tmpDel", "dir not exist");
+            return;
+        }
+        File[] files = new File(zipdir).listFiles();
+        long currentTimeMillis = System.currentTimeMillis();
+        for (File file : files)
+        {
+            if (file.isFile()
+                    && file.lastModified() < currentTimeMillis - keepdays * 24
+                            * 3600L * 1000)
+            {
+                Log.i("tmpDel", "删除" + file.getName());
+                file.delete();
+            }
+        }
+    }
 
-	public static void backup(Activity activity, BackupTimeModel model, NetChannel channel)
-	{
-		if (canBackUpDb)
-		{
-			String newdb = backupDatabase(activity);
-			BackupFilesHolder.addBackupFile(newdb);
-			BackupFilesHolder.addBackupFile(getLatestLog());
+    public static void backup(Activity activity, BackupTimeModel model,
+            NetChannel channel)
+    {
+        String newdb = backupDatabase(activity);
+        BackupFilesHolder.addBackupFile(newdb);
+        BackupFilesHolder.addBackupFile(getLatestLog());
+        if (model == BackupTimeModel.TIMELY)
+        {
+            if (canBackUpDb)
+            {
+                NetBackupFactory.getNetBackup(model, channel, activity)
+                        .backup();
+                canBackUpDb = false;
+            }
+        }
+    }
 
-			NetBackupFactory.getNetBackup(model, channel, activity).backup();
+    private static String getLatestLog()
+    {
+        File logFolder = new File(MyAppParams.getInstance().getLocalLogPath());
+        if (logFolder != null && logFolder.exists())
+        {
+            File[] logfiles = logFolder.listFiles();
+            Arrays.sort(logfiles);
+            String name;
+            for (int i = logfiles.length - 1; i >= 0; i--)
+            {
+                name = logfiles[i].getName();
+                if (!name.matches("^\\d+?.+"))
+                {
+                    continue;
+                }
+                return logfiles[i].getAbsolutePath();
+            }
+        }
+        return "";
+    }
 
-			canBackUpDb = false;
-		}
-	}
+    public static String backupDatabase(Context context)
+    {
+        if (!canBackUpDb)
+        {
+            return "";
+        }
+        File dbFile = context.getDatabasePath(subjectDb);
+        String newFilePath = BasicFileUtil.getMakeFilePath(MyAppParams
+                .getInstance().getBackupDbPath(),
+        // "/data/data/db",
+                BasicDateUtil.getCurrentDateTimeString() + "_" + subjectDb);
+        File[] files = new File(MyAppParams.getInstance().getBackupDbPath())
+                .listFiles();
+        Arrays.sort(files);
 
-	private static String getLatestLog()
-	{
-		File logFolder = new File(MyAppParams.getInstance().getLocalLogPath());
-		if (logFolder != null && logFolder.exists())
-		{
-			File[] logfiles = logFolder.listFiles();
-			Arrays.sort(logfiles);
-			String name;
-			for (int i = logfiles.length - 1; i >= 0; i--)
-			{
-				name = logfiles[i].getName();
-				if (!name.matches("^\\d+?.+"))
-				{
-					continue;
-				}
-				return logfiles[i].getAbsolutePath();
-			}
-		}
-		return "";
-	}
+        final int len = files.length;
 
-	public static String backupDatabase(Context context)
-	{
-		if (!canBackUpDb)
-		{
-			return "";
-		}
-		File dbFile = context.getDatabasePath(subjectDb);
-		String newFilePath = BasicFileUtil.getMakeFilePath(MyAppParams.getInstance().getBackupDbPath(),
-		// "/data/data/db",
-				BasicDateUtil.getCurrentDateTimeString() + "_" + subjectDb);
-		File[] files = new File(MyAppParams.getInstance().getBackupDbPath()).listFiles();
-		Arrays.sort(files);
+        if (BasicFileUtil.CopyFile(dbFile, new File(newFilePath)))
+        {
+            int i = len;
+            while (i + 1 > maxBackupCount)
+            {
+                String filePath = files[len - i].getAbsolutePath();
+                Log.i("BackUpDataUtil", "删除数据库-->" + filePath);
+                if (!BasicFileUtil.deleteFile(filePath))
+                {
+                    ToastUtil
+                            .showShortToast(context, "删除" + filePath + "文件失败!");
+                }
+                i--;
+            }
+        }
+        else
+        {
+            ToastUtil.showShortToast(context, "复制" + subjectDb + "文件到<"
+                    + newFilePath + ">失败!");
+        }
 
-		final int len = files.length;
+        return newFilePath;
+    }
 
-		if (BasicFileUtil.CopyFile(dbFile, new File(newFilePath)))
-		{
-			int i = len;
-			while (i + 1 > maxBackupCount)
-			{
-				String filePath = files[len - i].getAbsolutePath();
-				Log.i("BackUpDataUtil", "删除数据库-->" + filePath);
-				if (!BasicFileUtil.deleteFile(filePath))
-				{
-					ToastUtil.showShortToast(context, "删除" + filePath + "文件失败!");
-				}
-				i--;
-			}
-		}
-		else
-		{
-			ToastUtil.showShortToast(context, "复制" + subjectDb + "文件到<" + newFilePath + ">失败!");
-		}
-
-		return newFilePath;
-	}
-
-	public static boolean clearAllTmpZips()
-	{
-		try
-		{
-			File[] files = new File(zipdir).listFiles();
-			for (File file : files)
-			{
-				file.delete();
-			}
-		}
-		catch (Exception e)
-		{
-			return false;
-		}
-		return true;
-	}
+    public static boolean clearAllTmpZips()
+    {
+        try
+        {
+            File[] files = new File(zipdir).listFiles();
+            for (File file : files)
+            {
+                file.delete();
+            }
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+        return true;
+    }
 }

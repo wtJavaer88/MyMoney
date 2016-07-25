@@ -53,7 +53,7 @@ public abstract class AbstractNetBackup implements FilesZip
 
         if (backCode)
         {
-            BackupFilesHolder.clearBackupPics();
+            BackupFilesHolder.clearBackupFiles();
         }
         return backCode;
     }

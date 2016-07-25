@@ -5,9 +5,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
  
+     <TextView
+        android:id="@+id/dbname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+		android:text="数据库文件:"
+		android:textColor="#0000ff"
+        android:textSize="30sp" />
     <ListView
         android:id="@+id/dblist"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+         android:layout_marginTop="10dp"
+         />
  
 </LinearLayout>
