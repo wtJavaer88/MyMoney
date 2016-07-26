@@ -2,7 +2,9 @@ package com.wnc.mymoney.ui;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +49,7 @@ public class SrtActivity extends Activity implements OnClickListener,
     TextView timelineTv;
     final String srtFolder = Environment.getExternalStorageDirectory()
             .getPath() + "/wnc/app/srt/";
-    final int DELTA_UNIQUE = 1000;
+    final int DELTA_UNIQUE = 1000;// 文件夹和所属文件的Map的Key规则
     Map<Integer, String> srtFilePathes = new HashMap<Integer, String>();
     private GestureDetector gestureDetector;
     int[] defaultTimePoint =
@@ -111,33 +113,57 @@ public class SrtActivity extends Activity implements OnClickListener,
     final int LEFT = 1;
     final int RIGHT = 2;
 
+    final int countsPerPage = 100;
+    String curFile = "";
+    Picker picker;
+
     private void parseSrt(String srtFile)
     {
-        Date date1 = new Date();
         if (BasicFileUtil.isExistFile(srtFile))
         {
+            if (t != null)
+            {
+                t.interrupt();
+            }
+            DataHolder.switchFile(srtFile);
             if (!DataHolder.map.containsKey(srtFile))
             {
-                Picker picker = PickerFactory.getPicker(srtFile);
-                System.out.println("pickerTime:"
-                        + (new Date().getTime() - date1.getTime()));
-                List<SrtInfo> srtInfos = picker.getSrtInfos();
-                DataHolder.appendData(srtFile, srtInfos);
-                System.out.println("parseTime:"
-                        + (new Date().getTime() - date1.getTime()));
+                curFile = srtFile;
+                picker = PickerFactory.getPicker(srtFile);
+                DataHolder.appendData(curFile,
+                        picker.getSrtInfos(0, countsPerPage));
+                new Thread(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        getDataByPage();
+                    }
+                }).start();
                 getSrtAndSetContent(RIGHT);
-                System.out.println("overTime:"
-                        + (new Date().getTime() - date1.getTime()));
             }
             else
             {
-                DataHolder.switchFile(srtFile);
                 getSrtAndSetContent(CURRENT);
             }
         }
         else
         {
             Log.e("srt", "not found " + srtFile);
+        }
+    }
+
+    private void getDataByPage()
+    {
+        int curPage = 1;
+        while (!DataHolder.completeMap.get(curFile))
+        {
+            DataHolder.appendData(
+                    curFile,
+                    picker.getSrtInfos(countsPerPage * curPage, countsPerPage
+                            * (curPage + 1)));
+            curPage++;
+            System.out.println(DataHolder.map.get(curFile).size());
         }
     }
 
@@ -329,8 +355,9 @@ public class SrtActivity extends Activity implements OnClickListener,
                 // 文件夹最大只取10位
                 leftArr[i] = BasicStringUtil.subString(folder.getName(), 0, 10);
                 File[] listFiles = folder.listFiles();
+                List<File> fileList = getSortFiles(listFiles);
                 int length = 0;
-                for (File f2 : listFiles)
+                for (File f2 : fileList)
                 {
                     if (f2.isFile()
                             && (f2.getName().endsWith("ass") || f2.getName()
@@ -341,7 +368,7 @@ public class SrtActivity extends Activity implements OnClickListener,
                 }
                 String[] arr = new String[length];
                 int j = 0;
-                for (File f2 : listFiles)
+                for (File f2 : fileList)
                 {
                     if (f2.isFile()
                             && (f2.getName().endsWith("ass") || f2.getName()
@@ -381,6 +408,28 @@ public class SrtActivity extends Activity implements OnClickListener,
         {
             e.printStackTrace();
         }
+    }
+
+    private List<File> getSortFiles(File[] listFiles)
+    {
+        List<File> fileList = Arrays.asList(listFiles);
+        Collections.sort(fileList, new Comparator<File>()
+        {
+            @Override
+            public int compare(File o1, File o2)
+            {
+                if (o1.isDirectory() && o2.isFile())
+                {
+                    return 1;
+                }
+                if (o1.isFile() && o2.isDirectory())
+                {
+                    return -1;
+                }
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+        return fileList;
     }
 
     private void getSrtAndSetContent(int btId)
@@ -448,6 +497,7 @@ public class SrtActivity extends Activity implements OnClickListener,
     @Override
     public void doRight()
     {
+        // getDataByPage();
         getSrtAndSetContent(RIGHT);
     }
 }

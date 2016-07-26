@@ -9,10 +9,12 @@ import com.wnc.tools.FileOp;
 
 public class AssPicker implements Picker
 {
+    List<String> segments;
 
     public AssPicker(String srtFile)
     {
         this.srtFile = srtFile;
+        segments = FileOp.readFrom(srtFile, "GBK");
     }
 
     String srtFile;
@@ -20,15 +22,48 @@ public class AssPicker implements Picker
     @Override
     public List<SrtInfo> getSrtInfos()
     {
+        return getSrtInfos(0, segments.size());
+    }
+
+    private boolean valid(String[] parts)
+    {
+        if (parts.length >= 9 && parts[0].startsWith("Dialogue:")
+                && parts[1].matches("\\d:\\d{2}:\\d{2}\\.\\d{2}")
+                && parts[2].matches("\\d:\\d{2}:\\d{2}\\.\\d{2}"))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private TimeInfo parseTimeInfo(String timeStr)
+    {
+        int hour = BasicNumberUtil.getNumber(PatternUtil.getFirstPattern(
+                timeStr, "\\d+:").replace(":", ""));
+        int minute = BasicNumberUtil.getNumber(PatternUtil.getLastPattern(
+                timeStr, "\\d+:").replace(":", ""));
+        int second = BasicNumberUtil.getNumber(PatternUtil.getFirstPattern(
+                timeStr, "\\d{2}\\.").replace(".", ""));
+        int millSecond = BasicNumberUtil.getNumber(PatternUtil.getLastPattern(
+                timeStr, "\\d+"));
+        TimeInfo timeInfo = new TimeInfo();
+        timeInfo.setHour(hour);
+        timeInfo.setMinute(minute);
+        timeInfo.setSecond(second);
+        timeInfo.setMillSecond(millSecond);
+        return timeInfo;
+    }
+
+    @Override
+    public List<SrtInfo> getSrtInfos(int start, int end)
+    {
         List<SrtInfo> srtInfos = new ArrayList<SrtInfo>();
         int index = -1;
-        List<String> segments = FileOp.readFrom(srtFile, "GBK");
         TimeInfo fromTime = null;
         TimeInfo toTime = null;
         String chs = null;
         String eng = null;
-
-        for (int i = 0; i < segments.size(); i++)
+        for (int i = start; i < end && i < segments.size(); i++)
         {
             String str = segments.get(i);
             String[] parts = str.split(",");
@@ -66,42 +101,12 @@ public class AssPicker implements Picker
                 }
                 else
                 {
-                    System.out.println("Cause A Err, Not Match In File<"
-                            + srtFile + "> Line " + i + "...");
+                    // System.out.println("Cause A Err, Not Match In File<" +
+                    // srtFile + "> Line " + i + "...");
                 }
             }
 
         }
         return srtInfos;
-
-    }
-
-    private boolean valid(String[] parts)
-    {
-        if (parts.length >= 9 && parts[0].startsWith("Dialogue:")
-                && parts[1].matches("\\d:\\d{2}:\\d{2}\\.\\d{2}")
-                && parts[2].matches("\\d:\\d{2}:\\d{2}\\.\\d{2}"))
-        {
-            return true;
-        }
-        return false;
-    }
-
-    private TimeInfo parseTimeInfo(String timeStr)
-    {
-        int hour = BasicNumberUtil.getNumber(PatternUtil.getFirstPattern(
-                timeStr, "\\d+:").replace(":", ""));
-        int minute = BasicNumberUtil.getNumber(PatternUtil.getLastPattern(
-                timeStr, "\\d+:").replace(":", ""));
-        int second = BasicNumberUtil.getNumber(PatternUtil.getFirstPattern(
-                timeStr, "\\d{2}\\.").replace(".", ""));
-        int millSecond = BasicNumberUtil.getNumber(PatternUtil.getLastPattern(
-                timeStr, "\\d+"));
-        TimeInfo timeInfo = new TimeInfo();
-        timeInfo.setHour(hour);
-        timeInfo.setMinute(minute);
-        timeInfo.setSecond(second);
-        timeInfo.setMillSecond(millSecond);
-        return timeInfo;
     }
 }

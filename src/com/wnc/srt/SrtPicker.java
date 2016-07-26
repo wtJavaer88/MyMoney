@@ -9,10 +9,12 @@ import com.wnc.tools.FileOp;
 
 public class SrtPicker implements Picker
 {
+    List<String> segments;
 
     public SrtPicker(String srtFile)
     {
         this.srtFile = srtFile;
+        segments = FileOp.readFrom(srtFile, "GBK");
     }
 
     String srtFile;
@@ -20,69 +22,7 @@ public class SrtPicker implements Picker
     @Override
     public List<SrtInfo> getSrtInfos()
     {
-        List<SrtInfo> srtInfos = new ArrayList<SrtInfo>();
-
-        List<String> segments = FileOp.readFrom(srtFile, "GBK");
-        int index = 0;
-        TimeInfo fromTime = null;
-        TimeInfo toTime = null;
-        String chs = null;
-        String eng = null;
-        int indexLineNumber = 0;
-
-        for (int i = 0; i < segments.size(); i++)
-        {
-            String str = segments.get(i);
-            if (isIndexLine(str))
-            {
-                indexLineNumber = i;
-                index = BasicNumberUtil.getNumber(str.trim());
-            }
-            if (i == indexLineNumber + 1)
-            {
-                fromTime = parseTimeInfo(PatternUtil.getFirstPattern(str,
-                        "\\d{2}:\\d{2}:\\d{2},\\d{3}"));
-                toTime = parseTimeInfo(PatternUtil.getLastPattern(str,
-                        "\\d{2}:\\d{2}:\\d{2},\\d{3}"));
-            }
-            if (i == indexLineNumber + 2)
-            {
-                chs = SrtTextHelper.getClearText(str);
-            }
-            if (i == indexLineNumber + 3)
-            {
-                eng = SrtTextHelper.getClearText(str);
-            }
-            if (i == indexLineNumber + 4)
-            {
-                if (index > 0 && fromTime != null && toTime != null
-                        && chs != null && eng != null)
-                {
-                    // System.out.println("一段字幕" + index + "已经结束...");
-                    // System.out.println("CHS:" + chs + " ENG:" + eng);
-                    // System.out.println("FROMTIME:" + fromTime + " TOTIME:" +
-                    // toTime);
-                    SrtInfo srtInfo = new SrtInfo();
-                    srtInfo.setSrtIndex(index);
-                    srtInfo.setFromTime(fromTime);
-                    srtInfo.setToTime(toTime);
-                    srtInfo.setChs(chs);
-                    srtInfo.setEng(eng);
-                    srtInfos.add(srtInfo);
-                    index = 0;
-                    fromTime = null;
-                    toTime = null;
-                    chs = null;
-                    eng = null;
-                }
-                else
-                {
-                    System.out.println("Cause A Err, Not Match In File<"
-                            + srtFile + "> Line " + i + "...");
-                }
-            }
-        }
-        return srtInfos;
+        return getSrtInfos(0, segments.size());
     }
 
     private TimeInfo parseTimeInfo(String timeStr)
@@ -106,5 +46,83 @@ public class SrtPicker implements Picker
     private boolean isIndexLine(String string)
     {
         return string.matches("\\d+");
+    }
+
+    private boolean isEmptyLine(String string)
+    {
+        return string.trim().length() == 0;
+    }
+
+    @Override
+    public List<SrtInfo> getSrtInfos(int start, int end)
+    {
+        List<SrtInfo> srtInfos = new ArrayList<SrtInfo>();
+
+        int index = 0;
+        TimeInfo fromTime = null;
+        TimeInfo toTime = null;
+        String chs = null;
+        String eng = null;
+        int indexLineNumber = 0;
+        if (end < segments.size() && !isEmptyLine(segments.get(end - 1)))
+        {
+            end += 4;
+        }
+        for (int i = start; i < end && i < segments.size(); i++)
+        {
+            {
+                String str = segments.get(i);
+                if (isIndexLine(str))
+                {
+                    indexLineNumber = i;
+                    index = BasicNumberUtil.getNumber(str.trim());
+                }
+                if (i == indexLineNumber + 1)
+                {
+                    fromTime = parseTimeInfo(PatternUtil.getFirstPattern(str,
+                            "\\d{2}:\\d{2}:\\d{2},\\d{3}"));
+                    toTime = parseTimeInfo(PatternUtil.getLastPattern(str,
+                            "\\d{2}:\\d{2}:\\d{2},\\d{3}"));
+                }
+                if (i == indexLineNumber + 2)
+                {
+                    chs = SrtTextHelper.getClearText(str);
+                }
+                if (i == indexLineNumber + 3)
+                {
+                    eng = SrtTextHelper.getClearText(str);
+                }
+                if (i == indexLineNumber + 4)
+                {
+                    if (index > 0 && fromTime != null && toTime != null
+                            && chs != null && eng != null)
+                    {
+                        // System.out.println("一段字幕" + index + "已经结束...");
+                        // System.out.println("CHS:" + chs + " ENG:" + eng);
+                        // System.out.println("FROMTIME:" + fromTime + "
+                        // TOTIME:" +
+                        // toTime);
+                        SrtInfo srtInfo = new SrtInfo();
+                        srtInfo.setSrtIndex(index);
+                        srtInfo.setFromTime(fromTime);
+                        srtInfo.setToTime(toTime);
+                        srtInfo.setChs(chs);
+                        srtInfo.setEng(eng);
+                        srtInfos.add(srtInfo);
+                        index = 0;
+                        fromTime = null;
+                        toTime = null;
+                        chs = null;
+                        eng = null;
+                    }
+                    else
+                    {
+                        System.out.println("Cause A Err, Not Match In File<"
+                                + srtFile + "> Line " + i + "...");
+                    }
+                }
+            }
+        }
+        return srtInfos;
     }
 }

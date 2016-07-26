@@ -12,6 +12,8 @@ public class DataHolder
     public static Map<String, List<SrtInfo>> map = new HashMap<String, List<SrtInfo>>();
     public static Map<String, Integer> indexMap = new HashMap<String, Integer>();
 
+    public static Map<String, Boolean> completeMap = new HashMap<String, Boolean>();
+
     public static String getFileKey()
     {
         return fileKey;
@@ -72,6 +74,10 @@ public class DataHolder
     {
         fileKey = file;
         srtIndex = indexMap.get(fileKey) == null ? -1 : indexMap.get(fileKey);
+        if (!completeMap.containsKey(file))
+        {
+            completeMap.put(file, false);
+        }
     }
 
     private static void checkExist()
@@ -116,8 +122,21 @@ public class DataHolder
 
     public static void appendData(String srtFile, List<SrtInfo> srtInfos)
     {
-        map.put(srtFile, srtInfos);
-        switchFile(srtFile);
+        if (!map.containsKey(srtFile))
+        {
+            map.put(srtFile, srtInfos);
+        }
+        else if (!srtInfos.isEmpty())
+        {
+            if (!completeMap.get(srtFile))
+            {
+                map.get(srtFile).addAll(srtInfos);
+            }
+        }
+        else
+        {
+            completeMap.put(srtFile, true);
+        }
     }
 
     public static void setFileKey(String srtFile)
