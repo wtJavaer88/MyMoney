@@ -3,6 +3,7 @@ package com.wnc.mymoney.ui.helper;
 import java.io.File;
 import java.io.FileInputStream;
 
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 
@@ -15,37 +16,56 @@ public class SrtVoiceHelper
             final PlayCompleteEvent playCompleteEvent, int type)
             throws Exception
     {
-        if (player != null && player.isPlaying())
+        try
         {
-            player.stop();
-            isPlaying = false;
-            if (type == 1)
+            if (player != null)
             {
-                return;
+                player.reset();
+                player.release();
+                player = null;
+                isPlaying = false;
+                if (type == 1)
+                {
+                    return;
+                }
+            }
+
+            if (!isPlaying)
+            {
+                File file = new File(voicePath);
+                FileInputStream fis = new FileInputStream(file);
+                player = new MediaPlayer();
+                player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                player.setDataSource(fis.getFD());
+                player.prepare();
+                player.setOnCompletionListener(new OnCompletionListener()
+                {
+                    @Override
+                    public void onCompletion(MediaPlayer mp)
+                    {
+                        isPlaying = false;
+                        player.reset();
+                        player.release();
+                        player = null;
+                        playCompleteEvent.onComplete();
+                    }
+                });
+                player.setOnPreparedListener(new MediaPlayer.OnPreparedListener()
+                {
+                    @Override
+                    public void onPrepared(MediaPlayer mediaPlayer)
+                    {
+                        mediaPlayer.start();
+                        isPlaying = true;
+                    }
+                });
             }
         }
-
-        if (!isPlaying)
+        catch (Exception e)
         {
-            File file = new File(voicePath);
-            FileInputStream fis = new FileInputStream(file);
-            player = new MediaPlayer();
-            player.setDataSource(fis.getFD());
-            player.prepare();
-            player.setOnCompletionListener(new OnCompletionListener()
-            {
-                @Override
-                public void onCompletion(MediaPlayer mp)
-                {
-                    isPlaying = false;
-                    player.reset();
-                    player.release();
-                    player = null;
-                    playCompleteEvent.onComplete();
-                }
-            });
-            player.start();
-            isPlaying = true;
+            player = null;
+            isPlaying = false;
+            throw new RuntimeException(e);
         }
     }
 }

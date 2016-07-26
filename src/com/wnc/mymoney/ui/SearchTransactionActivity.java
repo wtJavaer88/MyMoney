@@ -334,7 +334,8 @@ public class SearchTransactionActivity extends BaseActivity implements
     private void createNewAdapter(String keyword)
     {
         this.search_expense_lv.setVisibility(View.VISIBLE);
-        this.adapter = new SimpleAdapter(this, getSearchMapData(keyword),
+        getSearchMapData(keyword);
+        this.adapter = new SimpleAdapter(this, lvDataSet,
                 R.layout.nav_year_trans_lv_item, new String[]
                 { "icon", "name", "photo", "memo", "cost" }, new int[]
                 { R.id.item_icon_iv, R.id.item_name_tv, R.id.photo_flag_iv,
@@ -347,13 +348,16 @@ public class SearchTransactionActivity extends BaseActivity implements
                 .setOnItemLongClickListener(transItemClickListener);
 
         dataReOrder();
-        ToastUtil.showShortToast(this,
-                "消费总额:" + TextFormatUtil.getFormatMoneyStr(COST_SUM));
+        if (lvDataSet.size() > 0)
+        {
+            ToastUtil.showLongToast(this, "记录数:" + lvDataSet.size() + " 消费总额:"
+                    + TextFormatUtil.getFormatMoneyStr(COST_SUM));
+        }
     }
 
     private double COST_SUM = 0;
 
-    private List<Map<String, Object>> getSearchMapData(String keyword)
+    private void getSearchMapData(String keyword)
     {
         lvDataSet.clear();
         COST_SUM = 0;
@@ -394,7 +398,6 @@ public class SearchTransactionActivity extends BaseActivity implements
             lvDataSet.add(map);
         }
         TransactionsDao.closeDb();
-        return lvDataSet;
     }
 
     private void lvDataRefresh()

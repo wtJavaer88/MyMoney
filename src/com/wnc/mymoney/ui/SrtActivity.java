@@ -2,6 +2,7 @@ package com.wnc.mymoney.ui;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -99,8 +100,9 @@ public class SrtActivity extends Activity implements OnClickListener,
             if (i != -1)
             {
                 folder = folder.substring(i + 1);
+                String name = TextFormatUtil.getFileNameNoExtend(f.getName());
                 ((TextView) findViewById(R.id.file_tv)).setText(folder + " / "
-                        + f.getName());
+                        + name);
             }
         }
     }
@@ -111,14 +113,21 @@ public class SrtActivity extends Activity implements OnClickListener,
 
     private void parseSrt(String srtFile)
     {
+        Date date1 = new Date();
         if (BasicFileUtil.isExistFile(srtFile))
         {
             if (!DataHolder.map.containsKey(srtFile))
             {
                 Picker picker = PickerFactory.getPicker(srtFile);
+                System.out.println("pickerTime:"
+                        + (new Date().getTime() - date1.getTime()));
                 List<SrtInfo> srtInfos = picker.getSrtInfos();
                 DataHolder.appendData(srtFile, srtInfos);
+                System.out.println("parseTime:"
+                        + (new Date().getTime() - date1.getTime()));
                 getSrtAndSetContent(RIGHT);
+                System.out.println("overTime:"
+                        + (new Date().getTime() - date1.getTime()));
             }
             else
             {
@@ -138,7 +147,7 @@ public class SrtActivity extends Activity implements OnClickListener,
         switch (v.getId())
         {
         case R.id.btnChoose:
-            showChooseWheel();
+            showChooseMovieWheel();
             break;
         case R.id.btnSkip:
             showSkipWheel();
@@ -177,7 +186,7 @@ public class SrtActivity extends Activity implements OnClickListener,
      */
     public void playBytype(final int type)
     {
-        System.out.println("type " + type);
+        // System.out.println("type " + type);
         String voicePath = SrtTextHelper.getSrtVoiceLocation(
                 DataHolder.getFileKey(), DataHolder.getCurrent());
         if (voicePath != null && BasicFileUtil.isExistFile(voicePath))
@@ -297,7 +306,7 @@ public class SrtActivity extends Activity implements OnClickListener,
         }
     }
 
-    private void showChooseWheel()
+    private void showChooseMovieWheel()
     {
         File srtFolderFile = new File(srtFolder);
         try
