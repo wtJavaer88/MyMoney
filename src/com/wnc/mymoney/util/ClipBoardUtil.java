@@ -24,7 +24,7 @@ public class ClipBoardUtil
         return "";
     }
 
-    public static void setClipBoardTextContent(Context context, String text)
+    public static void setTradeContent(Context context, String text)
     {
         @SuppressWarnings("deprecation")
         ClipboardManager clipboard = (ClipboardManager) context
@@ -34,5 +34,15 @@ public class ClipBoardUtil
         System.out.println("text: " + text);
         Trade trade = JSONArray.parseObject(text, Trade.class);
         System.out.println(trade);
+    }
+
+    public static void setNormalContent(Context context, String text)
+    {
+        @SuppressWarnings("deprecation")
+        ClipboardManager clipboard = (ClipboardManager) context
+                .getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData textCd = ClipData.newPlainText("key", text);
+        clipboard.setPrimaryClip(textCd);
+        System.out.println("text: " + text);
     }
 }

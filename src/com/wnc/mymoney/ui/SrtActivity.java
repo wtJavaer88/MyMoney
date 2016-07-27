@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -19,9 +21,11 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.wnc.basic.BasicDateUtil;
 import com.wnc.basic.BasicFileUtil;
 import com.wnc.basic.BasicStringUtil;
 import com.wnc.mymoney.R;
@@ -32,6 +36,7 @@ import com.wnc.mymoney.ui.helper.PlayCompleteEvent;
 import com.wnc.mymoney.ui.helper.Setting;
 import com.wnc.mymoney.ui.helper.SrtVoiceHelper;
 import com.wnc.mymoney.ui.helper.WheelDialogShowUtil;
+import com.wnc.mymoney.util.ClipBoardUtil;
 import com.wnc.mymoney.util.TextFormatUtil;
 import com.wnc.mymoney.util.ToastUtil;
 import com.wnc.srt.DataHolder;
@@ -42,13 +47,15 @@ import com.wnc.srt.SrtTextHelper;
 import com.wnc.srt.TimeHelper;
 
 public class SrtActivity extends Activity implements OnClickListener,
-        HorGestureDetectorListener
+        OnLongClickListener, HorGestureDetectorListener
 {
     TextView chsTv;
     TextView engTv;
     TextView timelineTv;
     final String srtFolder = Environment.getExternalStorageDirectory()
             .getPath() + "/wnc/app/srt/";
+    final String favoriteTxt = Environment.getExternalStorageDirectory()
+            .getPath() + "/wnc/app/srt/favorite.txt";
     final int DELTA_UNIQUE = 1000;// 文件夹和所属文件的Map的Key规则
     Map<Integer, String> srtFilePathes = new HashMap<Integer, String>();
     private GestureDetector gestureDetector;
@@ -66,6 +73,7 @@ public class SrtActivity extends Activity implements OnClickListener,
 
         this.gestureDetector = new GestureDetector(this,
                 new MyHorizontalGestureDetector(0.2, this));
+
     }
 
     private void initView()
@@ -82,6 +90,7 @@ public class SrtActivity extends Activity implements OnClickListener,
 
         chsTv.setOnClickListener(this);
         engTv.setOnClickListener(this);
+        engTv.setOnLongClickListener(this);
         findViewById(R.id.btnFirst).setOnClickListener(this);
         findViewById(R.id.btnLast).setOnClickListener(this);
         // findViewById(R.id.btnPre).setOnClickListener(this);
@@ -89,7 +98,6 @@ public class SrtActivity extends Activity implements OnClickListener,
         findViewById(R.id.btnSkip).setOnClickListener(this);
         findViewById(R.id.btnChoose).setOnClickListener(this);
         findViewById(R.id.btnSkip).setOnClickListener(this);
-
     }
 
     private void initFileTv(String srtFilePath)
@@ -499,5 +507,76 @@ public class SrtActivity extends Activity implements OnClickListener,
     {
         // getDataByPage();
         getSrtAndSetContent(RIGHT);
+    }
+
+    @Override
+    public boolean onLongClick(View v)
+    {
+        final String[] menuItems = new String[]
+        { "复制英文", "复制中英文", "收藏" };
+        new AlertDialog.Builder(this)
+                .setTitle("对字幕进行操作")
+                .setItems(menuItems, new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        try
+                        {
+                            switch (which)
+                            {
+                            case 0:
+                                ClipBoardUtil.setNormalContent(
+                                        SrtActivity.this, engTv.getText()
+                                                .toString());
+                                ToastUtil.showLongToast(
+                                        getApplicationContext(), "复制成功!");
+                                break;
+                            case 1:
+                                ClipBoardUtil.setNormalContent(
+                                        SrtActivity.this, chsTv.getText()
+                                                .toString()
+                                                + "<>"
+                                                + engTv.getText().toString());
+                                ToastUtil.showLongToast(
+                                        getApplicationContext(), "复制成功!");
+                                break;
+                            case 2:
+                                BasicFileUtil.writeFileString(favoriteTxt,
+                                        getFavoriteContent(), "UTF-8", true);
+                                ToastUtil.showLongToast(
+                                        getApplicationContext(), "收藏成功!");
+                                break;
+                            default:
+                                break;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            ToastUtil.showLongToast(getApplicationContext(),
+                                    "操作失败!");
+                            e.printStackTrace();
+                        }
+                    }
+
+                    private String getFavoriteContent()
+                    {
+
+                        return BasicDateUtil.getCurrentDateTimeString() + " \""
+                                + curFile.replace(srtFolder, "") + "\" "
+                                + DataHolder.getCurrent() + "\r\n";
+                    }
+
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        // TODO Auto-generated method stub
+                    }
+                }).show();
+
+        return true;
     }
 }

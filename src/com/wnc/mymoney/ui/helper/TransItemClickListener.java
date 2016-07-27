@@ -76,7 +76,7 @@ public class TransItemClickListener implements OnItemClickListener,
                         {
                             if (which == 2)
                             {
-                                ClipBoardUtil.setClipBoardTextContent(activity,
+                                ClipBoardUtil.setTradeContent(activity,
                                         JSON.toJSONString(selectedTrade));
 
                                 ToastUtil.showShortToast(activity, "复制成功!");
