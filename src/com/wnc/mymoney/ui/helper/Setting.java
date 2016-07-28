@@ -106,7 +106,6 @@ public class Setting
         {
             return;
         }
-        System.out.println("settt.......");
         Editor editor = sharedPreferences.edit();
         editor.putString(key, value);
         editor.commit();

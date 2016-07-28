@@ -11,7 +11,9 @@ import java.util.Map;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -70,10 +72,108 @@ public class SrtActivity extends Activity implements OnClickListener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_srt);
         initView();
-
+        initAlertDialog();
         this.gestureDetector = new GestureDetector(this,
                 new MyHorizontalGestureDetector(0.2, this));
 
+    }
+
+    Builder alertDialogBuilder;
+
+    private void initAlertDialog()
+    {
+        final String[] menuItems = new String[]
+        { "复制英文", "复制中英文", "收藏", "分享" };
+        alertDialogBuilder = new AlertDialog.Builder(this)
+                .setTitle("对字幕进行操作")
+                .setItems(menuItems, new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        try
+                        {
+                            switch (which)
+                            {
+                            case 0:
+                                ClipBoardUtil.setNormalContent(
+                                        SrtActivity.this, engTv.getText()
+                                                .toString());
+                                ToastUtil.showLongToast(
+                                        getApplicationContext(), "复制成功!");
+                                break;
+                            case 1:
+                                ClipBoardUtil.setNormalContent(
+                                        SrtActivity.this, getEngChs());
+                                ToastUtil.showLongToast(
+                                        getApplicationContext(), "复制成功!");
+                                break;
+                            case 2:
+                                favoriteSrt();
+                                break;
+                            case 3:
+                                favoriteSrt();
+                                shareSrt();
+                                break;
+                            default:
+                                break;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            ToastUtil.showLongToast(getApplicationContext(),
+                                    "操作失败!");
+                            e.printStackTrace();
+                        }
+                    }
+
+                    private void favoriteSrt()
+                    {
+                        if (BasicFileUtil.writeFileString(favoriteTxt,
+                                getFavoriteContent(), "UTF-8", true))
+                        {
+                            ToastUtil.showLongToast(getApplicationContext(),
+                                    "收藏成功!");
+                        }
+                        else
+                        {
+                            ToastUtil.showLongToast(getApplicationContext(),
+                                    "收藏失败!");
+                        }
+                    }
+
+                    private String getEngChs()
+                    {
+                        return chsTv.getText().toString() + "<>"
+                                + engTv.getText().toString();
+                    }
+
+                    private void shareSrt()
+                    {
+                        Intent intent = new Intent(Intent.ACTION_SEND);
+                        intent.setType("image/*");
+                        intent.putExtra(Intent.EXTRA_SUBJECT, "Share Srt");
+                        intent.putExtra(Intent.EXTRA_TEXT, getEngChs());
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(Intent.createChooser(intent, getTitle()));
+                    }
+
+                    private String getFavoriteContent()
+                    {
+
+                        return BasicDateUtil.getCurrentDateTimeString() + " \""
+                                + curFile.replace(srtFolder, "") + "\" "
+                                + DataHolder.getCurrent() + "\r\n";
+                    }
+
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                    }
+                });
     }
 
     private void initView()
@@ -93,8 +193,6 @@ public class SrtActivity extends Activity implements OnClickListener,
         engTv.setOnLongClickListener(this);
         findViewById(R.id.btnFirst).setOnClickListener(this);
         findViewById(R.id.btnLast).setOnClickListener(this);
-        // findViewById(R.id.btnPre).setOnClickListener(this);
-        // findViewById(R.id.btnNext).setOnClickListener(this);
         findViewById(R.id.btnSkip).setOnClickListener(this);
         findViewById(R.id.btnChoose).setOnClickListener(this);
         findViewById(R.id.btnSkip).setOnClickListener(this);
@@ -235,6 +333,10 @@ public class SrtActivity extends Activity implements OnClickListener,
                         if (isLoopModel())
                         {
                             doRight();
+                        }
+                        else
+                        {
+                            btnPlay.setText("播放");
                         }
                     }
                 }, type);
@@ -442,6 +544,10 @@ public class SrtActivity extends Activity implements OnClickListener,
 
     private void getSrtAndSetContent(int btId)
     {
+        if (alertDialog != null)
+        {
+            alertDialog.hide();
+        }
         try
         {
             SrtInfo srt = null;
@@ -509,74 +615,24 @@ public class SrtActivity extends Activity implements OnClickListener,
         getSrtAndSetContent(RIGHT);
     }
 
+    AlertDialog alertDialog;
+
     @Override
     public boolean onLongClick(View v)
     {
-        final String[] menuItems = new String[]
-        { "复制英文", "复制中英文", "收藏" };
-        new AlertDialog.Builder(this)
-                .setTitle("对字幕进行操作")
-                .setItems(menuItems, new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        try
-                        {
-                            switch (which)
-                            {
-                            case 0:
-                                ClipBoardUtil.setNormalContent(
-                                        SrtActivity.this, engTv.getText()
-                                                .toString());
-                                ToastUtil.showLongToast(
-                                        getApplicationContext(), "复制成功!");
-                                break;
-                            case 1:
-                                ClipBoardUtil.setNormalContent(
-                                        SrtActivity.this, chsTv.getText()
-                                                .toString()
-                                                + "<>"
-                                                + engTv.getText().toString());
-                                ToastUtil.showLongToast(
-                                        getApplicationContext(), "复制成功!");
-                                break;
-                            case 2:
-                                BasicFileUtil.writeFileString(favoriteTxt,
-                                        getFavoriteContent(), "UTF-8", true);
-                                ToastUtil.showLongToast(
-                                        getApplicationContext(), "收藏成功!");
-                                break;
-                            default:
-                                break;
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            ToastUtil.showLongToast(getApplicationContext(),
-                                    "操作失败!");
-                            e.printStackTrace();
-                        }
-                    }
-
-                    private String getFavoriteContent()
-                    {
-
-                        return BasicDateUtil.getCurrentDateTimeString() + " \""
-                                + curFile.replace(srtFolder, "") + "\" "
-                                + DataHolder.getCurrent() + "\r\n";
-                    }
-
-                })
-                .setNegativeButton("取消", new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        // TODO Auto-generated method stub
-                    }
-                }).show();
-
+        alertDialog = alertDialogBuilder.show();
         return true;
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        loop = false;
+        if (alertDialog != null)
+        {
+            System.out.println();
+            alertDialog.dismiss();
+        }
+        super.onDestroy();
     }
 }

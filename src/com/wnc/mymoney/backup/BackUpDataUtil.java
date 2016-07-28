@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.wnc.basic.BasicDateUtil;
 import com.wnc.basic.BasicFileUtil;
+import com.wnc.basic.BasicStringUtil;
 import com.wnc.mymoney.ui.helper.MyAppParams;
 import com.wnc.mymoney.util.ToastUtil;
 
@@ -52,7 +53,10 @@ public class BackUpDataUtil
             NetChannel channel)
     {
         String newdb = backupDatabase(activity);
-        BackupFilesHolder.addBackupFile(newdb);
+        if (!BasicStringUtil.isNullString(newdb))
+        {
+            BackupFilesHolder.addBackupFile(newdb);
+        }
         BackupFilesHolder.addBackupFile(getLatestLog());
         if (model == BackupTimeModel.TIMELY)
         {

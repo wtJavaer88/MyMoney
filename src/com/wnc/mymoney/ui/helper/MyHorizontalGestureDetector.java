@@ -40,6 +40,9 @@ public class MyHorizontalGestureDetector extends SimpleOnGestureListener
         }
     }
 
+    /**
+     * 返回false,表示其他组件的 点击方法暂时失效
+     */
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
             float velocityY)
@@ -71,6 +74,6 @@ public class MyHorizontalGestureDetector extends SimpleOnGestureListener
                 }
             }
         }
-        return true;
+        return false;
     }
 }
