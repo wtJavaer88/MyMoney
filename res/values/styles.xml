@@ -414,9 +414,7 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowAnimationStyle">@*android:style/Animation.Translucent</item>
     </style>
-    <style name="MymoneyTheme.SplashScreen" parent="@style/MymoneyTheme">
-        <item name="android:windowBackground">@drawable/splash_screen_bg</item>
-    </style>
+    
     <style name="MymoneyTheme.SafeModeActivity" parent="@style/MymoneyTheme">
         <item name="android:windowBackground">@drawable/safe_mode_bg</item>
         <item name="android:windowIsTranslucent">true</item>

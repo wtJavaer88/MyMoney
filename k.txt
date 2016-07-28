@@ -1,8 +1,4 @@
 C:\Users\cpr216\Desktop\工作文件夹\MyMoney\AndroidManifest.xml
-C:\Users\cpr216\Desktop\工作文件夹\MyMoney\lint.xml
-C:\Users\cpr216\Desktop\工作文件夹\MyMoney\bin\AndroidManifest.xml
-C:\Users\cpr216\Desktop\工作文件夹\MyMoney\gen\com\wnc\mymoney\BuildConfig.java
-C:\Users\cpr216\Desktop\工作文件夹\MyMoney\gen\com\wnc\mymoney\R.java
 C:\Users\cpr216\Desktop\工作文件夹\MyMoney\res\anim\push_bottom_in.xml
 C:\Users\cpr216\Desktop\工作文件夹\MyMoney\res\anim\push_bottom_out.xml
 C:\Users\cpr216\Desktop\工作文件夹\MyMoney\res\color\add_trans_cost_income_text.xml
