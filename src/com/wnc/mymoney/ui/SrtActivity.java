@@ -576,6 +576,7 @@ public class SrtActivity extends Activity implements OnClickListener,
         }
         catch (Exception ex)
         {
+            btnPlay.setText("播放");
             ToastUtil.showShortToast(this, "错误:" + ex.getMessage());
         }
     }
@@ -586,6 +587,10 @@ public class SrtActivity extends Activity implements OnClickListener,
         engTv.setText(srt.getEng());
         timelineTv.setText(srt.getFromTime().toString() + " ---> "
                 + srt.getToTime().toString());
+
+        defaultTimePoint[0] = srt.getFromTime().getHour();
+        defaultTimePoint[1] = srt.getFromTime().getMinute();
+        defaultTimePoint[2] = srt.getFromTime().getSecond();
 
         btnPlay.setText("停止");
         loop = true;

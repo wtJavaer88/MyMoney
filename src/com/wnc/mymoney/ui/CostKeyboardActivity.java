@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.wnc.mymoney.R;
 import com.wnc.mymoney.ui.helper.SimulatorCal;
@@ -35,8 +34,8 @@ public class CostKeyboardActivity extends Activity
             @Override
             public void onClick(View v)
             {
-                Toast.makeText(getApplicationContext(), "提示：点击窗口外部关闭窗口！",
-                        Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getApplicationContext(), "提示：点击窗口外部关闭窗口！",
+                // Toast.LENGTH_SHORT).show();
             }
         });
 
