@@ -185,7 +185,7 @@ public class SrtActivity extends Activity implements OnClickListener,
         if (BasicStringUtil.isNotNullString(DataHolder.getFileKey()))
         {
             initFileTv(DataHolder.getFileKey());
-            getSrtAndSetContent(CURRENT);
+            getSrtAndSetContent(VIEW_CURRENT);
         }
 
         chsTv.setOnClickListener(this);
@@ -215,9 +215,9 @@ public class SrtActivity extends Activity implements OnClickListener,
         }
     }
 
-    final int CURRENT = 0;
-    final int LEFT = 1;
-    final int RIGHT = 2;
+    final int VIEW_CURRENT = 0;
+    final int VIEW_LEFT = 1;
+    final int VIEW_RIGHT = 2;
 
     final int countsPerPage = 100;
     String curFile = "";
@@ -246,11 +246,11 @@ public class SrtActivity extends Activity implements OnClickListener,
                         getDataByPage();
                     }
                 }).start();
-                getSrtAndSetContent(RIGHT);
+                getSrtAndSetContent(VIEW_RIGHT);
             }
             else
             {
-                getSrtAndSetContent(CURRENT);
+                getSrtAndSetContent(VIEW_CURRENT);
             }
         }
         else
@@ -373,7 +373,7 @@ public class SrtActivity extends Activity implements OnClickListener,
                             Thread.sleep(time);
                             Message msg = new Message();
                             msg.what = type;
-                            handler.sendMessage(msg);
+                            loopHandler.sendMessage(msg);
                         }
                         catch (InterruptedException e)
                         {
@@ -388,7 +388,7 @@ public class SrtActivity extends Activity implements OnClickListener,
     }
 
     Thread t;
-    public Handler handler = new Handler()
+    public Handler loopHandler = new Handler()
     {
         @Override
         public void handleMessage(android.os.Message msg)
@@ -559,13 +559,13 @@ public class SrtActivity extends Activity implements OnClickListener,
             case R.id.btnLast:
                 srt = DataHolder.getLast();
                 break;
-            case LEFT:
+            case VIEW_LEFT:
                 srt = DataHolder.getPre();
                 break;
-            case RIGHT:
+            case VIEW_RIGHT:
                 srt = DataHolder.getNext();
                 break;
-            case CURRENT:
+            case VIEW_CURRENT:
                 srt = DataHolder.getCurrent();
                 break;
             }
@@ -610,14 +610,14 @@ public class SrtActivity extends Activity implements OnClickListener,
     @Override
     public void doLeft()
     {
-        getSrtAndSetContent(LEFT);
+        getSrtAndSetContent(VIEW_LEFT);
     }
 
     @Override
     public void doRight()
     {
         // getDataByPage();
-        getSrtAndSetContent(RIGHT);
+        getSrtAndSetContent(VIEW_RIGHT);
     }
 
     AlertDialog alertDialog;

@@ -46,6 +46,10 @@ public class AssPicker implements Picker
                 timeStr, "\\d{2}\\.").replace(".", ""));
         int millSecond = BasicNumberUtil.getNumber(PatternUtil.getLastPattern(
                 timeStr, "\\d+"));
+        if (millSecond < 100)
+        {
+            millSecond = millSecond * 10;
+        }
         TimeInfo timeInfo = new TimeInfo();
         timeInfo.setHour(hour);
         timeInfo.setMinute(minute);
@@ -69,7 +73,7 @@ public class AssPicker implements Picker
             String[] parts = str.split(",");
             if (valid(parts))
             {
-                String dialogue = parts[9];
+                String dialogue = getDialogAfterEight(parts);
                 index++;
                 fromTime = parseTimeInfo(parts[1]);
                 toTime = parseTimeInfo(parts[2]);
@@ -108,5 +112,15 @@ public class AssPicker implements Picker
 
         }
         return srtInfos;
+    }
+
+    private String getDialogAfterEight(String[] parts)
+    {
+        String ret = "";
+        for (int i = 9; i < parts.length; i++)
+        {
+            ret += parts[i].trim() + " ";
+        }
+        return ret;
     }
 }

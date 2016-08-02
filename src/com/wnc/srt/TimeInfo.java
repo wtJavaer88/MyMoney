@@ -50,8 +50,8 @@ public class TimeInfo
     @Override
     public String toString()
     {
-        return align(hour, 2) + ":" + align(minute, 2) + ":" + align(second, 2)
-                + "," + align(millSecond, 3);
+        return String.format("%s:%s:%s,%s", align(hour, 2), align(minute, 2),
+                align(second, 2), align(millSecond, 3));
     }
 
     private String align(int i, int len)

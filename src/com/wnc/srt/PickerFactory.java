@@ -8,7 +8,7 @@ public class PickerFactory
         {
             return new SrtPicker(srtFile);
         }
-        else if (srtFile.endsWith(".ass"))
+        else if (srtFile.endsWith(".ass") || srtFile.endsWith(".ssa"))
         {
             return new AssPicker(srtFile);
         }
