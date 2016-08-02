@@ -1,5 +1,6 @@
 package com.wnc.srt;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,7 @@ public class DataHolder
     public static SrtInfo getNext()
     {
         srtIndex++;
+        // System.out.println("next:srtIndex.." + srtIndex);
         return getSrtByIndex();
     }
 
@@ -136,7 +138,24 @@ public class DataHolder
         else
         {
             completeMap.put(srtFile, true);
+            resortList();
         }
+    }
+
+    private static void resortList()
+    {
+        List<SrtInfo> list = map.get(fileKey);
+        Collections.sort(list, new java.util.Comparator<SrtInfo>()
+        {
+            @Override
+            public int compare(SrtInfo lhs, SrtInfo rhs)
+            {
+                return lhs.getFromTime().toString()
+                        .compareTo(rhs.getFromTime().toString());
+            }
+        });
+        srtIndex = 0;
+        // System.out.println("list:srtIndex.." + srtIndex);
     }
 
     public static void setFileKey(String srtFile)
