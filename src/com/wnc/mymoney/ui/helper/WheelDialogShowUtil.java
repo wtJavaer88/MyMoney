@@ -20,12 +20,13 @@ import com.wnc.basic.BasicStringUtil;
 import com.wnc.mymoney.bean.MyWheelBean;
 import com.wnc.mymoney.util.DateTimeSelectArrUtil;
 import com.wnc.mymoney.util.TextFormatUtil;
+import com.wnc.mymoney.util.ToastUtil;
 import com.wnc.string.PatternUtil;
 
 public class WheelDialogShowUtil
 {
-    public static void showCurrDateTimeDialog(Context context, String datetime,
-            final AfterWheelChooseListener listener)
+    public static void showCurrDateTimeDialog(final Context context,
+            String datetime, final AfterWheelChooseListener listener)
     {
         final AlertDialog dialog = new AlertDialog.Builder(context).create();
         // dialog.setTitle(title);
@@ -63,6 +64,9 @@ public class WheelDialogShowUtil
                     LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1));
             wheelviews.add(wheelview);
         }
+        // 为日期的改变设置监听器
+        setDateChangeListener(context, arrList, wheelviews);
+
         setDefaultValue(wheelviews, arrList, datetime);
 
         // 设置对话框点击事件 积极
@@ -91,6 +95,35 @@ public class WheelDialogShowUtil
                 });
         dialog.setView(llContent);
         dialog.show();
+    }
+
+    private static void setDateChangeListener(final Context context,
+            final List<String[]> arrList, final List<WheelView> wheelviews)
+    {
+        OnWheelChangedListener onWheelChangedListener = new OnWheelChangedListener()
+        {
+            @Override
+            public void onChanged(WheelView wheel, int oldValue, int newValue)
+            {
+                String formatDateStr = getFormatDateStr(wheelviews, arrList);
+                if (BasicDateUtil.isDateFormatTimeString(formatDateStr,
+                        "yyyy-MM-dd"))
+                {
+                    ToastUtil.showShortToast(
+                            context,
+                            BasicDateUtil.getGBDateWeekString(
+                                    formatDateStr.replace("-", "")).replace(
+                                    "七", "天"));
+                }
+                else
+                {
+                    ToastUtil.showLongToast(context, "不存在这一天:" + formatDateStr);
+                }
+            }
+        };
+        wheelviews.get(0).addChangingListener(onWheelChangedListener);
+        wheelviews.get(1).addChangingListener(onWheelChangedListener);
+        wheelviews.get(2).addChangingListener(onWheelChangedListener);
     }
 
     public static void showCurrDateDialog(Context context,
@@ -132,6 +165,8 @@ public class WheelDialogShowUtil
         setDefaultValue(wheelviews, arrList,
                 BasicDateUtil.getCurrentDateTimeString());
 
+        // 为日期的改变设置监听器
+        setDateChangeListener(context, arrList, wheelviews);
         // 设置对话框点击事件 积极
         dialog.setButton(AlertDialog.BUTTON_POSITIVE, "确定",
                 new DialogInterface.OnClickListener()

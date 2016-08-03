@@ -38,6 +38,7 @@ import com.wnc.mymoney.ui.helper.PlayCompleteEvent;
 import com.wnc.mymoney.ui.helper.Setting;
 import com.wnc.mymoney.ui.helper.SrtVoiceHelper;
 import com.wnc.mymoney.ui.helper.WheelDialogShowUtil;
+import com.wnc.mymoney.ui.widget.richtext.ClickFileIntentFactory;
 import com.wnc.mymoney.util.ClipBoardUtil;
 import com.wnc.mymoney.util.TextFormatUtil;
 import com.wnc.mymoney.util.ToastUtil;
@@ -51,11 +52,14 @@ import com.wnc.srt.TimeHelper;
 public class SrtActivity extends Activity implements OnClickListener,
         OnLongClickListener, HorGestureDetectorListener
 {
+    TextView movieTv;
     TextView chsTv;
     TextView engTv;
     TextView timelineTv;
     final String srtFolder = Environment.getExternalStorageDirectory()
             .getPath() + "/wnc/app/srt/";
+    final String thumbPicFolder = Environment.getExternalStorageDirectory()
+            .getPath() + "/wnc/app/图片/";
     final String favoriteTxt = Environment.getExternalStorageDirectory()
             .getPath() + "/wnc/app/srt/favorite.txt";
     final int DELTA_UNIQUE = 1000;// 文件夹和所属文件的Map的Key规则
@@ -178,7 +182,9 @@ public class SrtActivity extends Activity implements OnClickListener,
 
     private void initView()
     {
+
         btnPlay = (Button) findViewById(R.id.btnPlay);
+        movieTv = (TextView) findViewById(R.id.file_tv);
         chsTv = (TextView) findViewById(R.id.chs_tv);
         engTv = (TextView) findViewById(R.id.eng_tv);
         timelineTv = (TextView) findViewById(R.id.timeline_tv);
@@ -187,9 +193,9 @@ public class SrtActivity extends Activity implements OnClickListener,
             initFileTv(DataHolder.getFileKey());
             getSrtAndSetContent(VIEW_CURRENT);
         }
-
-        chsTv.setOnClickListener(this);
-        engTv.setOnClickListener(this);
+        movieTv.setOnClickListener(this);
+        // chsTv.setOnClickListener(this);
+        // engTv.setOnClickListener(this);
         engTv.setOnLongClickListener(this);
         findViewById(R.id.btnFirst).setOnClickListener(this);
         findViewById(R.id.btnLast).setOnClickListener(this);
@@ -209,8 +215,8 @@ public class SrtActivity extends Activity implements OnClickListener,
             {
                 folder = folder.substring(i + 1);
                 String name = TextFormatUtil.getFileNameNoExtend(f.getName());
-                ((TextView) findViewById(R.id.file_tv)).setText(folder + " / "
-                        + name);
+
+                movieTv.setText(folder + " / " + name);
             }
         }
     }
@@ -289,6 +295,19 @@ public class SrtActivity extends Activity implements OnClickListener,
             break;
         case R.id.btnLast:
             getSrtAndSetContent(R.id.btnLast);
+            break;
+        case R.id.file_tv:
+            System.out.println(curFile);
+            System.out.println(curFile.replace(srtFolder, ""));
+            String filePath = thumbPicFolder + curFile.replace(srtFolder, "");
+            int i = filePath.lastIndexOf(".");
+            filePath = filePath.substring(0, i);
+            filePath = filePath + File.separator
+                    + TextFormatUtil.getFileNameNoExtend(curFile) + "_p1.jpg";
+            System.out.println(filePath);
+            System.out.println(BasicFileUtil.isExistFile(filePath));
+            Intent intent = ClickFileIntentFactory.getIntentByFile(filePath);
+            startActivity(intent);
             break;
         }
     }
@@ -449,7 +468,8 @@ public class SrtActivity extends Activity implements OnClickListener,
         {
 
             final List<File> tvFolderFiles = new ArrayList<File>();
-            for (File f : srtFolderFile.listFiles())
+
+            for (File f : getSortFiles(srtFolderFile.listFiles()))
             {
                 if (f.isDirectory())
                 {

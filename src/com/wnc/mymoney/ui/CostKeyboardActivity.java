@@ -45,7 +45,8 @@ public class CostKeyboardActivity extends Activity
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
-        setResultAndFinish();
+        // setResultAndFinish();
+        finish();
         return true;
     }
 

@@ -30,12 +30,12 @@
 	     <TextView
             android:id="@+id/file_tv"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:textColor="#b5e61e"
-            android:textSize="15dp"
+            android:textSize="16dp"
             android:gravity="left"
             android:layout_marginLeft="15dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:text="疑犯追踪第1季第1集" />
 	   
     </LinearLayout>
