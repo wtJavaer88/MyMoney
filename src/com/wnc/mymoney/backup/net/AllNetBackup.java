@@ -7,8 +7,8 @@ import java.util.List;
 
 import android.app.Activity;
 
-import com.wnc.mymoney.backup.NetChannel;
 import com.wnc.mymoney.uihelper.MyAppParams;
+import com.wnc.mymoney.util.enums.NetChannel;
 
 public class AllNetBackup extends AbstractNetBackup
 {

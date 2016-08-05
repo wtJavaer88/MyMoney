@@ -21,9 +21,9 @@ import com.wnc.mymoney.bean.DayTranTotal;
 import com.wnc.mymoney.bean.PriceTotalBean;
 import com.wnc.mymoney.bean.Trade;
 import com.wnc.mymoney.dao.TransactionsDao;
-import com.wnc.mymoney.util.CostTypeUtil;
-import com.wnc.mymoney.util.TOTAL_RANGE;
-import com.wnc.mymoney.util.TextFormatUtil;
+import com.wnc.mymoney.util.common.TextFormatUtil;
+import com.wnc.mymoney.util.enums.CostTypeUtil;
+import com.wnc.mymoney.util.enums.TOTAL_RANGE;
 import com.wnc.mymoney.vholder.ExpandGroupHolder;
 import com.wnc.mymoney.vholder.TranListViewHolder;
 

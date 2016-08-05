@@ -22,8 +22,8 @@ import com.wnc.basic.BasicStringUtil;
 import com.wnc.mymoney.R;
 import com.wnc.mymoney.uihelper.AfterWheelChooseListener;
 import com.wnc.mymoney.uihelper.WheelDialogShowUtil;
-import com.wnc.mymoney.util.TextFormatUtil;
-import com.wnc.mymoney.util.ToastUtil;
+import com.wnc.mymoney.util.app.ToastUtil;
+import com.wnc.mymoney.util.common.TextFormatUtil;
 import com.wnc.mymoney.widget.ComboBox;
 import com.wnc.mymoney.widget.ComboBox.ListViewItemClickListener;
 

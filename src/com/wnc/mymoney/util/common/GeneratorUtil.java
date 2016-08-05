@@ -1,4 +1,4 @@
-package com.wnc.mymoney.util;
+package com.wnc.mymoney.util.common;
 
 import java.util.UUID;
 

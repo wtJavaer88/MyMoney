@@ -11,7 +11,7 @@ import android.text.style.ImageSpan;
 import android.util.Log;
 
 import com.wnc.mymoney.uihelper.MyAppParams;
-import com.wnc.mymoney.util.BitmapHelper;
+import com.wnc.mymoney.util.app.BitmapHelper;
 
 public class ClickablePicRichText implements RichText
 {

@@ -25,8 +25,8 @@ import com.wnc.mymoney.ui.NavTransactionActivity;
 import com.wnc.mymoney.ui.SearchTransactionActivity;
 import com.wnc.mymoney.ui.ShowCostDetailActivity;
 import com.wnc.mymoney.ui.ViewTransActivity;
-import com.wnc.mymoney.util.ClipBoardUtil;
-import com.wnc.mymoney.util.ToastUtil;
+import com.wnc.mymoney.util.app.ClipBoardUtil;
+import com.wnc.mymoney.util.app.ToastUtil;
 
 public class TransItemClickListener implements OnItemClickListener,
         OnItemLongClickListener

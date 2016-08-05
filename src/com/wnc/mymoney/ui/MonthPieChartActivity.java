@@ -23,10 +23,10 @@ import com.wnc.mymoney.R;
 import com.wnc.mymoney.bean.CostChartTotal;
 import com.wnc.mymoney.bean.DayRangePoint;
 import com.wnc.mymoney.dao.TransactionsDao;
-import com.wnc.mymoney.util.CostTypeUtil;
-import com.wnc.mymoney.util.TOTAL_RANGE;
-import com.wnc.mymoney.util.TextFormatUtil;
-import com.wnc.mymoney.util.ToastUtil;
+import com.wnc.mymoney.util.app.ToastUtil;
+import com.wnc.mymoney.util.common.TextFormatUtil;
+import com.wnc.mymoney.util.enums.CostTypeUtil;
+import com.wnc.mymoney.util.enums.TOTAL_RANGE;
 
 public class MonthPieChartActivity extends BaseActivity implements
         OnClickListener

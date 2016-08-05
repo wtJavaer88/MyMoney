@@ -6,7 +6,7 @@ import java.util.Collection;
 import android.app.Activity;
 
 import com.wnc.mymoney.backup.BackupFilesHolder;
-import com.wnc.mymoney.backup.NetChannel;
+import com.wnc.mymoney.util.enums.NetChannel;
 
 public class TimelyNetBackup extends AbstractNetBackup
 {

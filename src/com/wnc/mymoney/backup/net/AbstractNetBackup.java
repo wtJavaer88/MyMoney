@@ -11,10 +11,10 @@ import android.util.Log;
 
 import com.wnc.basic.BasicDateUtil;
 import com.wnc.mymoney.backup.BackupFilesHolder;
-import com.wnc.mymoney.backup.NetChannel;
 import com.wnc.mymoney.backup.ZipPathFactory;
 import com.wnc.mymoney.uihelper.Setting;
-import com.wnc.mymoney.util.ZipUtils;
+import com.wnc.mymoney.util.common.ZipUtils;
+import com.wnc.mymoney.util.enums.NetChannel;
 
 public abstract class AbstractNetBackup implements FilesZip
 {

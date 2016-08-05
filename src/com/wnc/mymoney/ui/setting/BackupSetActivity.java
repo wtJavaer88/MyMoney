@@ -11,7 +11,7 @@ import android.view.WindowManager;
 
 import com.wnc.mymoney.R;
 import com.wnc.mymoney.uihelper.Setting;
-import com.wnc.mymoney.util.ToastUtil;
+import com.wnc.mymoney.util.app.ToastUtil;
 import com.wnc.mymoney.widget.ComboBox;
 import com.wnc.mymoney.widget.MyToggle;
 import com.wnc.mymoney.widget.ComboBox.ListViewItemClickListener;

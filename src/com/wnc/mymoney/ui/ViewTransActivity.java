@@ -29,10 +29,10 @@ import com.wnc.mymoney.ui.richtext.ClickableVoiceRichText;
 import com.wnc.mymoney.uihelper.HorGestureDetectorListener;
 import com.wnc.mymoney.uihelper.MyAppParams;
 import com.wnc.mymoney.uihelper.MyHorizontalGestureDetector;
-import com.wnc.mymoney.util.CostTypeUtil;
-import com.wnc.mymoney.util.FileTypeUtil;
-import com.wnc.mymoney.util.TextFormatUtil;
-import com.wnc.mymoney.util.ToastUtil;
+import com.wnc.mymoney.util.app.ToastUtil;
+import com.wnc.mymoney.util.common.FileTypeUtil;
+import com.wnc.mymoney.util.common.TextFormatUtil;
+import com.wnc.mymoney.util.enums.CostTypeUtil;
 import com.wnc.mymoney.widget.ComboBox;
 
 public class ViewTransActivity extends BaseActivity implements

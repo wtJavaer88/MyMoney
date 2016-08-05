@@ -7,7 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 
-import com.wnc.mymoney.util.ToastUtil;
+import com.wnc.mymoney.util.app.ToastUtil;
 
 public class Clickable extends ClickableSpan implements OnClickListener
 {

@@ -19,8 +19,8 @@ import com.wnc.basic.BasicDateUtil;
 import com.wnc.basic.BasicStringUtil;
 import com.wnc.mymoney.bean.MyWheelBean;
 import com.wnc.mymoney.util.DateTimeSelectArrUtil;
-import com.wnc.mymoney.util.TextFormatUtil;
-import com.wnc.mymoney.util.ToastUtil;
+import com.wnc.mymoney.util.app.ToastUtil;
+import com.wnc.mymoney.util.common.TextFormatUtil;
 import com.wnc.string.PatternUtil;
 
 public class WheelDialogShowUtil

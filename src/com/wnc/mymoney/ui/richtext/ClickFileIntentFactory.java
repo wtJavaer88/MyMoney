@@ -3,8 +3,8 @@ package com.wnc.mymoney.ui.richtext;
 import android.content.Intent;
 
 import com.wnc.basic.BasicStringUtil;
-import com.wnc.mymoney.util.FileTypeUtil;
-import com.wnc.mymoney.util.MyIntentUtil;
+import com.wnc.mymoney.util.app.MyIntentUtil;
+import com.wnc.mymoney.util.common.FileTypeUtil;
 
 public class ClickFileIntentFactory
 {

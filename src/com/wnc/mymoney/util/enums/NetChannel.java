@@ -1,4 +1,4 @@
-package com.wnc.mymoney.backup;
+package com.wnc.mymoney.util.enums;
 
 /**
  * 分为邮件和分享两种模式

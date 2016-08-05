@@ -1,4 +1,4 @@
-package com.wnc.mymoney.util;
+package com.wnc.mymoney.util.common;
 
 import java.io.File;
 import java.text.ParseException;
@@ -210,6 +210,12 @@ public class TextFormatUtil
         return filePath;
     }
 
+    /**
+     * 判断是否包含中文
+     * 
+     * @param string
+     * @return
+     */
     public static boolean containsChinese(String string)
     {
         return BasicStringUtil.isNotNullString(PatternUtil.getFirstPattern(

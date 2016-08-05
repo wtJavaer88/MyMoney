@@ -6,7 +6,9 @@ import com.wnc.mymoney.backup.net.AbstractNetBackup;
 import com.wnc.mymoney.backup.net.AllNetBackup;
 import com.wnc.mymoney.backup.net.NullNetBackup;
 import com.wnc.mymoney.backup.net.TimelyNetBackup;
-import com.wnc.mymoney.util.ToastUtil;
+import com.wnc.mymoney.util.app.ToastUtil;
+import com.wnc.mymoney.util.enums.BackupTimeModel;
+import com.wnc.mymoney.util.enums.NetChannel;
 
 public class NetBackupFactory
 {

@@ -28,8 +28,8 @@ import com.wnc.mymoney.uihelper.HorGestureDetectorListener;
 import com.wnc.mymoney.uihelper.MyExpandableListAdapter;
 import com.wnc.mymoney.uihelper.MyHorizontalGestureDetector;
 import com.wnc.mymoney.uihelper.MyListViewAdapter;
-import com.wnc.mymoney.util.TOTAL_RANGE;
-import com.wnc.mymoney.util.TextFormatUtil;
+import com.wnc.mymoney.util.common.TextFormatUtil;
+import com.wnc.mymoney.util.enums.TOTAL_RANGE;
 import com.wnc.mymoney.widget.QExListView;
 
 /**

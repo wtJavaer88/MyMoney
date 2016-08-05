@@ -43,10 +43,10 @@ import com.wnc.mymoney.uihelper.HorGestureDetectorListener;
 import com.wnc.mymoney.uihelper.MyHorizontalGestureDetector;
 import com.wnc.mymoney.uihelper.Setting;
 import com.wnc.mymoney.uihelper.WheelDialogShowUtil;
-import com.wnc.mymoney.util.ClipBoardUtil;
-import com.wnc.mymoney.util.FileSortUtil;
-import com.wnc.mymoney.util.TextFormatUtil;
-import com.wnc.mymoney.util.ToastUtil;
+import com.wnc.mymoney.util.app.ClipBoardUtil;
+import com.wnc.mymoney.util.app.ToastUtil;
+import com.wnc.mymoney.util.common.FileSortUtil;
+import com.wnc.mymoney.util.common.TextFormatUtil;
 import com.wnc.srt.HeadSetUtil.OnHeadSetListener;
 
 public class SrtActivity extends Activity implements OnClickListener,
@@ -81,7 +81,7 @@ public class SrtActivity extends Activity implements OnClickListener,
         // 引入线控监听
         HeadSetUtil.getInstance().setOnHeadSetListener(headSetListener);
         HeadSetUtil.getInstance().open(this);
-        // 设置未捕获异常的处理方法
+        // 设置未捕获异常UncaughtExceptionHandler的处理方法
         Thread.setDefaultUncaughtExceptionHandler(this);
 
         initView();

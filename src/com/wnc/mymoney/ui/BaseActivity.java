@@ -7,7 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 
-import com.wnc.mymoney.util.KeyBoardUtil;
+import com.wnc.mymoney.util.app.KeyBoardUtil;
 
 public class BaseActivity extends Activity
 {

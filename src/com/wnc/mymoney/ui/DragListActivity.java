@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 import com.wnc.mymoney.R;
 import com.wnc.mymoney.dao.MemberDao;
-import com.wnc.mymoney.util.ToastUtil;
+import com.wnc.mymoney.util.app.ToastUtil;
 import com.wnc.mymoney.widget.draglv.DragListView;
 import com.wnc.mymoney.widget.draglv.EasyDragListAdapter;
 

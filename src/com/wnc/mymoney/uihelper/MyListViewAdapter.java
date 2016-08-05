@@ -18,7 +18,7 @@ import android.widget.TextView;
 import com.wnc.mymoney.R;
 import com.wnc.mymoney.bean.Trade;
 import com.wnc.mymoney.dao.TransactionsDao;
-import com.wnc.mymoney.util.CostTypeUtil;
+import com.wnc.mymoney.util.enums.CostTypeUtil;
 import com.wnc.mymoney.vholder.TranListViewHolder;
 
 public class MyListViewAdapter extends BaseAdapter

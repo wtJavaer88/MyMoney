@@ -1,4 +1,4 @@
-package com.wnc.mymoney.util;
+package com.wnc.mymoney.util.app;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;

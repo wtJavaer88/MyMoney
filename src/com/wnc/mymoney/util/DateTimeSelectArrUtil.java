@@ -47,9 +47,9 @@ public class DateTimeSelectArrUtil
     private static String[] getOrderedArrByLen(int len, int start, String ext)
     {
         String[] arr = new String[len];
-        for (int i = 1; i <= len; i++)
+        for (int i = 0; i < len; i++)
         {
-            arr[i - 1] = start + (i - 1) + ext;
+            arr[i] = start + (i) + ext;
         }
         return arr;
     }

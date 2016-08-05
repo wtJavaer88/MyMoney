@@ -16,7 +16,7 @@ import com.wnc.mymoney.bean.DayRangePoint;
 import com.wnc.mymoney.bean.DayTranTotal;
 import com.wnc.mymoney.dao.TransactionsDao;
 import com.wnc.mymoney.uihelper.MyListViewAdapter;
-import com.wnc.mymoney.util.CostTypeUtil;
+import com.wnc.mymoney.util.enums.CostTypeUtil;
 
 public class ShowCostDetailActivity extends BaseActivity implements
         View.OnClickListener

@@ -1,6 +1,7 @@
-package com.wnc.mymoney.util;
+package com.wnc.mymoney.util.enums;
 
 import com.wnc.mymoney.bean.DayRangePoint;
+import com.wnc.mymoney.util.DayRangePointUtil;
 
 public enum TOTAL_RANGE
 {

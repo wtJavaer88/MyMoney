@@ -8,7 +8,7 @@ import com.wnc.mymoney.bean.DayRangePoint;
 import com.wnc.mymoney.bean.DayTranTotal;
 import com.wnc.mymoney.bean.NullPriceTotalBean;
 import com.wnc.mymoney.bean.PriceTotalBean;
-import com.wnc.mymoney.util.TOTAL_RANGE;
+import com.wnc.mymoney.util.enums.TOTAL_RANGE;
 
 public class OnStartUpDataUtil
 {

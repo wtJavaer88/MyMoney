@@ -9,6 +9,7 @@ import com.wnc.mymoney.backup.BackUpDataUtil;
 import com.wnc.mymoney.dao.CategoryDao;
 import com.wnc.mymoney.dao.MemberDao;
 import com.wnc.mymoney.uihelper.MyAppParams;
+import com.wnc.mymoney.util.app.MoveDbUtil;
 
 public class SysInit
 {

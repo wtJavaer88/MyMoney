@@ -11,7 +11,9 @@ import com.wnc.basic.BasicDateUtil;
 import com.wnc.basic.BasicFileUtil;
 import com.wnc.basic.BasicStringUtil;
 import com.wnc.mymoney.uihelper.MyAppParams;
-import com.wnc.mymoney.util.ToastUtil;
+import com.wnc.mymoney.util.app.ToastUtil;
+import com.wnc.mymoney.util.enums.BackupTimeModel;
+import com.wnc.mymoney.util.enums.NetChannel;
 
 public class BackUpDataUtil
 {

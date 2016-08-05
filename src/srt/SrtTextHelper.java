@@ -3,7 +3,7 @@ package srt;
 import java.io.File;
 
 import com.wnc.basic.BasicFileUtil;
-import com.wnc.mymoney.util.TextFormatUtil;
+import com.wnc.mymoney.util.common.TextFormatUtil;
 
 public class SrtTextHelper
 {

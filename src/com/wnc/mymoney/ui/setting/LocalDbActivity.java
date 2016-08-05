@@ -22,10 +22,10 @@ import com.wnc.mymoney.R;
 import com.wnc.mymoney.backup.BackUpDataUtil;
 import com.wnc.mymoney.uihelper.MyAppParams;
 import com.wnc.mymoney.uihelper.PositiveEvent;
-import com.wnc.mymoney.util.ConfirmUtil;
-import com.wnc.mymoney.util.MoveDbUtil;
-import com.wnc.mymoney.util.TextFormatUtil;
-import com.wnc.mymoney.util.ToastUtil;
+import com.wnc.mymoney.util.app.ConfirmUtil;
+import com.wnc.mymoney.util.app.MoveDbUtil;
+import com.wnc.mymoney.util.app.ToastUtil;
+import com.wnc.mymoney.util.common.TextFormatUtil;
 
 public class LocalDbActivity extends Activity
 {

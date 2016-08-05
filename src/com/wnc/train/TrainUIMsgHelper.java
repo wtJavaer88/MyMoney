@@ -4,7 +4,7 @@ import android.os.Message;
 import android.os.Vibrator;
 
 import com.wnc.basic.BasicDateUtil;
-import com.wnc.mymoney.util.ToastUtil;
+import com.wnc.mymoney.util.app.ToastUtil;
 
 public class TrainUIMsgHelper
 {

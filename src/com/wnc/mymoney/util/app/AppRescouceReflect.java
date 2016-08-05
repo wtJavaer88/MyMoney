@@ -1,4 +1,4 @@
-package com.wnc.mymoney.util;
+package com.wnc.mymoney.util.app;
 
 import com.wnc.mymoney.uihelper.MyAppParams;
 

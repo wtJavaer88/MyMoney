@@ -19,9 +19,9 @@ import com.wnc.mymoney.ui.DragListActivity;
 import com.wnc.mymoney.uihelper.MyAppParams;
 import com.wnc.mymoney.uihelper.PositiveEvent;
 import com.wnc.mymoney.uihelper.Setting;
-import com.wnc.mymoney.util.ConfirmUtil;
-import com.wnc.mymoney.util.MoveDbUtil;
-import com.wnc.mymoney.util.ToastUtil;
+import com.wnc.mymoney.util.app.ConfirmUtil;
+import com.wnc.mymoney.util.app.MoveDbUtil;
+import com.wnc.mymoney.util.app.ToastUtil;
 import com.wnc.mymoney.widget.MyToggle;
 import com.wnc.mymoney.widget.MyToggle.OnToggleStateListener;
 

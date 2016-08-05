@@ -8,7 +8,7 @@ import android.os.Message;
 import android.widget.TextView;
 
 import com.wnc.basic.BasicStringUtil;
-import com.wnc.mymoney.util.ToastUtil;
+import com.wnc.mymoney.util.app.ToastUtil;
 
 public class WatchHandler extends Handler
 {

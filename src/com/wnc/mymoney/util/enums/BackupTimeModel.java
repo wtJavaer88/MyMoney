@@ -1,4 +1,4 @@
-package com.wnc.mymoney.backup;
+package com.wnc.mymoney.util.enums;
 
 public enum BackupTimeModel
 {
