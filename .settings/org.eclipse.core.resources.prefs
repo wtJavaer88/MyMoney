@@ -1,8 +1,8 @@
 eclipse.preferences.version=1
-encoding//src/com/wnc/mymoney/ui/BackupSetActivity.java=UTF-8
 encoding//src/com/wnc/mymoney/ui/MovieActivity.java=UTF-8
-encoding//src/com/wnc/mymoney/ui/SettingActivity.java=UTF-8
-encoding//src/com/wnc/mymoney/ui/helper/MovieRecorder.java=UTF-8
-encoding//src/com/wnc/mymoney/ui/helper/SimulatorCal.java=GBK
-encoding//src/com/wnc/mymoney/ui/widget/MyToggle.java=UTF-8
+encoding//src/com/wnc/mymoney/ui/setting/BackupSetActivity.java=UTF-8
+encoding//src/com/wnc/mymoney/ui/setting/SettingActivity.java=UTF-8
+encoding//src/com/wnc/mymoney/uihelper/MovieRecorder.java=UTF-8
+encoding//src/com/wnc/mymoney/uihelper/SimulatorCal.java=UTF-8
+encoding//src/com/wnc/mymoney/widget/MyToggle.java=UTF-8
 encoding/<project>=UTF-8

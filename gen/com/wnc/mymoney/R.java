@@ -981,7 +981,7 @@ containing a value of this type.
         public static final int category_name_tv=0x7f060037;
         public static final int category_row_ly=0x7f060035;
         public static final int check_del=0x7f060058;
-        public static final int chs_tv=0x7f06002e;
+        public static final int chs_tv=0x7f06002f;
         public static final int cities_info=0x7f0600ba;
         public static final int clear=0x7f0600c7;
         public static final int clearTrans_btn=0x7f0600b5;
@@ -1015,7 +1015,7 @@ containing a value of this type.
         public static final int eight=0x7f0600bf;
         public static final int email_set_ly=0x7f06009b;
         public static final int email_tv=0x7f06009c;
-        public static final int eng_tv=0x7f06002f;
+        public static final int eng_tv=0x7f06002e;
         public static final int equal=0x7f0600cd;
         public static final int expense_amount_tv=0x7f060008;
         public static final int file_tv=0x7f060028;

@@ -10,7 +10,7 @@ import android.util.Log;
 import com.wnc.basic.BasicDateUtil;
 import com.wnc.basic.BasicFileUtil;
 import com.wnc.basic.BasicStringUtil;
-import com.wnc.mymoney.ui.helper.MyAppParams;
+import com.wnc.mymoney.uihelper.MyAppParams;
 import com.wnc.mymoney.util.ToastUtil;
 
 public class BackUpDataUtil

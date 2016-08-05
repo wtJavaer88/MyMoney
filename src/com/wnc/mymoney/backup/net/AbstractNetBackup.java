@@ -2,7 +2,7 @@ package com.wnc.mymoney.backup.net;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
+import java.util.Collection;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,7 +13,7 @@ import com.wnc.basic.BasicDateUtil;
 import com.wnc.mymoney.backup.BackupFilesHolder;
 import com.wnc.mymoney.backup.NetChannel;
 import com.wnc.mymoney.backup.ZipPathFactory;
-import com.wnc.mymoney.ui.helper.Setting;
+import com.wnc.mymoney.uihelper.Setting;
 import com.wnc.mymoney.util.ZipUtils;
 
 public abstract class AbstractNetBackup implements FilesZip
@@ -40,7 +40,7 @@ public abstract class AbstractNetBackup implements FilesZip
     public boolean backup()
     {
         String destZip = ZipPathFactory.getZipPath(this);
-        List<File> list = getBackupList();
+        Collection<File> list = getBackupList();
         boolean backCode = false;
         if (channel == NetChannel.EMAIL)
         {
@@ -58,10 +58,10 @@ public abstract class AbstractNetBackup implements FilesZip
         return backCode;
     }
 
-    protected abstract List<File> getBackupList();
+    protected abstract Collection<File> getBackupList();
 
     @Override
-    public boolean zipAndShare(List<File> list, String destZip)
+    public boolean zipAndShare(Collection<File> list, String destZip)
     {
         if (list != null && list.size() > 0)
         {
@@ -85,40 +85,44 @@ public abstract class AbstractNetBackup implements FilesZip
     }
 
     @Override
-    public boolean zipAndSendEmail(List<File> list, String destZip)
+    public boolean zipAndSendEmail(Collection<File> list, String destZip)
     {
         if (list != null && list.size() > 0)
         {
-
             try
             {
                 ZipUtils.zipFiles(list, new File(destZip));
+
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                String[] tos =
+                { Setting.getEmail() };
+                String[] ccs =
+                {};
+                String[] bccs =
+                {};
+                intent.putExtra(Intent.EXTRA_EMAIL, tos);
+                intent.putExtra(Intent.EXTRA_CC, ccs);
+                intent.putExtra(Intent.EXTRA_BCC, bccs);
+                intent.putExtra(Intent.EXTRA_TEXT, "备份文件数目:" + list.size());
+                intent.putExtra(Intent.EXTRA_SUBJECT, "随手记" + tip + "备份"
+                        + BasicDateUtil.getCurrentDateString());
+
+                intent.putExtra(Intent.EXTRA_STREAM,
+                        Uri.parse("file://" + destZip));
+                intent.setType("image/*");
+                intent.setType("message/rfc882");
+                Intent.createChooser(intent, "Choose Email Client");
+                activity.startActivity(intent);
             }
             catch (IOException e)
             {
                 Log.e("backup", e.getMessage());
                 return false;
             }
-
-            Intent intent = new Intent(Intent.ACTION_SEND);
-            String[] tos =
-            { Setting.getEmail() };
-            String[] ccs =
-            {};
-            String[] bccs =
-            {};
-            intent.putExtra(Intent.EXTRA_EMAIL, tos);
-            intent.putExtra(Intent.EXTRA_CC, ccs);
-            intent.putExtra(Intent.EXTRA_BCC, bccs);
-            intent.putExtra(Intent.EXTRA_TEXT, "备份文件数目:" + list.size());
-            intent.putExtra(Intent.EXTRA_SUBJECT, "随手记" + tip + "备份"
-                    + BasicDateUtil.getCurrentDateString());
-
-            intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + destZip));
-            intent.setType("image/*");
-            intent.setType("message/rfc882");
-            Intent.createChooser(intent, "Choose Email Client");
-            activity.startActivity(intent);
+        }
+        else
+        {
+            Log.e("backup", "没有找到备份数据!");
         }
         return true;
     }

@@ -1,6 +1,6 @@
 package com.wnc.mymoney.util;
 
-import com.wnc.mymoney.ui.helper.MyAppParams;
+import com.wnc.mymoney.uihelper.MyAppParams;
 
 import android.app.Activity;
 

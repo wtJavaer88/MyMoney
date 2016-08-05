@@ -8,8 +8,8 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import com.wnc.mymoney.R;
-import com.wnc.mymoney.ui.helper.MyAppParams;
-import com.wnc.mymoney.ui.helper.PositiveEvent;
+import com.wnc.mymoney.uihelper.MyAppParams;
+import com.wnc.mymoney.uihelper.PositiveEvent;
 
 public class ConfirmUtil
 {

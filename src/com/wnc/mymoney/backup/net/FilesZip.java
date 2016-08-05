@@ -1,12 +1,12 @@
 package com.wnc.mymoney.backup.net;
 
 import java.io.File;
-import java.util.List;
+import java.util.Collection;
 
 public interface FilesZip
 {
-    public boolean zipAndShare(List<File> list, String destZip);
+    public boolean zipAndShare(Collection<File> files, String destZip);
 
-    public boolean zipAndSendEmail(List<File> list, String destZip);
+    public boolean zipAndSendEmail(Collection<File> files, String destZip);
 
 }

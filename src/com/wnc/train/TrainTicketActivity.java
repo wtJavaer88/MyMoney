@@ -20,12 +20,12 @@ import com.wnc.basic.BasicDateUtil;
 import com.wnc.basic.BasicNumberUtil;
 import com.wnc.basic.BasicStringUtil;
 import com.wnc.mymoney.R;
-import com.wnc.mymoney.ui.helper.AfterWheelChooseListener;
-import com.wnc.mymoney.ui.helper.WheelDialogShowUtil;
-import com.wnc.mymoney.ui.widget.ComboBox;
-import com.wnc.mymoney.ui.widget.ComboBox.ListViewItemClickListener;
+import com.wnc.mymoney.uihelper.AfterWheelChooseListener;
+import com.wnc.mymoney.uihelper.WheelDialogShowUtil;
 import com.wnc.mymoney.util.TextFormatUtil;
 import com.wnc.mymoney.util.ToastUtil;
+import com.wnc.mymoney.widget.ComboBox;
+import com.wnc.mymoney.widget.ComboBox.ListViewItemClickListener;
 
 public class TrainTicketActivity extends Activity
 {

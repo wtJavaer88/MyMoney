@@ -4,7 +4,7 @@ import com.wnc.basic.BasicDateUtil;
 import com.wnc.mymoney.backup.net.AbstractNetBackup;
 import com.wnc.mymoney.backup.net.AllNetBackup;
 import com.wnc.mymoney.backup.net.TimelyNetBackup;
-import com.wnc.mymoney.ui.helper.MyAppParams;
+import com.wnc.mymoney.uihelper.MyAppParams;
 
 public class ZipPathFactory
 {

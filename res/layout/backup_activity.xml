@@ -6,7 +6,7 @@
 		     <LinearLayout android:id="@+id/autobackup_set_ly" android:layout_marginTop="@dimen/dimen_10_dip" android:layout_marginBottom="@dimen/dimen_10_dip" style="@style/common_row_new_layout">
 		            <ImageView android:layout_gravity="center_vertical" android:background="@drawable/setting_others_set_icon" style="@style/setting_item_icon" />
 		            <TextView android:text="自动备份" style="@style/common_row_label_new" />
-		            <com.wnc.mymoney.ui.widget.MyToggle
+		            <com.wnc.mymoney.widget.MyToggle
 				        android:id="@+id/autobackup_toggle"
 				        android:layout_width="0.0dip"
 				        android:layout_height="wrap_content"
@@ -19,7 +19,7 @@
 		      <LinearLayout android:id="@+id/backup_way_set_ly" android:layout_marginTop="@dimen/dimen_10_dip" android:layout_marginBottom="@dimen/dimen_10_dip" style="@style/common_row_new_layout">
 		            <ImageView android:layout_gravity="center_vertical" android:background="@drawable/setting_others_set_icon" style="@style/setting_item_icon" />
 		            <TextView android:text="备份方式" style="@style/common_row_label_new" />
-		            <com.wnc.mymoney.ui.widget.ComboBox
+		            <com.wnc.mymoney.widget.ComboBox
 				        android:id="@+id/backupWayComb"
 				        android:layout_width="wrap_content"
 				        android:layout_height="60dp"
@@ -34,7 +34,7 @@
 		      <LinearLayout android:id="@+id/backup_frequency_set_ly" android:layout_marginTop="@dimen/dimen_10_dip" android:layout_marginBottom="@dimen/dimen_10_dip" style="@style/common_row_new_layout">
 		            <ImageView android:layout_gravity="center_vertical" android:background="@drawable/setting_others_set_icon" style="@style/setting_item_icon" />
 		            <TextView android:text="备份频率" style="@style/common_row_label_new" />
-		            <com.wnc.mymoney.ui.widget.ComboBox
+		            <com.wnc.mymoney.widget.ComboBox
 				        android:id="@+id/backupFreComb"
 				        android:layout_width="wrap_content"
 				        android:layout_height="60dp"

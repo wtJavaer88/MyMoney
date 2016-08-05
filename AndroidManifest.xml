@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest android:versionCode="100" android:versionName="4.3" package="com.wnc.mymoney"
+<manifest android:versionCode="100" android:versionName="4.8" package="com.wnc.mymoney"
   xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
@@ -50,13 +50,20 @@
         <activity android:name="com.wnc.train.TrainTicketActivity"></activity>
         <activity android:name="com.wnc.train.RadioButtonListActivity"></activity>
         <activity android:name="com.wnc.mymoney.ui.MovieActivity"></activity>
-        <activity android:name="com.wnc.mymoney.ui.SrtActivity"></activity>
-        <activity android:name="com.wnc.mymoney.ui.SettingActivity"></activity>
-        <activity android:name="com.wnc.mymoney.ui.LocalDbActivity"></activity>
-        <activity android:name="com.wnc.mymoney.ui.BackupSetActivity"></activity>
+        <activity android:name="com.wnc.srt.SrtActivity"></activity>
+        <activity android:name="com.wnc.mymoney.ui.setting.SettingActivity"></activity>
+        <activity android:name="com.wnc.mymoney.ui.setting.LocalDbActivity"></activity>
+        <activity android:name="com.wnc.mymoney.ui.setting.BackupSetActivity"></activity>
         
         <service android:name="com.wnc.mymoney.service.LogService">
         </service>
+        
+         <receiver android:name="com.wnc.srt.MediaButtonReceiver" >
+            <intent-filter android:priority="1000">
+                <action android:name="android.intent.action.MEDIA_BUTTON" >
+                </action>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

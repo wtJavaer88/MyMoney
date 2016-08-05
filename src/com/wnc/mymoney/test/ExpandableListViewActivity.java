@@ -7,8 +7,8 @@ import android.widget.ExpandableListView;
 import android.widget.FrameLayout;
 
 import com.wnc.mymoney.R;
-import com.wnc.mymoney.ui.helper.MyExpandableListAdapter;
-import com.wnc.mymoney.ui.widget.QExListView;
+import com.wnc.mymoney.uihelper.MyExpandableListAdapter;
+import com.wnc.mymoney.widget.QExListView;
 
 public class ExpandableListViewActivity extends Activity
 {

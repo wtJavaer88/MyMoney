@@ -107,7 +107,6 @@
 	          android:shadowColor="@color/black" 
 	          android:shadowDx="0.0" 
 	          android:shadowDy="2.0" 
-	          android:onClick="playVoice"
 	          android:shadowRadius="1.0"
 	        android:text="播放" />
          </LinearLayout>
@@ -116,7 +115,7 @@
 
           <TextView
               android:id="@+id/timeline_tv"
-              android:layout_marginTop="10dp"
+              android:layout_marginTop="dp"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_gravity="center"
@@ -124,24 +123,25 @@
               android:textColor="@color/white"  />
 
      <TextView
+            android:id="@+id/eng_tv"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+			android:layout_marginLeft="10dp"
+			android:layout_marginTop="3dp"
+           android:textColor="#820072"
+            android:singleLine="false"
+            android:textSize="40dp"
+           android:text="" />
+     <TextView
             android:id="@+id/chs_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="3dp"
             android:textColor="#820072"
 			android:singleLine="false"
 			android:textSize="40dp"
             android:text="" />
       
-     <TextView
-            android:id="@+id/eng_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-			android:layout_marginLeft="10dp"
-			android:layout_marginTop="10dp"
-           android:textColor="#820072"
-            android:singleLine="false"
-            android:textSize="40dp"
-           android:text="" />
+     
 </LinearLayout>

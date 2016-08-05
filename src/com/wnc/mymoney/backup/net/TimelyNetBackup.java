@@ -1,7 +1,7 @@
 package com.wnc.mymoney.backup.net;
 
 import java.io.File;
-import java.util.List;
+import java.util.Collection;
 
 import android.app.Activity;
 
@@ -19,7 +19,7 @@ public class TimelyNetBackup extends AbstractNetBackup
     }
 
     @Override
-    protected List<File> getBackupList()
+    protected Collection<File> getBackupList()
     {
         return BackupFilesHolder.getBackupFiles();
     }

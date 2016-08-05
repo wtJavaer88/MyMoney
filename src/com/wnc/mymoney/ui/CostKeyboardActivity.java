@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wnc.mymoney.R;
-import com.wnc.mymoney.ui.helper.SimulatorCal;
+import com.wnc.mymoney.uihelper.SimulatorCal;
 
 public class CostKeyboardActivity extends Activity
 {

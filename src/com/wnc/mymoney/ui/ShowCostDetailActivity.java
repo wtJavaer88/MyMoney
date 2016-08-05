@@ -15,7 +15,7 @@ import com.wnc.mymoney.R;
 import com.wnc.mymoney.bean.DayRangePoint;
 import com.wnc.mymoney.bean.DayTranTotal;
 import com.wnc.mymoney.dao.TransactionsDao;
-import com.wnc.mymoney.ui.helper.MyListViewAdapter;
+import com.wnc.mymoney.uihelper.MyListViewAdapter;
 import com.wnc.mymoney.util.CostTypeUtil;
 
 public class ShowCostDetailActivity extends BaseActivity implements

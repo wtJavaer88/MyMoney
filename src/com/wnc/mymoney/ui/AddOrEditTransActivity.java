@@ -39,12 +39,10 @@ import com.wnc.mymoney.bean.Trade;
 import com.wnc.mymoney.dao.CategoryDao;
 import com.wnc.mymoney.dao.MemberDao;
 import com.wnc.mymoney.dao.TransactionsDao;
-import com.wnc.mymoney.ui.helper.AfterWheelChooseListener;
-import com.wnc.mymoney.ui.helper.MyAppParams;
-import com.wnc.mymoney.ui.helper.Setting;
-import com.wnc.mymoney.ui.helper.WheelDialogShowUtil;
-import com.wnc.mymoney.ui.widget.ComboBox;
-import com.wnc.mymoney.ui.widget.ComboBox.ListViewItemClickListener;
+import com.wnc.mymoney.uihelper.AfterWheelChooseListener;
+import com.wnc.mymoney.uihelper.MyAppParams;
+import com.wnc.mymoney.uihelper.Setting;
+import com.wnc.mymoney.uihelper.WheelDialogShowUtil;
 import com.wnc.mymoney.util.ClipBoardUtil;
 import com.wnc.mymoney.util.CostTypeUtil;
 import com.wnc.mymoney.util.FileTypeUtil;
@@ -52,6 +50,8 @@ import com.wnc.mymoney.util.GeneratorUtil;
 import com.wnc.mymoney.util.TextFormatUtil;
 import com.wnc.mymoney.util.ToastUtil;
 import com.wnc.mymoney.util.UriUtil;
+import com.wnc.mymoney.widget.ComboBox;
+import com.wnc.mymoney.widget.ComboBox.ListViewItemClickListener;
 
 public class AddOrEditTransActivity extends BaseActivity implements
         OnClickListener

@@ -8,7 +8,7 @@
         android:gravity="center"
         android:orientation="horizontal">
         
-        <com.wnc.mymoney.ui.widget.ComboBox
+        <com.wnc.mymoney.widget.ComboBox
         android:id="@+id/id_combobox"
         android:layout_width="90dp"
         android:layout_height="30dp"
