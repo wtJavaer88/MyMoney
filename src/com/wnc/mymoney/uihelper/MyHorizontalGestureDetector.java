@@ -59,7 +59,7 @@ public class MyHorizontalGestureDetector extends SimpleOnGestureListener
         {
             if (x > 0)
             {
-                System.out.println("left");
+                // System.out.println("left");
                 if (this.listener != null)
                 {
                     this.listener.doLeft();
@@ -67,7 +67,7 @@ public class MyHorizontalGestureDetector extends SimpleOnGestureListener
             }
             else if (x < 0)
             {
-                System.out.println("right");
+                // System.out.println("right");
                 if (this.listener != null)
                 {
                     this.listener.doRight();

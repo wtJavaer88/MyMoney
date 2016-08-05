@@ -1,26 +1,26 @@
-package com.wnc.mymoney.ui.richtext;
+package com.wnc.mymoney.richtext;
 
 import android.app.Activity;
 import android.text.SpannableString;
 import android.text.Spanned;
 
-public class ClickableVoiceRichText implements RichText
+public class ClickableVideoRichText implements RichText
 {
-    private String voicePath;
+    private String videoPath;
     private Activity activity;
 
-    public ClickableVoiceRichText(Activity activity, String text)
+    public ClickableVideoRichText(Activity activity, String text)
     {
         this.activity = activity;
-        this.voicePath = text;
+        this.videoPath = text;
     }
 
     @Override
     public CharSequence getSequence()
     {
-        String tip = "  录音文件  ";
+        String tip = "  录像文件  ";
         SpannableString spanableInfo = new SpannableString(tip);
-        spanableInfo.setSpan(new Clickable(activity, voicePath), 0,
+        spanableInfo.setSpan(new Clickable(activity, videoPath), 0,
                 tip.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spanableInfo;
     }

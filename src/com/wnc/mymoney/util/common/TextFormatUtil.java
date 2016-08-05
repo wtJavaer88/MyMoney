@@ -221,4 +221,5 @@ public class TextFormatUtil
         return BasicStringUtil.isNotNullString(PatternUtil.getFirstPattern(
                 string, "[\u4e00-\u9fa5]"));
     }
+
 }

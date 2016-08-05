@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.wnc.basic.BasicFileUtil;
 import com.wnc.basic.BasicStringUtil;
 import com.wnc.mymoney.R;
 import com.wnc.mymoney.backup.BackUpDataUtil;
@@ -22,6 +23,7 @@ import com.wnc.mymoney.uihelper.Setting;
 import com.wnc.mymoney.util.app.ConfirmUtil;
 import com.wnc.mymoney.util.app.MoveDbUtil;
 import com.wnc.mymoney.util.app.ToastUtil;
+import com.wnc.mymoney.util.common.MyFileUtil;
 import com.wnc.mymoney.widget.MyToggle;
 import com.wnc.mymoney.widget.MyToggle.OnToggleStateListener;
 
@@ -107,23 +109,27 @@ public class SettingActivity extends Activity implements OnClickListener
             emailDialogOpen();
             break;
         case R.id.cacheclear_set_ly:
-            ConfirmUtil.confirmDelete(this, "确定要清除缓存吗?", new PositiveEvent()
-            {
-                @Override
-                public void onPositive()
-                {
-                    if (BackUpDataUtil.clearAllTmpZips())
+            long cacheSize = BasicFileUtil.getFolderSize(MyAppParams
+                    .getInstance().getZipPath());
+            ConfirmUtil.confirmDelete(this,
+                    "缓存大小:" + MyFileUtil.convertFileSize(cacheSize)
+                            + ", 确定要清除吗?", new PositiveEvent()
                     {
-                        ToastUtil.showShortToast(getApplicationContext(),
-                                "清除缓存成功");
-                    }
-                    else
-                    {
-                        ToastUtil.showShortToast(getApplicationContext(),
-                                "清除缓存失败!");
-                    }
-                }
-            });
+                        @Override
+                        public void onPositive()
+                        {
+                            if (BackUpDataUtil.clearAllTmpZips())
+                            {
+                                ToastUtil.showShortToast(
+                                        getApplicationContext(), "清除缓存成功");
+                            }
+                            else
+                            {
+                                ToastUtil.showShortToast(
+                                        getApplicationContext(), "清除缓存失败!");
+                            }
+                        }
+                    });
             break;
         case R.id.dataclear_set_ly:
             ConfirmUtil.confirmDelete(this, "确定要清空数据吗?", new PositiveEvent()

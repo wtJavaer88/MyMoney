@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.wnc.basic.BasicStringUtil;
+
 public class DataHolder
 {
     private static String fileKey = "";
@@ -14,6 +16,30 @@ public class DataHolder
     public static Map<String, Integer> indexMap = new HashMap<String, Integer>();
 
     public static Map<String, Boolean> completeMap = new HashMap<String, Boolean>();
+
+    public static List<SrtInfo> getCurrentSrtInfos()
+    {
+        if (BasicStringUtil.isNullString(fileKey))
+        {
+            return null;
+        }
+        return map.get(fileKey);
+    }
+
+    public static int getCurrentSrtIndex()
+    {
+        return srtIndex;
+    }
+
+    /**
+     * 设置播放位置,注意现在只能在复读模式下起作用
+     * 
+     * @param replayBeginIndex
+     */
+    public static void setCurrentSrtIndex(int replayBeginIndex)
+    {
+        srtIndex = replayBeginIndex;
+    }
 
     public static String getFileKey()
     {

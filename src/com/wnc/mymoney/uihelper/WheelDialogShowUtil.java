@@ -21,6 +21,7 @@ import com.wnc.mymoney.bean.MyWheelBean;
 import com.wnc.mymoney.util.DateTimeSelectArrUtil;
 import com.wnc.mymoney.util.app.ToastUtil;
 import com.wnc.mymoney.util.common.TextFormatUtil;
+import com.wnc.srt.SrtActivity;
 import com.wnc.string.PatternUtil;
 
 public class WheelDialogShowUtil
@@ -469,6 +470,68 @@ public class WheelDialogShowUtil
                                 + wheelRight.getCurrentItem());
                         dialog.dismiss();
                     }
+                });
+
+        // 设置对话框点击事件 消极
+        dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "取消",
+                new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                    }
+                });
+        dialog.setView(llContent);
+        dialog.show();
+    }
+
+    public static void showSrtDialog(SrtActivity context, String[] leftArr,
+            String[] rightArr, int beginIndex, int endIndex,
+            final AfterWheelChooseListener listener)
+    {
+        final AlertDialog dialog = new AlertDialog.Builder(context).create();
+        // dialog.setTitle(title);
+
+        final List<String[]> arrList = new ArrayList<String[]>();
+        arrList.add(DateTimeSelectArrUtil.getYears());
+        arrList.add(DateTimeSelectArrUtil.getMonths());
+        arrList.add(DateTimeSelectArrUtil.getDays());
+
+        LinearLayout llContent = new LinearLayout(context);
+        llContent.setOrientation(LinearLayout.HORIZONTAL);
+
+        final WheelView wheelview1 = new WheelView(context);
+        wheelview1.setVisibleItems(7);
+        wheelview1.setCyclic(true);
+        wheelview1.setAdapter(new ArrayWheelAdapter<String>(leftArr));
+        wheelview1.setTextSize(40);
+        wheelview1.setCurrentItem(beginIndex);
+        llContent.addView(wheelview1, new LinearLayout.LayoutParams(
+                LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1));
+
+        final WheelView wheelview2 = new WheelView(context);
+        wheelview2.setVisibleItems(7);
+        wheelview2.setCyclic(true);
+        wheelview2.setAdapter(new ArrayWheelAdapter<String>(rightArr));
+        wheelview2.setTextSize(40);
+        wheelview2.setCurrentItem(endIndex);
+        llContent.addView(wheelview2, new LinearLayout.LayoutParams(
+                LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1));
+        // 为日期的改变设置监听器
+        // setDateChangeListener(context, arrList, wheelviews);
+        // 设置对话框点击事件 积极
+        dialog.setButton(AlertDialog.BUTTON_POSITIVE, "确定",
+                new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        listener.afterWheelChoose(wheelview1.getCurrentItem(),
+                                wheelview2.getCurrentItem());
+                        dialog.dismiss();
+                    }
+
                 });
 
         // 设置对话框点击事件 消极

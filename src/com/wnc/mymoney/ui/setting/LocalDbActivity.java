@@ -24,6 +24,7 @@ import com.wnc.mymoney.uihelper.MyAppParams;
 import com.wnc.mymoney.uihelper.PositiveEvent;
 import com.wnc.mymoney.util.app.ConfirmUtil;
 import com.wnc.mymoney.util.app.MoveDbUtil;
+import com.wnc.mymoney.util.app.ShareUtil;
 import com.wnc.mymoney.util.app.ToastUtil;
 import com.wnc.mymoney.util.common.TextFormatUtil;
 
@@ -48,7 +49,7 @@ public class LocalDbActivity extends Activity
                 final HashMap map = (HashMap) (lv).getItemAtPosition(arg2);
                 // System.out.println(map);
                 final String[] menuItems = new String[]
-                { "还原", "删除" };
+                { "还原", "删除", "分享" };
                 new AlertDialog.Builder(LocalDbActivity.this)
                         .setTitle("对记录进行操作")
                         .setItems(menuItems,
@@ -58,6 +59,8 @@ public class LocalDbActivity extends Activity
                                     public void onClick(DialogInterface dialog,
                                             int which)
                                     {
+                                        final String dbpath = String
+                                                .valueOf(map.get("path"));
                                         try
                                         {
                                             if (which == 0)
@@ -68,12 +71,12 @@ public class LocalDbActivity extends Activity
                                                     BackUpDataUtil
                                                             .backupDatabase(getApplicationContext());
                                                 }
-                                                if (MoveDbUtil.moveSdCardDb(
-                                                        (String) map
-                                                                .get("path"),
-                                                        getApplicationContext()
-                                                                .getDatabasePath(
-                                                                        "money.db")))
+                                                if (MoveDbUtil
+                                                        .moveSdCardDb(
+                                                                dbpath,
+                                                                getApplicationContext()
+                                                                        .getDatabasePath(
+                                                                                "money.db")))
                                                 {
                                                     ToastUtil
                                                             .showLongToast(
@@ -100,9 +103,7 @@ public class LocalDbActivity extends Activity
                                                             public void onPositive()
                                                             {
                                                                 boolean b = BasicFileUtil
-                                                                        .deleteFile(String
-                                                                                .valueOf(map
-                                                                                        .get("path")));
+                                                                        .deleteFile(dbpath);
                                                                 if (b)
                                                                 {
                                                                     ToastUtil
@@ -121,6 +122,13 @@ public class LocalDbActivity extends Activity
                                                             }
                                                         });
 
+                                            }
+                                            else if (which == 2)
+                                            {
+                                                ShareUtil
+                                                        .shareFile(
+                                                                getApplicationContext(),
+                                                                dbpath);
                                             }
                                         }
                                         catch (Exception ex)

@@ -37,7 +37,7 @@ import com.wnc.basic.BasicDateUtil;
 import com.wnc.basic.BasicFileUtil;
 import com.wnc.basic.BasicStringUtil;
 import com.wnc.mymoney.R;
-import com.wnc.mymoney.ui.richtext.ClickFileIntentFactory;
+import com.wnc.mymoney.richtext.ClickFileIntentFactory;
 import com.wnc.mymoney.uihelper.AfterWheelChooseListener;
 import com.wnc.mymoney.uihelper.HorGestureDetectorListener;
 import com.wnc.mymoney.uihelper.MyHorizontalGestureDetector;
@@ -45,7 +45,7 @@ import com.wnc.mymoney.uihelper.Setting;
 import com.wnc.mymoney.uihelper.WheelDialogShowUtil;
 import com.wnc.mymoney.util.app.ClipBoardUtil;
 import com.wnc.mymoney.util.app.ToastUtil;
-import com.wnc.mymoney.util.common.FileSortUtil;
+import com.wnc.mymoney.util.common.MyFileUtil;
 import com.wnc.mymoney.util.common.TextFormatUtil;
 import com.wnc.srt.HeadSetUtil.OnHeadSetListener;
 
@@ -86,8 +86,9 @@ public class SrtActivity extends Activity implements OnClickListener,
 
         initView();
         initAlertDialog();
+        // 因为是横屏,所以设置的滑屏比例低一些
         this.gestureDetector = new GestureDetector(this,
-                new MyHorizontalGestureDetector(0.2, this));
+                new MyHorizontalGestureDetector(0.1, this));
 
     }
 
@@ -194,6 +195,11 @@ public class SrtActivity extends Activity implements OnClickListener,
         return DataHolder.getFileKey();
     }
 
+    private int getCurIndex()
+    {
+        return DataHolder.getCurrentSrtIndex();
+    }
+
     private void initView()
     {
 
@@ -209,6 +215,7 @@ public class SrtActivity extends Activity implements OnClickListener,
         }
         engTv.setOnLongClickListener(this);
 
+        timelineTv.setOnClickListener(this);
         movieTv.setOnClickListener(this);
         btnPlay.setOnClickListener(this);
         findViewById(R.id.btnFirst).setOnClickListener(this);
@@ -332,7 +339,44 @@ public class SrtActivity extends Activity implements OnClickListener,
             {
                 ToastUtil.showShortToast(getApplicationContext(), "没有选择任何剧集");
             }
+        case R.id.timeline_tv:
+            showSrtInfoWheel();
             break;
+        }
+    }
+
+    int beginReplayIndex = -1;
+    int endReplayIndex = -1;
+
+    private void showSrtInfoWheel()
+    {
+        List<SrtInfo> currentSrtInfos = DataHolder.getCurrentSrtInfos();
+        if (currentSrtInfos != null && !currentSrtInfos.isEmpty())
+        {
+            int size = currentSrtInfos.size();
+            String leftArr[] = new String[size];
+            String rightArr[] = new String[currentSrtInfos.size()];
+            for (int i = 0; i < currentSrtInfos.size(); i++)
+            {
+                SrtInfo srtInfo = currentSrtInfos.get(i);
+                leftArr[i] = srtInfo.getFromTime().toString();
+                rightArr[i] = srtInfo.getToTime().toString();
+            }
+
+            int curIndex = getCurIndex();
+            WheelDialogShowUtil.showSrtDialog(this, leftArr, rightArr,
+                    curIndex, curIndex, new AfterWheelChooseListener()
+                    {
+                        @Override
+                        public void afterWheelChoose(Object... objs)
+                        {
+                            beginReplayIndex = Integer.valueOf(objs[0]
+                                    .toString());
+                            endReplayIndex = Integer.valueOf(objs[1].toString());
+                            System.out.println(beginReplayIndex + "  "
+                                    + endReplayIndex);
+                        }
+                    });
         }
     }
 
@@ -402,7 +446,15 @@ public class SrtActivity extends Activity implements OnClickListener,
                     {
                         if (replay)
                         {
-                            getSrtAndSetContent(VIEW_CURRENT);
+                            if (getCurIndex() == endReplayIndex)
+                            {
+                                DataHolder.setCurrentSrtIndex(beginReplayIndex);
+                                getSrtAndSetContent(VIEW_CURRENT);
+                            }
+                            else
+                            {
+                                getSrtAndSetContent(VIEW_RIGHT);
+                            }
                         }
                         else if (isAutoPlayModel())
                         {
@@ -521,7 +573,7 @@ public class SrtActivity extends Activity implements OnClickListener,
 
             final List<File> tvFolderFiles = new ArrayList<File>();
 
-            for (File f : FileSortUtil.getSortFiles(srtFolderFile.listFiles()))
+            for (File f : MyFileUtil.getSortFiles(srtFolderFile.listFiles()))
             {
                 if (f.isDirectory())
                 {
@@ -537,7 +589,7 @@ public class SrtActivity extends Activity implements OnClickListener,
                 // 文件夹最大只取10位
                 leftArr[i] = BasicStringUtil.subString(folder.getName(), 0, 10);
                 File[] listFiles = folder.listFiles();
-                List<File> fileList = FileSortUtil.getSortFiles(listFiles);
+                List<File> fileList = MyFileUtil.getSortFiles(listFiles);
                 int length = 0;
                 for (File f2 : fileList)
                 {
@@ -719,6 +771,7 @@ public class SrtActivity extends Activity implements OnClickListener,
             System.out.println();
             alertDialog.dismiss();
         }
+        HeadSetUtil.getInstance().close(this);
         super.onDestroy();
     }
 
@@ -753,15 +806,26 @@ public class SrtActivity extends Activity implements OnClickListener,
             return super.onKeyDown(keyCode, event);
         case KeyEvent.KEYCODE_VOLUME_DOWN:
             doRight();
-            // System.out.println("down vol");
+            try
+            {
+                Thread.sleep(100);
+            }
+            catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
             return true;
 
         case KeyEvent.KEYCODE_VOLUME_UP:
             doLeft();
-            // System.out.println("up vol");
-            return true;
-        case KeyEvent.KEYCODE_VOLUME_MUTE:
-            System.out.println("mute vol");
+            try
+            {
+                Thread.sleep(100);
+            }
+            catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
             return true;
         }
 

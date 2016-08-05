@@ -10,9 +10,11 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.wnc.basic.BasicDateUtil;
+import com.wnc.basic.BasicFileUtil;
 import com.wnc.mymoney.backup.BackupFilesHolder;
 import com.wnc.mymoney.backup.ZipPathFactory;
 import com.wnc.mymoney.uihelper.Setting;
+import com.wnc.mymoney.util.app.ShareUtil;
 import com.wnc.mymoney.util.common.ZipUtils;
 import com.wnc.mymoney.util.enums.NetChannel;
 
@@ -68,12 +70,10 @@ public abstract class AbstractNetBackup implements FilesZip
             try
             {
                 ZipUtils.zipFiles(list, new File(destZip));
-                Intent share = new Intent(Intent.ACTION_SEND);
-                share.putExtra(Intent.EXTRA_STREAM,
-                        Uri.fromFile(new File(destZip)));
-
-                share.setType("*/*");// 此处可发送多种文件
-                activity.startActivity(Intent.createChooser(share, "随手记Share"));
+                if (BasicFileUtil.isExistFile(destZip))
+                {
+                    ShareUtil.shareFile(activity, destZip);
+                }
             }
             catch (IOException e)
             {

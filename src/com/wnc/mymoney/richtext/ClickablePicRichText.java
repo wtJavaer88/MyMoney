@@ -1,4 +1,4 @@
-package com.wnc.mymoney.ui.richtext;
+package com.wnc.mymoney.richtext;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
