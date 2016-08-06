@@ -50,7 +50,7 @@
         <activity android:name="com.wnc.train.TrainTicketActivity"></activity>
         <activity android:name="com.wnc.train.RadioButtonListActivity"></activity>
         <activity android:name="com.wnc.mymoney.ui.MovieActivity"></activity>
-        <activity android:name="com.wnc.srt.SrtActivity"></activity>
+        <activity android:name="com.wnc.srt.SrtActivity" android:screenOrientation="landscape"></activity>
         <activity android:name="com.wnc.mymoney.ui.setting.SettingActivity"></activity>
         <activity android:name="com.wnc.mymoney.ui.setting.LocalDbActivity"></activity>
         <activity android:name="com.wnc.mymoney.ui.setting.BackupSetActivity"></activity>

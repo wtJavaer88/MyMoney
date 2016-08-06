@@ -16,7 +16,6 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -75,15 +74,15 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 	static boolean voiceAutoPlayCtrl = true;// 如果播放过程出异常,就不能单靠系统设置的值控制自动播放下一个了,
 	static int beginReplayIndex = -1;
 	static int endReplayIndex = -1;
+	static Thread autoPlayThread;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
-		System.out.println("onCreate..." + this.beginReplayIndex + "  replay:" + replay);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_srt);
 		// 设置横屏显示
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+		// setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		// 引入线控监听
 		HeadSetUtil.getInstance().setOnHeadSetListener(headSetListener);
 		HeadSetUtil.getInstance().open(this);
@@ -211,6 +210,7 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 		findViewById(R.id.btnLast).setOnClickListener(this);
 		findViewById(R.id.btnSkip).setOnClickListener(this);
 		findViewById(R.id.btnChoose).setOnClickListener(this);
+		findViewById(R.id.btnSetting).setOnClickListener(this);
 	}
 
 	private void initFileTv(String srtFilePath)
@@ -230,7 +230,7 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 		}
 	}
 
-	private void showNewSrt(String srtFile)
+	private void showNewSrtFile(String srtFile)
 	{
 		if (BasicFileUtil.isExistFile(srtFile))
 		{
@@ -257,10 +257,15 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 	{
 		switch (v.getId())
 		{
+		case R.id.btnSetting:
+			switchToReplayModel();
+			break;
 		case R.id.btnChoose:
+			stopReplayModel();
 			showChooseMovieWheel();
 			break;
 		case R.id.btnSkip:
+			stopReplayModel();
 			showSkipWheel();
 			break;
 		case R.id.btnFirst:
@@ -421,7 +426,6 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 		autoPlayThread.start();
 	}
 
-	Thread autoPlayThread;
 	public Handler autoPlayHandler = new Handler()
 	{
 		@Override
@@ -546,7 +550,7 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 					defaultMoviePoint[1] = Integer.valueOf(objs[1].toString());
 					String srtFilePath = srtFilePathes.get(DELTA_UNIQUE * defaultMoviePoint[0] + defaultMoviePoint[1]);
 					initFileTv(srtFilePath);
-					showNewSrt(srtFilePath);
+					showNewSrtFile(srtFilePath);
 				}
 
 			});
@@ -656,7 +660,7 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 	/**
 	 * 控制是否复读,只在自动播放模式下有用,仅复读本句
 	 */
-	private void switchReplayModel()
+	private void switchToReplayModel()
 	{
 		this.replay = replay ? false : true;
 		if (replay)
@@ -665,6 +669,13 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 			endReplayIndex = getCurIndex();
 		}
 		ToastUtil.showShortToast(getApplicationContext(), replay ? "复读" : "不复读");
+	}
+
+	private void stopReplayModel()
+	{
+		this.replay = false;
+		beginReplayIndex = -1;
+		endReplayIndex = -1;
 	}
 
 	@Override
@@ -693,7 +704,7 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 		@Override
 		public void onDoubleClick()
 		{
-			switchReplayModel();
+			switchToReplayModel();
 		}
 
 		@Override
