@@ -593,7 +593,7 @@ public class AddOrEditTransActivity extends BaseActivity implements
         }
         final List<MyWheelBean> leftData2 = leftData;
         final Map<MyWheelBean, List<? extends MyWheelBean>> rightData2 = rightData;
-        WheelDialogShowUtil.showSelectDialog(this, "选择分类", leftData, rightData,
+        WheelDialogShowUtil.showRelativeDialog(this, "选择分类", leftData, rightData,
                 selectedLeftIndex, selectedRightIndex,
                 new AfterWheelChooseListener()
                 {

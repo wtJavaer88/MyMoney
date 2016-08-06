@@ -4,6 +4,8 @@ import srt.DataHolder;
 import srt.Picker;
 import srt.PickerFactory;
 
+import com.wnc.basic.BasicFileUtil;
+
 public class PickerHelper
 {
 	final static int countsPerPage = 100;
@@ -35,7 +37,7 @@ public class PickerHelper
 		}
 		if (DataHolder.map.containsKey(curFile))
 		{
-			System.out.println("字幕结果数:" + DataHolder.map.get(curFile).size());
+			System.out.println(BasicFileUtil.getFileName(curFile) + "字幕结果数:" + DataHolder.map.get(curFile).size());
 		}
 	}
 

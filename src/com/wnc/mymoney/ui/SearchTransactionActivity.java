@@ -291,7 +291,7 @@ public class SearchTransactionActivity extends BaseActivity implements
 
     private void showCostTypeWheel()
     {
-        WheelDialogShowUtil.showSelectDialog(this, "选择分类", leftData, rightData,
+        WheelDialogShowUtil.showRelativeDialog(this, "选择分类", leftData, rightData,
                 selectedLeftIndex, selectedRightIndex,
                 new AfterWheelChooseListener()
                 {

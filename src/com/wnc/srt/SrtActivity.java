@@ -64,7 +64,7 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 	AlertDialog alertDialog;
 
 	int[] defaultTimePoint = { 0, 0, 0 };
-	int[] defaultMoviePoint = { 0, 0 };
+	int[] defaultMoviePoint = { 0, -1 };// 初次使用请把右边序号设为-1,以便程序判断
 
 	final int VIEW_CURRENT = 0;
 	final int VIEW_LEFT = 1;
@@ -196,13 +196,7 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 		chsTv = (TextView) findViewById(R.id.chs_tv);
 		engTv = (TextView) findViewById(R.id.eng_tv);
 		timelineTv = (TextView) findViewById(R.id.timeline_tv);
-		if (BasicStringUtil.isNotNullString(DataHolder.getFileKey()))
-		{
-			initFileTv(DataHolder.getFileKey());
-			getSrtAndSetContent(VIEW_CURRENT);
-		}
 		engTv.setOnLongClickListener(this);
-
 		timelineTv.setOnClickListener(this);
 		movieTv.setOnClickListener(this);
 		btnPlay.setOnClickListener(this);
@@ -211,6 +205,19 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 		findViewById(R.id.btnSkip).setOnClickListener(this);
 		findViewById(R.id.btnChoose).setOnClickListener(this);
 		findViewById(R.id.btnSetting).setOnClickListener(this);
+
+		try
+		{
+			if (BasicStringUtil.isNotNullString(DataHolder.getFileKey()))
+			{
+				initFileTv(DataHolder.getFileKey());
+				setContent(DataHolder.getCurrent());
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	private void initFileTv(String srtFilePath)
@@ -239,11 +246,11 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 			if (!DataHolder.map.containsKey(srtFile))
 			{
 				PickerHelper.dataEntity(getCurFile());
-				getSrtAndSetContent(VIEW_RIGHT);
+				getSrtInfoAndPlay(VIEW_RIGHT);
 			}
 			else
 			{
-				getSrtAndSetContent(VIEW_CURRENT);
+				getSrtInfoAndPlay(VIEW_CURRENT);
 			}
 		}
 		else
@@ -258,7 +265,7 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 		switch (v.getId())
 		{
 		case R.id.btnSetting:
-			switchToReplayModel();
+			switchReplayModel();
 			break;
 		case R.id.btnChoose:
 			stopReplayModel();
@@ -269,41 +276,31 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 			showSkipWheel();
 			break;
 		case R.id.btnFirst:
-			getSrtAndSetContent(R.id.btnFirst);
+			stopReplayModel();
+			getSrtInfoAndPlay(R.id.btnFirst);
 			break;
 		case R.id.btnLast:
-			getSrtAndSetContent(R.id.btnLast);
+			stopReplayModel();
+			getSrtInfoAndPlay(R.id.btnLast);
 			break;
 		case R.id.btnPlay:
-			if (notEmptyStatu())
+			if (hasSrtContent())
 			{
 				clickPlayBtn();
 			}
-			else
-			{
-				ToastUtil.showShortToast(getApplicationContext(), "没有选择任何剧集");
-			}
 			break;
 		case R.id.file_tv:
-			if (notEmptyStatu())
+			if (hasSrtContent())
 			{
 				stopSrtPlay();
 				showThumbPic();
 			}
-			else
-			{
-				ToastUtil.showShortToast(getApplicationContext(), "没有选择任何剧集");
-			}
 			break;
 		case R.id.timeline_tv:
-			if (notEmptyStatu())
+			if (hasSrtContent())
 			{
 				stopSrtPlay();// 停止播放
 				showSrtInfoWheel();
-			}
-			else
-			{
-				ToastUtil.showShortToast(getApplicationContext(), "没有选择任何剧集");
 			}
 			break;
 		}
@@ -330,8 +327,7 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 				@Override
 				public void afterWheelChoose(Object... objs)
 				{
-					beginReplayIndex = Integer.valueOf(objs[0].toString());
-					endReplayIndex = Integer.valueOf(objs[1].toString());
+					setReplayIndex(Integer.valueOf(objs[0].toString()), Integer.valueOf(objs[1].toString()));
 					replay = true;
 					DataHolder.setCurrentSrtIndex(beginReplayIndex);
 				}
@@ -339,12 +335,13 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 		}
 	}
 
-	private boolean notEmptyStatu()
+	private boolean hasSrtContent()
 	{
 		if (BasicFileUtil.isExistFile(getCurFile()))
 		{
 			return true;
 		}
+		ToastUtil.showShortToast(getApplicationContext(), "没有选择任何剧集");
 		return false;
 	}
 
@@ -394,6 +391,8 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 
 	private void playSrt()
 	{
+		// 每次播放,先设置自动播放控制为true
+		voiceAutoPlayCtrl = true;
 		// 停止原有的播放线程,播放新字幕
 		stopSrtPlayThread();
 		final String voicePath = SrtTextHelper.getSrtVoiceLocation(DataHolder.getFileKey(), DataHolder.getCurrent());
@@ -437,15 +436,16 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 				if (getCurIndex() == endReplayIndex)
 				{
 					DataHolder.setCurrentSrtIndex(beginReplayIndex);
-					getSrtAndSetContent(VIEW_CURRENT);
+					getSrtInfoAndPlay(VIEW_CURRENT);
 				}
 				else
 				{
-					getSrtAndSetContent(VIEW_RIGHT);
+					getSrtInfoAndPlay(VIEW_RIGHT);
 				}
 			}
 			else if (isAutoPlayModel())
 			{
+				// 只有在自动播放模式下,才播放下一条
 				doRight();
 			}
 			else
@@ -464,7 +464,7 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 	{
 		try
 		{
-			WheelDialogShowUtil.showTimeDialog(this, defaultTimePoint, new AfterWheelChooseListener()
+			WheelDialogShowUtil.showTimeSelectDialog(this, defaultTimePoint, new AfterWheelChooseListener()
 			{
 				@Override
 				public void afterWheelChoose(Object... objs)
@@ -541,7 +541,7 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 				rightArr[i] = arr;
 				i++;
 			}
-			WheelDialogShowUtil.showSelectDialog(this, "选择剧集", leftArr, rightArr, defaultMoviePoint[0], defaultMoviePoint[1], new AfterWheelChooseListener()
+			WheelDialogShowUtil.showRelativeDialog(this, "选择剧集", leftArr, rightArr, defaultMoviePoint[0], defaultMoviePoint[1], new AfterWheelChooseListener()
 			{
 				@Override
 				public void afterWheelChoose(Object... objs)
@@ -572,9 +572,8 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 		}
 	}
 
-	private void getSrtAndSetContent(int btId)
+	private void getSrtInfoAndPlay(int btId)
 	{
-		this.voiceAutoPlayCtrl = true;
 		if (alertDialog != null)
 		{
 			alertDialog.hide();
@@ -615,6 +614,12 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 
 	private void setContentAndPlay(SrtInfo srt)
 	{
+		setContent(srt);
+		beginSrtPlay();
+	}
+
+	private void setContent(SrtInfo srt)
+	{
 		// 对于字幕里英文与中文颠倒的,用这种方法
 		if (TextFormatUtil.containsChinese(srt.getEng()))
 		{
@@ -631,8 +636,6 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 		defaultTimePoint[0] = srt.getFromTime().getHour();
 		defaultTimePoint[1] = srt.getFromTime().getMinute();
 		defaultTimePoint[2] = srt.getFromTime().getSecond();
-
-		beginSrtPlay();
 	}
 
 	@Override
@@ -648,34 +651,38 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 	@Override
 	public void doLeft()
 	{
-		getSrtAndSetContent(VIEW_LEFT);
+		getSrtInfoAndPlay(VIEW_LEFT);
 	}
 
 	@Override
 	public void doRight()
 	{
-		getSrtAndSetContent(VIEW_RIGHT);
+		getSrtInfoAndPlay(VIEW_RIGHT);
 	}
 
 	/**
-	 * 控制是否复读,只在自动播放模式下有用,仅复读本句
+	 * 控制切换是否复读,快捷设置仅复读本句
 	 */
-	private void switchToReplayModel()
+	private void switchReplayModel()
 	{
 		this.replay = replay ? false : true;
 		if (replay)
 		{
-			beginReplayIndex = getCurIndex();
-			endReplayIndex = getCurIndex();
+			setReplayIndex(getCurIndex(), getCurIndex());
 		}
 		ToastUtil.showShortToast(getApplicationContext(), replay ? "复读" : "不复读");
+	}
+
+	private void setReplayIndex(int bIndex, int eIndex)
+	{
+		beginReplayIndex = bIndex;
+		endReplayIndex = eIndex;
 	}
 
 	private void stopReplayModel()
 	{
 		this.replay = false;
-		beginReplayIndex = -1;
-		endReplayIndex = -1;
+		setReplayIndex(-1, -1);
 	}
 
 	@Override
@@ -704,7 +711,7 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 		@Override
 		public void onDoubleClick()
 		{
-			switchToReplayModel();
+			switchReplayModel();
 		}
 
 		@Override
