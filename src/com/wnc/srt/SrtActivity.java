@@ -457,7 +457,7 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 
 	private boolean isAutoPlayModel()
 	{
-		return voiceAutoPlayCtrl && Boolean.valueOf(Setting.getAutoPlayVoice());
+		return voiceAutoPlayCtrl && Setting.isAutoPlayVoice();
 	}
 
 	private void showSkipWheel()
