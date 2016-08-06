@@ -12,7 +12,7 @@ public class SrtVoiceHelper
 	static MediaPlayer player;
 	static boolean isPlaying = false;
 
-	public static void play(String voicePath, final PlayCompleteEvent playCompleteEvent, int type) throws Exception
+	public static void stop()
 	{
 		try
 		{
@@ -22,10 +22,26 @@ public class SrtVoiceHelper
 				player.release();
 				player = null;
 				isPlaying = false;
-				if (type == 1)
-				{
-					return;
-				}
+			}
+		}
+		catch (Exception e)
+		{
+			player = null;
+			isPlaying = false;
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static void play(String voicePath)
+	{
+		try
+		{
+			if (player != null)
+			{
+				player.reset();
+				player.release();
+				player = null;
+				isPlaying = false;
 			}
 
 			if (!isPlaying)
@@ -45,7 +61,6 @@ public class SrtVoiceHelper
 						player.reset();
 						player.release();
 						player = null;
-						playCompleteEvent.onComplete();
 					}
 				});
 				player.setOnPreparedListener(new MediaPlayer.OnPreparedListener()

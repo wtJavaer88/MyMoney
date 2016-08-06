@@ -446,7 +446,6 @@ public class WheelDialogShowUtil
 
 		LinearLayout llContent = new LinearLayout(context);
 		llContent.setOrientation(LinearLayout.HORIZONTAL);
-
 		final WheelView wheelview1 = new WheelView(context);
 		wheelview1.setVisibleItems(7);
 		wheelview1.setCyclic(true);
