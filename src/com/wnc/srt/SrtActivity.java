@@ -38,9 +38,9 @@ import com.wnc.mymoney.richtext.ClickFileIntentFactory;
 import com.wnc.mymoney.uihelper.AfterWheelChooseListener;
 import com.wnc.mymoney.uihelper.HorGestureDetectorListener;
 import com.wnc.mymoney.uihelper.MyHorizontalGestureDetector;
-import com.wnc.mymoney.uihelper.WheelDialogShowUtil;
 import com.wnc.mymoney.util.app.ClipBoardUtil;
 import com.wnc.mymoney.util.app.ToastUtil;
+import com.wnc.mymoney.util.app.WheelDialogShowUtil;
 import com.wnc.mymoney.util.common.MyFileUtil;
 import com.wnc.mymoney.util.common.TextFormatUtil;
 import com.wnc.srt.HeadSetUtil.OnHeadSetListener;
@@ -371,8 +371,8 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 		{
 			int size = currentSrtInfos.size();
 			String leftArr[] = new String[size];
-			String rightArr[] = new String[currentSrtInfos.size()];
-			for (int i = 0; i < currentSrtInfos.size(); i++)
+			String rightArr[] = new String[size];
+			for (int i = 0; i < size; i++)
 			{
 				SrtInfo srtInfo = currentSrtInfos.get(i);
 				leftArr[i] = srtInfo.getFromTime().toString();
@@ -380,7 +380,7 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 			}
 
 			int curIndex = getCurIndex();
-			WheelDialogShowUtil.showSrtDialog(this, DataHolder.getCurrentSrtInfos(), leftArr, rightArr, curIndex, curIndex, new AfterWheelChooseListener()
+			WheelDialogShowUtil.showSrtDialog(this, leftArr, rightArr, curIndex, curIndex, new AfterWheelChooseListener()
 			{
 				@Override
 				public void afterWheelChoose(Object... objs)
@@ -736,8 +736,15 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 
 	private void setReplayIndex(int bIndex, int eIndex)
 	{
-		beginReplayIndex = bIndex;
-		endReplayIndex = eIndex;
+		if (bIndex > eIndex)
+		{
+			ToastUtil.showLongToast(this, "结束时间不能小于开始时间!");
+		}
+		else
+		{
+			beginReplayIndex = bIndex;
+			endReplayIndex = eIndex;
+		}
 	}
 
 	private void stopReplayModel()

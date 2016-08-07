@@ -1,11 +1,11 @@
-package com.wnc.mymoney.uihelper;
+package com.wnc.mymoney.util.app;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import srt.SrtInfo;
+import srt.DataHolder;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,8 +19,8 @@ import cn.org.octopus.wheelview.widget.WheelView;
 import com.wnc.basic.BasicDateUtil;
 import com.wnc.basic.BasicStringUtil;
 import com.wnc.mymoney.bean.MyWheelBean;
+import com.wnc.mymoney.uihelper.AfterWheelChooseListener;
 import com.wnc.mymoney.util.DateTimeSelectArrUtil;
-import com.wnc.mymoney.util.app.ToastUtil;
 import com.wnc.mymoney.util.common.TextFormatUtil;
 import com.wnc.srt.SrtActivity;
 import com.wnc.string.PatternUtil;
@@ -216,7 +216,7 @@ public class WheelDialogShowUtil
 		dialog.show();
 	}
 
-	public static void showSrtDialog(final SrtActivity context, final List<SrtInfo> srtInfos, String[] leftArr, String[] rightArr, int beginIndex, int endIndex, final AfterWheelChooseListener listener)
+	public static void showSrtDialog(final SrtActivity context, String[] leftArr, String[] rightArr, int beginIndex, int endIndex, final AfterWheelChooseListener listener)
 	{
 		final AlertDialog dialog = new AlertDialog.Builder(context).create();
 		// dialog.setTitle(title);
@@ -249,7 +249,7 @@ public class WheelDialogShowUtil
 			@Override
 			public void onChanged(WheelView wheel, int oldValue, int newValue)
 			{
-				ToastUtil.showShortToast(context, srtInfos.get(newValue).getEng());
+				ToastUtil.showShortToast(context, DataHolder.getCurrentSrtInfos().get(newValue).getEng());
 			}
 		};
 		wheelview1.addChangingListener(onWheelChangedListener);
