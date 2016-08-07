@@ -38,7 +38,6 @@ import com.wnc.mymoney.richtext.ClickFileIntentFactory;
 import com.wnc.mymoney.uihelper.AfterWheelChooseListener;
 import com.wnc.mymoney.uihelper.HorGestureDetectorListener;
 import com.wnc.mymoney.uihelper.MyHorizontalGestureDetector;
-import com.wnc.mymoney.uihelper.Setting;
 import com.wnc.mymoney.uihelper.WheelDialogShowUtil;
 import com.wnc.mymoney.util.app.ClipBoardUtil;
 import com.wnc.mymoney.util.app.ToastUtil;
@@ -70,11 +69,12 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 	final int VIEW_LEFT = 1;
 	final int VIEW_RIGHT = 2;
 
-	static boolean replay = false;// 复读模式
-	static boolean voiceAutoPlayCtrl = true;// 如果播放过程出异常,就不能单靠系统设置的值控制自动播放下一个了,
+	static boolean replayCtrl = false;// 复读模式
+	static boolean autoPlayNextCtrl = true;// 如果播放过程出异常,就不能单靠系统设置的值控制自动播放下一个了,
 	static int beginReplayIndex = -1;
 	static int endReplayIndex = -1;
 	static Thread autoPlayThread;
+	static String[] settingItems = new String[] { "自动下一条", "播放声音", "打开复读" };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -91,12 +91,14 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 
 		initView();
 		initAlertDialog();
+		initSettingDialog();
 		// 因为是横屏,所以设置的滑屏比例低一些
 		this.gestureDetector = new GestureDetector(this, new MyHorizontalGestureDetector(0.1, this));
 
 	}
 
 	Builder alertDialogBuilder;
+	Builder settingDialogBuilder;
 
 	private void initAlertDialog()
 	{
@@ -169,6 +171,45 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 				return BasicDateUtil.getCurrentDateTimeString() + " \"" + getCurFile().replace(srtFolder, "") + "\" " + DataHolder.getCurrent() + "\r\n";
 			}
 
+		}).setNegativeButton("取消", new DialogInterface.OnClickListener()
+		{
+			@Override
+			public void onClick(DialogInterface dialog, int which)
+			{
+			}
+		});
+	}
+
+	private void initSettingDialog()
+	{
+		settingDialogBuilder = new AlertDialog.Builder(this).setTitle("设置").setItems(settingItems, new DialogInterface.OnClickListener()
+		{
+			@Override
+			public void onClick(DialogInterface dialog, int which)
+			{
+				try
+				{
+					switch (which)
+					{
+					case 0:
+						SrtSetting.setAutoPlayNext(SrtSetting.isAutoPlayNext() ? false : true);
+						break;
+					case 1:
+						SrtSetting.setPlayVoice(SrtSetting.isPlayVoice() ? false : true);
+						break;
+					case 2:
+						switchReplayModel();
+						break;
+					default:
+						break;
+					}
+				}
+				catch (Exception e)
+				{
+					ToastUtil.showLongToast(getApplicationContext(), "操作失败!");
+					e.printStackTrace();
+				}
+			}
 		}).setNegativeButton("取消", new DialogInterface.OnClickListener()
 		{
 			@Override
@@ -265,23 +306,32 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 		switch (v.getId())
 		{
 		case R.id.btnSetting:
-			switchReplayModel();
+			setting();
 			break;
 		case R.id.btnChoose:
 			stopReplayModel();
 			showChooseMovieWheel();
 			break;
 		case R.id.btnSkip:
-			stopReplayModel();
-			showSkipWheel();
+			if (hasSrtContent())
+			{
+				stopReplayModel();
+				showSkipWheel();
+			}
 			break;
 		case R.id.btnFirst:
-			stopReplayModel();
-			getSrtInfoAndPlay(R.id.btnFirst);
+			if (hasSrtContent())
+			{
+				stopReplayModel();
+				getSrtInfoAndPlay(R.id.btnFirst);
+			}
 			break;
 		case R.id.btnLast:
-			stopReplayModel();
-			getSrtInfoAndPlay(R.id.btnLast);
+			if (hasSrtContent())
+			{
+				stopReplayModel();
+				getSrtInfoAndPlay(R.id.btnLast);
+			}
 			break;
 		case R.id.btnPlay:
 			if (hasSrtContent())
@@ -306,6 +356,14 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 		}
 	}
 
+	private void setting()
+	{
+		settingItems[0] = !SrtSetting.isAutoPlayNext() ? "自动下一条" : "只播放一条";
+		settingItems[1] = !SrtSetting.isPlayVoice() ? "播放声音" : "不播放声音";
+		settingItems[2] = !replayCtrl ? "复读" : "不复读";
+		alertDialog = settingDialogBuilder.show();
+	}
+
 	private void showSrtInfoWheel()
 	{
 		List<SrtInfo> currentSrtInfos = DataHolder.getCurrentSrtInfos();
@@ -328,7 +386,7 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 				public void afterWheelChoose(Object... objs)
 				{
 					setReplayIndex(Integer.valueOf(objs[0].toString()), Integer.valueOf(objs[1].toString()));
-					replay = true;
+					replayCtrl = true;
 					DataHolder.setCurrentSrtIndex(beginReplayIndex);
 				}
 			});
@@ -374,7 +432,7 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 	private void beginSrtPlay()
 	{
 		btnPlay.setText("停止");
-		voiceAutoPlayCtrl = true;
+		autoPlayNextCtrl = true;
 		playSrt();
 	}
 
@@ -386,16 +444,15 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 		btnPlay.setText("播放");
 		SrtVoiceHelper.stop();
 		stopSrtPlayThread();
-		voiceAutoPlayCtrl = false;
+		autoPlayNextCtrl = false;
 	}
 
 	private void playSrt()
 	{
 		// 每次播放,先设置自动播放控制为true
-		voiceAutoPlayCtrl = true;
+		autoPlayNextCtrl = true;
 		// 停止原有的播放线程,播放新字幕
 		stopSrtPlayThread();
-		final String voicePath = SrtTextHelper.getSrtVoiceLocation(DataHolder.getFileKey(), DataHolder.getCurrent());
 		autoPlayThread = new Thread(new Runnable()
 		{
 			@Override
@@ -405,9 +462,13 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 				long time = TimeHelper.getTime(DataHolder.getCurrent().getToTime()) - TimeHelper.getTime(DataHolder.getCurrent().getFromTime());
 				try
 				{
-					if (BasicFileUtil.isExistFile(voicePath))
+					if (SrtSetting.isPlayVoice())
 					{
-						SrtVoiceHelper.play(voicePath);
+						String voicePath = SrtTextHelper.getSrtVoiceLocation();
+						if (BasicFileUtil.isExistFile(voicePath))
+						{
+							SrtVoiceHelper.play(voicePath);
+						}
 					}
 					Thread.sleep(time);
 					autoPlayHandler.sendMessage(msg);
@@ -430,7 +491,7 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 		@Override
 		public void handleMessage(android.os.Message msg)
 		{
-			if (replay)
+			if (replayCtrl)
 			{
 				System.out.println("6:" + DataHolder.getCurrentSrtIndex() + " " + beginReplayIndex + " " + endReplayIndex);
 				if (getCurIndex() == endReplayIndex)
@@ -457,7 +518,7 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 
 	private boolean isAutoPlayModel()
 	{
-		return voiceAutoPlayCtrl && Setting.isAutoPlayVoice();
+		return autoPlayNextCtrl && SrtSetting.isAutoPlayNext();
 	}
 
 	private void showSkipWheel()
@@ -665,12 +726,12 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 	 */
 	private void switchReplayModel()
 	{
-		this.replay = replay ? false : true;
-		if (replay)
+		this.replayCtrl = replayCtrl ? false : true;
+		if (replayCtrl)
 		{
 			setReplayIndex(getCurIndex(), getCurIndex());
 		}
-		ToastUtil.showShortToast(getApplicationContext(), replay ? "复读" : "不复读");
+		ToastUtil.showShortToast(getApplicationContext(), replayCtrl ? "复读" : "不复读");
 	}
 
 	private void setReplayIndex(int bIndex, int eIndex)
@@ -681,7 +742,7 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 
 	private void stopReplayModel()
 	{
-		this.replay = false;
+		this.replayCtrl = false;
 		setReplayIndex(-1, -1);
 	}
 
@@ -696,7 +757,7 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 	@Override
 	public void onDestroy()
 	{
-		voiceAutoPlayCtrl = false;
+		autoPlayNextCtrl = false;
 		if (alertDialog != null)
 		{
 			System.out.println();
@@ -781,7 +842,7 @@ public class SrtActivity extends Activity implements OnClickListener, OnLongClic
 	public void uncaughtException(Thread thread, Throwable ex)
 	{
 		Log.i("AAA", "uncaughtException   " + ex);
-		voiceAutoPlayCtrl = false;
+		autoPlayNextCtrl = false;
 		btnPlay.setText("播放");
 		ToastUtil.showShortToast(this, "播放出现异常");
 		for (StackTraceElement o : ex.getStackTrace())

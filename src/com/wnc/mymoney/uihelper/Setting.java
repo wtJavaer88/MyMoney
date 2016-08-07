@@ -1,13 +1,10 @@
 package com.wnc.mymoney.uihelper;
 
-import android.app.Activity;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
+import com.wnc.mymoney.util.app.SharedPreferenceUtil;
 
 public class Setting
 {
-	static Activity context;
-	static SharedPreferences sharedPreferences;
+
 	public static boolean budgetChanged = false;
 	final static String DEFAULT_MEMBER = "王";
 	final static String DEFAULT_EMAIL = "1@qq.com";
@@ -22,99 +19,65 @@ public class Setting
 
 	private final static String WEEK_BUDGET = "M004";
 
-	private final static String AUTOPLAYVOICE = "M005";
-
-	final public static void init(Activity context2)
-	{
-		context = context2;
-		sharedPreferences = context.getSharedPreferences("share", context.MODE_PRIVATE);
-	}
-
 	public static void setBACKUP_TIME_MODEL(String backup_time_model)
 	{
-		changeValue(BACKUP_TIME_MODEL, backup_time_model);
+		SharedPreferenceUtil.changeValue(BACKUP_TIME_MODEL, backup_time_model);
 	}
 
 	public static void setBACKUP_AUTO(String backup_auto)
 	{
-		changeValue(BACKUP_AUTO, backup_auto);
+		SharedPreferenceUtil.changeValue(BACKUP_AUTO, backup_auto);
 	}
 
 	public static void setBACKUP_WAY(String backup_way)
 	{
-		changeValue(BACKUP_WAY, backup_way);
+		SharedPreferenceUtil.changeValue(BACKUP_WAY, backup_way);
 	}
 
 	public static void setMember(String member)
 	{
-		changeValue(LAST_MEMBER, member);
+		SharedPreferenceUtil.changeValue(LAST_MEMBER, member);
 	}
 
 	public static void setEmail(String email)
 	{
-		changeValue(EMAIL, email);
+		SharedPreferenceUtil.changeValue(EMAIL, email);
 	}
 
 	public static void setBudget(String budget)
 	{
 		budgetChanged = true;
-		changeValue(WEEK_BUDGET, budget);
-	}
-
-	public static void setAutoPlayVoice(String autoplay)
-	{
-		changeValue(AUTOPLAYVOICE, autoplay);
+		SharedPreferenceUtil.changeValue(WEEK_BUDGET, budget);
 	}
 
 	public static String getLastMember()
 	{
-		return getShareDataByKey(LAST_MEMBER, DEFAULT_MEMBER);
+		return SharedPreferenceUtil.getShareDataByKey(LAST_MEMBER, DEFAULT_MEMBER);
 	}
 
 	public static String getEmail()
 	{
-		return getShareDataByKey(EMAIL, DEFAULT_EMAIL);
+		return SharedPreferenceUtil.getShareDataByKey(EMAIL, DEFAULT_EMAIL);
 	}
 
 	public static int getBudget()
 	{
-		return Integer.parseInt(getShareDataByKey(WEEK_BUDGET, DEFAULT_BUDGET));
+		return Integer.parseInt(SharedPreferenceUtil.getShareDataByKey(WEEK_BUDGET, DEFAULT_BUDGET));
 	}
 
 	public static String getBackupTimeModel()
 	{
-		return getShareDataByKey(BACKUP_TIME_MODEL, "每次");
+		return SharedPreferenceUtil.getShareDataByKey(BACKUP_TIME_MODEL, "每次");
 	}
 
 	public static boolean isBackupAuto()
 	{
-		return Boolean.valueOf(getShareDataByKey(BACKUP_AUTO, "false"));
+		return Boolean.valueOf(SharedPreferenceUtil.getShareDataByKey(BACKUP_AUTO, "false"));
 	}
 
 	public static String getBackupWay()
 	{
-		return getShareDataByKey(BACKUP_WAY, "邮箱");
-	}
-
-	public static boolean isAutoPlayVoice()
-	{
-		return Boolean.valueOf(getShareDataByKey(AUTOPLAYVOICE, "false"));
-	}
-
-	private static void changeValue(String key, String value)
-	{
-		if (value.equals(getShareDataByKey(key, "")))
-		{
-			return;
-		}
-		Editor editor = sharedPreferences.edit();
-		editor.putString(key, value);
-		editor.commit();
-	}
-
-	private static String getShareDataByKey(String key, String defaultValue)
-	{
-		return sharedPreferences.getString(key, defaultValue);
+		return SharedPreferenceUtil.getShareDataByKey(BACKUP_WAY, "邮箱");
 	}
 
 }

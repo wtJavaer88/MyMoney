@@ -25,7 +25,6 @@ import com.wnc.mymoney.util.app.MoveDbUtil;
 import com.wnc.mymoney.util.app.ToastUtil;
 import com.wnc.mymoney.util.common.MyFileUtil;
 import com.wnc.mymoney.widget.MyToggle;
-import com.wnc.mymoney.widget.MyToggle.OnToggleStateListener;
 
 public class SettingActivity extends Activity implements OnClickListener
 {
@@ -56,26 +55,6 @@ public class SettingActivity extends Activity implements OnClickListener
 		emailTextSet();
 		budgetTextSet();
 		backupTextSet();
-		toggle = (MyToggle) findViewById(R.id.toggle);
-		toggle.setImageRes(R.drawable.btn_switch, R.drawable.btn_switch, R.drawable.btn_slip);
-		toggle.setToggleState(Setting.isAutoPlayVoice());
-		toggle.setOnToggleStateListener(new OnToggleStateListener()
-		{
-			@Override
-			public void onToggleState(boolean state)
-			{
-				if (state)
-				{
-					ToastUtil.showShortToast(getApplicationContext(), "开关开启");
-					Setting.setAutoPlayVoice("true");
-				}
-				else
-				{
-					ToastUtil.showShortToast(getApplicationContext(), "开关关闭");
-					Setting.setAutoPlayVoice("false");
-				}
-			}
-		});
 	}
 
 	public void intoActivity(Class clazz)

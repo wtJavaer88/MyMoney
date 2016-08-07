@@ -43,21 +43,9 @@
         </LinearLayout>
         <LinearLayout android:id="@+id/budget_set_ly" android:layout_marginTop="@dimen/dimen_10_dip" android:layout_marginBottom="@dimen/dimen_10_dip" style="@style/common_row_new_layout">
             <ImageView android:layout_gravity="center_vertical" android:background="@drawable/setting_others_set_icon" style="@style/setting_item_icon" />
-            <TextView android:text="预算设置" style="@style/common_row_label_new" />
+            <TextView android:text="一周预算" style="@style/common_row_label_new" />
             <TextView android:id="@+id/budget_tv" style="@style/common_row_default_item_name_new" android:text="500,2000"/>
             <ImageView android:layout_gravity="center_vertical" style="@style/go_detail_new" />
-        </LinearLayout>
-        <LinearLayout android:id="@+id/voiceauto_set_ly" android:layout_marginTop="@dimen/dimen_10_dip" android:layout_marginBottom="@dimen/dimen_10_dip" style="@style/common_row_new_layout">
-            <ImageView android:layout_gravity="center_vertical" android:background="@drawable/setting_others_set_icon" style="@style/setting_item_icon" />
-            <TextView android:text="音频自动播放" style="@style/common_row_label_new" />
-            <com.wnc.mymoney.widget.MyToggle
-		        android:id="@+id/toggle"
-		        android:layout_width="0.0dip"
-		        android:layout_height="wrap_content"
-		        android:layout_gravity="center_vertical"
-		        android:gravity="right"
-		        android:layout_marginLeft="@dimen/dimen_20_dip"
-		        />
         </LinearLayout>
         
     </LinearLayout>

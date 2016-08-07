@@ -21,6 +21,7 @@ import com.wnc.mymoney.ui.setting.SettingActivity;
 import com.wnc.mymoney.uihelper.Setting;
 import com.wnc.mymoney.util.SysInit;
 import com.wnc.mymoney.util.app.AppRescouceReflect;
+import com.wnc.mymoney.util.app.SharedPreferenceUtil;
 import com.wnc.mymoney.util.common.TextFormatUtil;
 import com.wnc.mymoney.util.enums.BackupTimeModel;
 import com.wnc.mymoney.util.enums.NetChannel;
@@ -43,7 +44,7 @@ public class MainActivity extends Activity
 		setContentView(R.layout.activity_main);
 
 		SysInit.init(this);
-		Setting.init(this);
+		SharedPreferenceUtil.init(this);
 		Intent intent = new Intent(this, LogService.class);
 		/** 进入Activity开始服务 */
 		bindService(intent, conn, Context.BIND_AUTO_CREATE);
