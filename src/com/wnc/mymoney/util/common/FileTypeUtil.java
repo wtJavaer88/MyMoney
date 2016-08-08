@@ -6,7 +6,7 @@ public class FileTypeUtil
     {
         return filePath.endsWith(".jpeg") || filePath.endsWith(".jpg")
                 || filePath.endsWith(".bmp") || filePath.endsWith(".gif")
-                || filePath.endsWith(".png");
+                || filePath.endsWith(".png") || filePath.endsWith(".pic");
     }
 
     public static boolean isTextFile(String filePath)

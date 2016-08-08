@@ -36,7 +36,7 @@ import com.wnc.mymoney.util.enums.CostTypeUtil;
 import com.wnc.mymoney.widget.ComboBox;
 
 public class ViewTransActivity extends BaseActivity implements
-        HorGestureDetectorListener
+        HorGestureDetectorListener, OnClickListener
 {
     private static final String EQU_MODEL_NAME = "自转";
     private static final String IN_MODEL_NAME = "收入";
@@ -77,6 +77,7 @@ public class ViewTransActivity extends BaseActivity implements
         initBts();
         initTv();
         setViewsInCurrModel();
+        findViewById(R.id.trade_time_row_btn).setOnClickListener(this);
     }
 
     private void initData()
@@ -204,12 +205,12 @@ public class ViewTransActivity extends BaseActivity implements
                     path = MyAppParams.getInstance().getTmpVoicePath()
                             + segment.trim();
                 }
-                else if(isPicFile)
+                else if (isPicFile)
                 {
                     path = MyAppParams.getInstance().getTmpPicPath()
                             + segment.trim();
                 }
-                else if(isVideoFile)
+                else if (isVideoFile)
                 {
                     path = MyAppParams.getInstance().getTmpVideoPath()
                             + segment.trim();
@@ -223,16 +224,16 @@ public class ViewTransActivity extends BaseActivity implements
                                 ViewTransActivity.this, path);
                         msg.obj = clickableVoiceRichText.getSequence();
                     }
-                    else if(isPicFile)
+                    else if (isPicFile)
                     {
                         ClickablePicRichText clickablePicRichText = new ClickablePicRichText(
                                 ViewTransActivity.this, path);
                         msg.obj = clickablePicRichText.getSequence();
                         picTexts.add(clickablePicRichText);
                     }
-                    else if(isVideoFile)
+                    else if (isVideoFile)
                     {
-                    	ClickableVideoRichText clickableVideoRichText = new ClickableVideoRichText(
+                        ClickableVideoRichText clickableVideoRichText = new ClickableVideoRichText(
                                 ViewTransActivity.this, path);
                         msg.obj = clickableVideoRichText.getSequence();
                     }
@@ -256,7 +257,8 @@ public class ViewTransActivity extends BaseActivity implements
         {
             if (msg.what == 1)
             {
-            	CharSequence result = msg.obj == null?"":(CharSequence)msg.obj;
+                CharSequence result = msg.obj == null ? ""
+                        : (CharSequence) msg.obj;
                 descriptionTV.append(result);
                 descriptionTV.append(" ");
             }
@@ -330,6 +332,25 @@ public class ViewTransActivity extends BaseActivity implements
         for (ClickablePicRichText clickablePicRichText : picTexts)
         {
             clickablePicRichText.clearBitmap();
+        }
+    }
+
+    @Override
+    public void onClick(View v)
+    {
+        if (v.getId() == R.id.trade_time_row_btn)
+        {
+            if (viewedTrade != null)
+            {
+                ToastUtil.showLongToast(
+                        this,
+                        BasicDateUtil.getGBWeekString(
+                                viewedTrade.getCreatetime().substring(
+                                        0,
+                                        viewedTrade.getCreatetime()
+                                                .indexOf(" "))).replace("七",
+                                "天"));
+            }
         }
     }
 }
