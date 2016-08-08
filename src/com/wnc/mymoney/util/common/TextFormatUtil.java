@@ -171,13 +171,19 @@ public class TextFormatUtil
         return list;
     }
 
+    /**
+     * 支持中英文的逗号冒号
+     * 
+     * @param rangeStr
+     * @return
+     */
     public static boolean isNumberRange(String rangeStr)
     {
         if (BasicStringUtil.isNullString(rangeStr))
         {
             return false;
         }
-        if (rangeStr.replace(" ", "").matches("\\d+\\.?\\d*[,:]\\d+\\.?\\d*"))
+        if (rangeStr.replace(" ", "").matches("\\d+\\.?\\d*[,，:：]\\d+\\.?\\d*"))
         {
             return true;
         }

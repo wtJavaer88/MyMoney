@@ -94,7 +94,7 @@ public class CategoryDao
             return;
         }
         Cursor c = db.rawQuery(
-                "SELECT * FROM category WHERE DEPTH>0 ORDER BY ID ASC",
+                "SELECT * FROM category WHERE DEPTH>0 ORDER BY ORDERED ASC",
                 new String[]
                 {});
         while (c.moveToNext())
