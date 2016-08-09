@@ -51,11 +51,12 @@ public class SrtActivity extends Activity implements OnClickListener,
         OnLongClickListener, HorGestureDetectorListener,
         UncaughtExceptionHandler
 {
-    private Button btnPlay;
-    private TextView movieTv;
-    private TextView chsTv;
-    private TextView engTv;
-    private TextView timelineTv;
+    // 组件设置成静态, 防止屏幕旋转的时候内存地址会变
+    private static Button btnPlay;
+    private static TextView movieTv;
+    private static TextView chsTv;
+    private static TextView engTv;
+    private static TextView timelineTv;
 
     final String srtFolder = Environment.getExternalStorageDirectory()
             .getPath() + "/wnc/app/srt/";
@@ -102,6 +103,10 @@ public class SrtActivity extends Activity implements OnClickListener,
         initView();
         initAlertDialog();
         initSettingDialog();
+        if (autoPlayThread != null)
+        {
+            this.btnPlay.setText("停止");
+        }
         // 因为是横屏,所以设置的滑屏比例低一些
         this.gestureDetector = new GestureDetector(this,
                 new MyHorizontalGestureDetector(0.1, this));
@@ -521,6 +526,7 @@ public class SrtActivity extends Activity implements OnClickListener,
                 }
                 catch (InterruptedException e)
                 {
+                    e.printStackTrace();
                 }
                 catch (Exception e)
                 {
@@ -743,23 +749,28 @@ public class SrtActivity extends Activity implements OnClickListener,
 
     private void setContent(SrtInfo srt)
     {
+
         // 对于字幕里英文与中文颠倒的,用这种方法
         if (TextFormatUtil.containsChinese(srt.getEng()))
         {
-            chsTv.setText(srt.getEng());
-            engTv.setText(srt.getChs());
+            chsTv.setText(srt.getEng() == null ? "NULL" : srt.getEng());
+            engTv.setText(srt.getChs() == null ? "NULL" : srt.getChs());
         }
         else
         {
-            chsTv.setText(srt.getChs());
-            engTv.setText(srt.getEng());
+            // System.out.println("setContent:" + srt);
+            chsTv.setText(srt.getChs() == null ? "NULL" : srt.getChs());
+            engTv.setText(srt.getEng() == null ? "NULL" : srt.getEng());
         }
-        timelineTv.setText(srt.getFromTime().toString() + " ---> "
-                + srt.getToTime().toString());
+        if (srt.getFromTime() != null && srt.getToTime() != null)
+        {
+            timelineTv.setText(srt.getFromTime().toString() + " ---> "
+                    + srt.getToTime().toString());
 
-        defaultTimePoint[0] = srt.getFromTime().getHour();
-        defaultTimePoint[1] = srt.getFromTime().getMinute();
-        defaultTimePoint[2] = srt.getFromTime().getSecond();
+            defaultTimePoint[0] = srt.getFromTime().getHour();
+            defaultTimePoint[1] = srt.getFromTime().getMinute();
+            defaultTimePoint[2] = srt.getFromTime().getSecond();
+        }
     }
 
     @Override
@@ -828,7 +839,6 @@ public class SrtActivity extends Activity implements OnClickListener,
     @Override
     public void onDestroy()
     {
-        autoPlayNextCtrl = false;
         if (alertDialog != null)
         {
             System.out.println();
@@ -913,8 +923,7 @@ public class SrtActivity extends Activity implements OnClickListener,
     public void uncaughtException(Thread thread, Throwable ex)
     {
         Log.i("AAA", "uncaughtException   " + ex);
-        autoPlayNextCtrl = false;
-        btnPlay.setText("播放");
+        stopSrtPlay();
         ToastUtil.showShortToast(this, "播放出现异常");
         for (StackTraceElement o : ex.getStackTrace())
         {
