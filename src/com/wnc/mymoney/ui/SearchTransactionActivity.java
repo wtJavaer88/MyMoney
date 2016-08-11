@@ -41,7 +41,7 @@ import com.wnc.mymoney.util.app.WheelDialogShowUtil;
 import com.wnc.mymoney.util.common.TextFormatUtil;
 import com.wnc.mymoney.util.enums.CostTypeUtil;
 
-public class SearchTransactionActivity extends BaseActivity implements
+public class SearchTransactionActivity extends DataViewActivity implements
         View.OnClickListener
 {
 
@@ -77,7 +77,7 @@ public class SearchTransactionActivity extends BaseActivity implements
     SimpleAdapter adapter;
     String curKeyWord = "";
     ORDER_FIELD curOrderField = ORDER_FIELD.FIELD_TIME;
-    List<Map<String, Object>> lvDataSet = new ArrayList<Map<String, Object>>();
+    List<Map<String, Object>> mData = new ArrayList<Map<String, Object>>();
 
     @Override
     protected void onCreate(Bundle paramBundle)
@@ -291,8 +291,8 @@ public class SearchTransactionActivity extends BaseActivity implements
 
     private void showCostTypeWheel()
     {
-        WheelDialogShowUtil.showRelativeDialog(this, "选择分类", leftData, rightData,
-                selectedLeftIndex, selectedRightIndex,
+        WheelDialogShowUtil.showRelativeDialog(this, "选择分类", leftData,
+                rightData, selectedLeftIndex, selectedRightIndex,
                 new AfterWheelChooseListener()
                 {
                     @Override
@@ -335,7 +335,7 @@ public class SearchTransactionActivity extends BaseActivity implements
     {
         this.search_expense_lv.setVisibility(View.VISIBLE);
         getSearchMapData(keyword);
-        this.adapter = new SimpleAdapter(this, lvDataSet,
+        this.adapter = new SimpleAdapter(this, mData,
                 R.layout.nav_year_trans_lv_item, new String[]
                 { "icon", "name", "photo", "memo", "cost" }, new int[]
                 { R.id.item_icon_iv, R.id.item_name_tv, R.id.photo_flag_iv,
@@ -348,9 +348,9 @@ public class SearchTransactionActivity extends BaseActivity implements
                 .setOnItemLongClickListener(transItemClickListener);
 
         dataReOrder();
-        if (lvDataSet.size() > 0)
+        if (mData.size() > 0)
         {
-            ToastUtil.showLongToast(this, "记录数:" + lvDataSet.size() + " 消费总额:"
+            ToastUtil.showLongToast(this, "记录数:" + mData.size() + " 消费总额:"
                     + TextFormatUtil.getFormatMoneyStr(COST_SUM));
         }
     }
@@ -359,7 +359,7 @@ public class SearchTransactionActivity extends BaseActivity implements
 
     private void getSearchMapData(String keyword)
     {
-        lvDataSet.clear();
+        mData.clear();
         COST_SUM = 0;
 
         TransactionsDao.initDb(this);
@@ -395,7 +395,7 @@ public class SearchTransactionActivity extends BaseActivity implements
             {
                 COST_SUM += trade.getCost();
             }
-            lvDataSet.add(map);
+            mData.add(map);
         }
         TransactionsDao.closeDb();
     }
@@ -407,7 +407,7 @@ public class SearchTransactionActivity extends BaseActivity implements
 
     private void dataReOrder()
     {
-        Collections.sort(lvDataSet, new Comparator<Map<String, Object>>()
+        Collections.sort(mData, new Comparator<Map<String, Object>>()
         {
             @Override
             public int compare(Map<String, Object> o1, Map<String, Object> o2)
@@ -441,5 +441,62 @@ public class SearchTransactionActivity extends BaseActivity implements
     public enum ORDER_FIELD
     {
         FIELD_TIME, FIELD_COST, FIELD_TYPE
+    }
+
+    @Override
+    public void delTrigger(ListView arg0, int arg2)
+    {
+        this.mData.remove(arg2);
+        this.adapter = new SimpleAdapter(this, mData,
+                R.layout.nav_year_trans_lv_item, new String[]
+                { "icon", "name", "photo", "memo", "cost" }, new int[]
+                { R.id.item_icon_iv, R.id.item_name_tv, R.id.photo_flag_iv,
+                        R.id.memo_tv, R.id.cost_tv });
+        this.search_expense_lv.setAdapter(this.adapter);
+        TransItemClickListener transItemClickListener = new TransItemClickListener(
+                this, this.search_expense_lv);
+        this.search_expense_lv.setOnItemClickListener(transItemClickListener);
+        this.search_expense_lv
+                .setOnItemLongClickListener(transItemClickListener);
+
+        dataReOrder();
+        isModify = true;
+    }
+
+    public boolean isModify = false;
+    public static int SEARCH_MODIFY_RESULT = 2001;
+
+    // 返回键事件
+    @Override
+    public void onBackPressed()
+    {
+        Intent intent = new Intent();
+        if (isModify)
+        {
+            setResult(SEARCH_MODIFY_RESULT, intent);
+        }
+        else
+        {
+            setResult(RESULT_CANCELED, intent);
+        }
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        // 如果经过修改
+        if (requestCode == DataViewActivity.MODIFY_REQUEST_CODE)
+        {
+            modifyTrigger();
+        }
+    }
+
+    @Override
+    public void modifyTrigger()
+    {
+        createNewAdapter();
+        isModify = true;
     }
 }

@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,7 @@ import android.widget.TextView;
 import com.wnc.mymoney.R;
 import com.wnc.mymoney.bean.Trade;
 import com.wnc.mymoney.dao.TransactionsDao;
+import com.wnc.mymoney.ui.DataViewActivity;
 import com.wnc.mymoney.util.enums.CostTypeUtil;
 import com.wnc.mymoney.vholder.TranListViewHolder;
 
@@ -25,12 +25,13 @@ public class MyListViewAdapter extends BaseAdapter
 {
 
     private LayoutInflater mInflater;
-    private Activity activity;
+    private DataViewActivity activity;
     List<Map<String, Object>> mData = new ArrayList<Map<String, Object>>();
-
+    public Map<Integer, TranListViewHolder> listHolders = new HashMap<Integer, TranListViewHolder>();
     private int costLevel = 0;
 
-    public MyListViewAdapter(Activity activity, List<Map<String, Object>> mData)
+    public MyListViewAdapter(DataViewActivity activity,
+            List<Map<String, Object>> mData)
     {
         this.activity = activity;
         this.mData = mData;
@@ -44,7 +45,7 @@ public class MyListViewAdapter extends BaseAdapter
      * @param mData
      * @param costLevel
      */
-    public MyListViewAdapter(Activity activity,
+    public MyListViewAdapter(DataViewActivity activity,
             List<Map<String, Object>> mData, int costLevel)
     {
         this(activity, mData);
@@ -67,6 +68,8 @@ public class MyListViewAdapter extends BaseAdapter
         {
             holder = (TranListViewHolder) convertView.getTag();
         }
+        listHolders.put(position, holder);
+
         setHolderData(holder, position);
 
         return convertView;
@@ -98,7 +101,7 @@ public class MyListViewAdapter extends BaseAdapter
         holder.listview = addedLV;
     }
 
-    private void setHolderData(TranListViewHolder holder, int position)
+    public void setHolderData(TranListViewHolder holder, int position)
     {
         holder.trans_day_of_month_tv.setText((String) this.mData.get(position)
                 .get("day"));
@@ -113,6 +116,19 @@ public class MyListViewAdapter extends BaseAdapter
 
         simpleLvSet(holder.listview, this.mData.get(position).get("searchDate")
                 .toString());
+    }
+
+    public void simpleLvSet(int position)
+    {
+        // for (Map.Entry<Integer, TranListViewHolder> item : listHolders
+        // .entrySet())
+        // {
+        // if (item.getValue().listview == listview)
+        // {
+        setHolderData(listHolders.get(position), position);
+        // }
+        // }
+
     }
 
     private void simpleLvSet(ListView listview, String searchDate)

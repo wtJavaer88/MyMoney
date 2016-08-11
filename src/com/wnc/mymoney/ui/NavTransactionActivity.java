@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.wnc.basic.BasicDateUtil;
+import com.wnc.basic.BasicNumberUtil;
 import com.wnc.mymoney.R;
 import com.wnc.mymoney.bean.DayRangePoint;
 import com.wnc.mymoney.bean.DayTranTotal;
@@ -30,6 +31,7 @@ import com.wnc.mymoney.uihelper.MyHorizontalGestureDetector;
 import com.wnc.mymoney.uihelper.MyListViewAdapter;
 import com.wnc.mymoney.util.common.TextFormatUtil;
 import com.wnc.mymoney.util.enums.TOTAL_RANGE;
+import com.wnc.mymoney.vholder.TranListViewHolder;
 import com.wnc.mymoney.widget.QExListView;
 
 /**
@@ -52,7 +54,7 @@ import com.wnc.mymoney.widget.QExListView;
  * @author cpr216
  * 
  */
-public class NavTransactionActivity extends BaseActivity implements
+public class NavTransactionActivity extends DataViewActivity implements
         View.OnClickListener, HorGestureDetectorListener
 {
     private GestureDetector gestureDetector;
@@ -76,6 +78,7 @@ public class NavTransactionActivity extends BaseActivity implements
     View expandHeader3;
 
     ArrayList<Map<String, Object>> mData = new ArrayList<Map<String, Object>>();
+    public MyListViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle paramBundle)
@@ -167,7 +170,8 @@ public class NavTransactionActivity extends BaseActivity implements
             }
             else
             {
-                expanseLV.setAdapter(new MyListViewAdapter(this, this.mData));
+                adapter = new MyListViewAdapter(this, this.mData);
+                expanseLV.setAdapter(adapter);
             }
         }
         else
@@ -268,8 +272,7 @@ public class NavTransactionActivity extends BaseActivity implements
                     localIntent.putExtra("dayrange",
                             NavTransactionActivity.this.dayRange).putExtra(
                             "keyword", "");
-                    ;
-                    startActivity(localIntent);
+                    startActivityForResult(localIntent, 1);
                     break;
                 case MotionEvent.ACTION_UP:
                     break;
@@ -359,23 +362,74 @@ public class NavTransactionActivity extends BaseActivity implements
     }
 
     @Override
-    protected void onResume()
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        super.onResume();
-        // initData();
-        // if (expanseLV instanceof QExListView)
-        // {
-        // int index = ((QExListView) expanseLV).getCurrentGroup();
-        // if (index > -1)
-        // {
-        // ((QExListView) expanseLV).expandGroup(index);
-        // }
-        // else
-        // {
-        // ((QExListView) expanseLV).expandGroup(0);
-        // }
-        //
-        // }
+        System.out.println(requestCode + "  " + resultCode);
+        super.onActivityResult(requestCode, resultCode, data);
+        // 如果经过修改
+        if (requestCode == DataViewActivity.MODIFY_REQUEST_CODE)
+        {
+            modifyTrigger();
+        }
+        // 如果是从SearchTransactionActivity返回并经过数据修改
+        if (resultCode == SearchTransactionActivity.SEARCH_MODIFY_RESULT)
+        {
+            // System.out.println("改了我的数据!");
+            modifyTrigger();
+        }
+    }
 
+    @Override
+    public void modifyTrigger()
+    {
+        initData();
+    }
+
+    @Override
+    public void delTrigger(ListView arg0, int arg2)
+    {
+        if (this.TOTAL_RANGE_TYPE != TOTAL_RANGE.CURRYEAR)
+        {
+            // adapter.simpleLvSet(arg0);
+            for (Map.Entry<Integer, TranListViewHolder> item : adapter.listHolders
+                    .entrySet())
+            {
+                if (item.getValue().listview == arg0)
+                {
+                    HashMap<String, Object> map = (HashMap) arg0
+                            .getItemAtPosition(arg2);
+                    System.out.println("删除的map:" + map);
+                    double in = BasicNumberUtil.getDouble(this.inboundTV
+                            .getText().toString().trim());
+                    double out = BasicNumberUtil.getDouble(this.outboundTV
+                            .getText().toString().trim());
+                    System.out.println(map.get("cost").toString());
+                    System.out.println(map.get("type_id").toString());
+                    if (BasicNumberUtil
+                            .getNumber(map.get("type_id").toString()) == -1)
+                    {
+                        out -= BasicNumberUtil.getDouble(map.get("cost")
+                                .toString());
+                    }
+                    else
+                    {
+                        in -= BasicNumberUtil.getDouble(map.get("cost")
+                                .toString());
+                    }
+                    System.out.println(in + "  " + out);
+                    // this.balanceTV.setText(TextFormatUtil.getFormatMoneyStr(in
+                    // - out));
+                    this.inboundTV
+                            .setText(TextFormatUtil.getFormatMoneyStr(in));
+                    this.outboundTV.setText(TextFormatUtil
+                            .getFormatMoneyStr(out));
+                    adapter.setHolderData(item.getValue(), item.getKey());
+                }
+            }
+        }
+        else
+        {
+            initData();
+        }
     }
 }

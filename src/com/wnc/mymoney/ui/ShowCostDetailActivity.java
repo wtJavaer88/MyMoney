@@ -18,7 +18,7 @@ import com.wnc.mymoney.dao.TransactionsDao;
 import com.wnc.mymoney.uihelper.MyListViewAdapter;
 import com.wnc.mymoney.util.enums.CostTypeUtil;
 
-public class ShowCostDetailActivity extends BaseActivity implements
+public class ShowCostDetailActivity extends DataViewActivity implements
         View.OnClickListener
 {
 
@@ -116,9 +116,25 @@ public class ShowCostDetailActivity extends BaseActivity implements
     }
 
     @Override
-    protected void onResume()
+    public void delTrigger(ListView arg0, int arg2)
     {
-        super.onResume();
-        // initData();
+        initData();
+    }
+
+    @Override
+    public void modifyTrigger()
+    {
+        initData();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        // 如果经过修改
+        if (requestCode == DataViewActivity.MODIFY_REQUEST_CODE)
+        {
+            modifyTrigger();
+        }
     }
 }

@@ -115,6 +115,8 @@ public class AddOrEditTransActivity extends BaseActivity implements
     private int selectedLeftIndex = 0;
     private int selectedRightIndex = 0;
 
+    private int modifyIndex = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -136,6 +138,7 @@ public class AddOrEditTransActivity extends BaseActivity implements
     private void initData()
     {
         this.isAdd = getIntent().getBooleanExtra("isAdd", true);
+        modifyIndex = getIntent().getIntExtra("index", -1);
         this.modifyTrade = (Trade) getIntent().getSerializableExtra("Trade");
 
         if (!this.isAdd && this.modifyTrade == null)
@@ -423,6 +426,8 @@ public class AddOrEditTransActivity extends BaseActivity implements
                     if (b = TransactionsDao.update(trade))
                     {
                         Log.i("updateTrade", "after:" + getTradeJson(trade));
+                        Intent intent = new Intent();
+                        setResult(0, intent);// 放入回传的值,并添加一个Code,方便区分返回的数据
                         finish();
                     }
                 }
@@ -593,8 +598,8 @@ public class AddOrEditTransActivity extends BaseActivity implements
         }
         final List<MyWheelBean> leftData2 = leftData;
         final Map<MyWheelBean, List<? extends MyWheelBean>> rightData2 = rightData;
-        WheelDialogShowUtil.showRelativeDialog(this, "选择分类", leftData, rightData,
-                selectedLeftIndex, selectedRightIndex,
+        WheelDialogShowUtil.showRelativeDialog(this, "选择分类", leftData,
+                rightData, selectedLeftIndex, selectedRightIndex,
                 new AfterWheelChooseListener()
                 {
                     @Override

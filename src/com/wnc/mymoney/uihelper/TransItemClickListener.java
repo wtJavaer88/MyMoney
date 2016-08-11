@@ -2,7 +2,6 @@ package com.wnc.mymoney.uihelper;
 
 import java.util.HashMap;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,9 +20,7 @@ import com.wnc.mymoney.R;
 import com.wnc.mymoney.bean.Trade;
 import com.wnc.mymoney.dao.TransactionsDao;
 import com.wnc.mymoney.ui.AddOrEditTransActivity;
-import com.wnc.mymoney.ui.NavTransactionActivity;
-import com.wnc.mymoney.ui.SearchTransactionActivity;
-import com.wnc.mymoney.ui.ShowCostDetailActivity;
+import com.wnc.mymoney.ui.DataViewActivity;
 import com.wnc.mymoney.ui.ViewTransActivity;
 import com.wnc.mymoney.util.app.ClipBoardUtil;
 import com.wnc.mymoney.util.app.ToastUtil;
@@ -31,10 +28,10 @@ import com.wnc.mymoney.util.app.ToastUtil;
 public class TransItemClickListener implements OnItemClickListener,
         OnItemLongClickListener
 {
-    Activity activity;
+    DataViewActivity activity;
     ListView listView;
 
-    public TransItemClickListener(Activity activity, ListView listView)
+    public TransItemClickListener(DataViewActivity activity, ListView listView)
     {
         this.activity = activity;
         this.listView = listView;
@@ -44,9 +41,11 @@ public class TransItemClickListener implements OnItemClickListener,
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3)
     {
         ListView lv = (ListView) arg0;
+
         this.activity.startActivity(new Intent().setClass(this.activity,
                 ViewTransActivity.class).putExtra("Trade",
                 getSelectedTrade(arg0, arg2)));
+
     }
 
     private Trade getSelectedTrade(AdapterView arg0, int arg2)
@@ -60,7 +59,6 @@ public class TransItemClickListener implements OnItemClickListener,
     public boolean onItemLongClick(final AdapterView<?> arg0, final View arg1,
             final int arg2, long arg3)
     {
-
         final String[] menuItems = new String[]
         { "修改", "删除", "复制" };
         new AlertDialog.Builder(this.activity)
@@ -83,11 +81,11 @@ public class TransItemClickListener implements OnItemClickListener,
                             }
                             else if (which == 1)
                             {
-                                deleteDialogOpen(selectedTrade);
+                                deleteDialogOpen(selectedTrade, arg0, arg2);
                             }
                             else if (which == 0)
                             {
-                                toTradeModify(selectedTrade);
+                                toTradeModify(selectedTrade, arg2);
                             }
                         }
                         catch (Exception ex)
@@ -109,11 +107,11 @@ public class TransItemClickListener implements OnItemClickListener,
                         // TODO Auto-generated method stub
                     }
                 }).show();
-
         return true;
     }
 
-    protected void deleteDialogOpen(final Trade selectedTrade)
+    protected void deleteDialogOpen(final Trade selectedTrade,
+            final AdapterView arg0, final int arg2)
     {
         final AlertDialog dlg = new AlertDialog.Builder(activity).create();
         dlg.show();
@@ -144,41 +142,24 @@ public class TransItemClickListener implements OnItemClickListener,
             @Override
             public void onClick(View v)
             {
-                delete(selectedTrade);
+                if (TransactionsDao.delete(activity, selectedTrade))
+                {
+                    ToastUtil.showShortToast(activity, "成功删除!");
+                    // 执行刷新操作
+                    activity.delTrigger((ListView) arg0, arg2);
+                    Log.i("deleteTrade", JSON.toJSONString(selectedTrade));
+                }
                 dlg.dismiss();
             }
         });
-
     }
 
-    protected boolean delete(Trade selectedTrade)
+    private void toTradeModify(Trade selectedTrade, int arg2)
     {
-        if (TransactionsDao.delete(activity, selectedTrade))
-        {
-            ToastUtil.showShortToast(activity, "成功删除!");
-            // 执行刷新操作
-            if (activity instanceof NavTransactionActivity)
-            {
-                ((NavTransactionActivity) activity).initData();
-            }
-            else if (activity instanceof SearchTransactionActivity)
-            {
-                ((SearchTransactionActivity) activity).createNewAdapter();
-            }
-            else if (activity instanceof ShowCostDetailActivity)
-            {
-                ((ShowCostDetailActivity) activity).initData();
-            }
-            Log.i("deleteTrade", JSON.toJSONString(selectedTrade));
-            return true;
-        }
-        return false;
-    }
-
-    private void toTradeModify(Trade selectedTrade)
-    {
-        activity.startActivity(new Intent()
-                .setClass(activity, AddOrEditTransActivity.class)
-                .putExtra("isAdd", false).putExtra("Trade", selectedTrade));
+        activity.startActivityForResult(
+                new Intent().setClass(activity, AddOrEditTransActivity.class)
+                        .putExtra("isAdd", false).putExtra("index", arg2)
+                        .putExtra("Trade", selectedTrade),
+                DataViewActivity.MODIFY_REQUEST_CODE);
     }
 }

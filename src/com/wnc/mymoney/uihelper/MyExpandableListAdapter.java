@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +20,7 @@ import com.wnc.mymoney.bean.DayTranTotal;
 import com.wnc.mymoney.bean.PriceTotalBean;
 import com.wnc.mymoney.bean.Trade;
 import com.wnc.mymoney.dao.TransactionsDao;
+import com.wnc.mymoney.ui.DataViewActivity;
 import com.wnc.mymoney.util.common.TextFormatUtil;
 import com.wnc.mymoney.util.enums.CostTypeUtil;
 import com.wnc.mymoney.util.enums.TOTAL_RANGE;
@@ -33,10 +33,10 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter
     private String[] armTypes;
     private PriceTotalBean[] monthBalance;
     private DayTranTotal[][] arms;
-    Activity activity;
+    DataViewActivity activity;
     DayRangePoint dayRange = TOTAL_RANGE.CURRYEAR.create();
 
-    public MyExpandableListAdapter(Activity activity)
+    public MyExpandableListAdapter(DataViewActivity activity)
     {
         this.activity = activity;
         initData();
