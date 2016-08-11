@@ -267,7 +267,7 @@ public class MainActivity extends Activity
 	protected void onResume()
 	{
 		super.onResume();
-		if (BackUpDataUtil.canBackUpDb || Setting.budgetChanged)
+		if (BackUpDataUtil.canBackUpDb || Setting.budgetChanged || Setting.restored)
 		{
 			OnStartUpDataUtil.restart();// 重新开始计算统计数据
 			setViewsIfChange();

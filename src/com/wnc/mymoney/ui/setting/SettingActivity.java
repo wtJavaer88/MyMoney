@@ -117,6 +117,7 @@ public class SettingActivity extends Activity implements OnClickListener
 					if (MoveDbUtil.moveEmptyMoneyDb(getApplicationContext()))
 					{
 						ToastUtil.showShortToast(getApplicationContext(), "清空数据成功!");
+						Setting.restored = true;
 					}
 					else
 					{

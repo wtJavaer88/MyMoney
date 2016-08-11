@@ -6,6 +6,7 @@ public class Setting
 {
 
 	public static boolean budgetChanged = false;
+	public static boolean restored = false;
 	final static String DEFAULT_MEMBER = "王";
 	final static String DEFAULT_EMAIL = "1@qq.com";
 	final static String DEFAULT_BUDGET = "500";
