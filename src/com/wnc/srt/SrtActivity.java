@@ -2,15 +2,13 @@ package com.wnc.srt;
 
 import java.io.File;
 import java.lang.Thread.UncaughtExceptionHandler;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import srt.DataHolder;
+import srt.SRT_VIEW_TYPE;
 import srt.SrtInfo;
-import srt.SrtTextHelper;
-import srt.TimeHelper;
+import srt.SrtPlayService;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -32,7 +30,6 @@ import android.view.View.OnLongClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.wnc.basic.BasicDateUtil;
 import com.wnc.basic.BasicFileUtil;
 import com.wnc.basic.BasicStringUtil;
 import com.wnc.mymoney.R;
@@ -43,7 +40,6 @@ import com.wnc.mymoney.uihelper.MyHorizontalGestureDetector;
 import com.wnc.mymoney.util.app.ClipBoardUtil;
 import com.wnc.mymoney.util.app.ToastUtil;
 import com.wnc.mymoney.util.app.WheelDialogShowUtil;
-import com.wnc.mymoney.util.common.MyFileUtil;
 import com.wnc.mymoney.util.common.TextFormatUtil;
 import com.wnc.srt.HeadSetUtil.OnHeadSetListener;
 
@@ -58,15 +54,9 @@ public class SrtActivity extends Activity implements OnClickListener,
     private static TextView engTv;
     private static TextView timelineTv;
 
-    final String srtFolder = Environment.getExternalStorageDirectory()
+    public final String srtFolder = Environment.getExternalStorageDirectory()
             .getPath() + "/wnc/app/srt/";
-    final String thumbPicFolder = Environment.getExternalStorageDirectory()
-            .getPath() + "/wnc/app/图片/";
-    final String favoriteTxt = Environment.getExternalStorageDirectory()
-            .getPath() + "/wnc/app/srt/favorite.txt";
-    final int DELTA_UNIQUE = 1000;// 文件夹和所属文件的Map的Key规则
 
-    private Map<Integer, String> srtFilePathes = new HashMap<Integer, String>();
     private GestureDetector gestureDetector;
     AlertDialog alertDialog;
 
@@ -75,17 +65,9 @@ public class SrtActivity extends Activity implements OnClickListener,
     int[] defaultMoviePoint =
     { 0, -1 };// 初次使用请把右边序号设为-1,以便程序判断
 
-    final int VIEW_CURRENT = 0;
-    final int VIEW_LEFT = 1;
-    final int VIEW_RIGHT = 2;
-
-    static boolean replayCtrl = false;// 复读模式
-    static boolean autoPlayNextCtrl = true;// 如果播放过程出异常,就不能单靠系统设置的值控制自动播放下一个了,
-    static int beginReplayIndex = -1;
-    static int endReplayIndex = -1;
-    static Thread autoPlayThread;
-    static String[] settingItems = new String[]
+    String[] settingItems = new String[]
     { "自动下一条", "播放声音", "打开复读", "音量调节" };
+    static SrtPlayService srtPlayService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -100,17 +82,18 @@ public class SrtActivity extends Activity implements OnClickListener,
         // 设置未捕获异常UncaughtExceptionHandler的处理方法
         Thread.setDefaultUncaughtExceptionHandler(this);
 
+        srtPlayService = new SrtPlayService(this);
+
         initView();
         initAlertDialog();
         initSettingDialog();
-        if (autoPlayThread != null)
+        if (srtPlayService.getAutoPlayThread() != null)
         {
             this.btnPlay.setText("停止");
         }
         // 因为是横屏,所以设置的滑屏比例低一些
         this.gestureDetector = new GestureDetector(this,
                 new MyHorizontalGestureDetector(0.1, this));
-
     }
 
     Builder alertDialogBuilder;
@@ -145,10 +128,10 @@ public class SrtActivity extends Activity implements OnClickListener,
                                         getApplicationContext(), "复制成功!");
                                 break;
                             case 2:
-                                favoriteSrt();
+                                srtPlayService.favoriteCurrSrt();
                                 break;
                             case 3:
-                                favoriteSrt();
+                                srtPlayService.favoriteCurrSrt();
                                 shareSrt();
                                 break;
                             default:
@@ -160,21 +143,6 @@ public class SrtActivity extends Activity implements OnClickListener,
                             ToastUtil.showLongToast(getApplicationContext(),
                                     "操作失败!");
                             e.printStackTrace();
-                        }
-                    }
-
-                    private void favoriteSrt()
-                    {
-                        if (BasicFileUtil.writeFileString(favoriteTxt,
-                                getFavoriteContent(), "UTF-8", true))
-                        {
-                            ToastUtil.showLongToast(getApplicationContext(),
-                                    "收藏成功!");
-                        }
-                        else
-                        {
-                            ToastUtil.showLongToast(getApplicationContext(),
-                                    "收藏失败!");
                         }
                     }
 
@@ -192,14 +160,6 @@ public class SrtActivity extends Activity implements OnClickListener,
                         intent.putExtra(Intent.EXTRA_TEXT, getEngChs());
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(Intent.createChooser(intent, getTitle()));
-                    }
-
-                    private String getFavoriteContent()
-                    {
-
-                        return BasicDateUtil.getCurrentDateTimeString() + " \""
-                                + getCurFile().replace(srtFolder, "") + "\" "
-                                + DataHolder.getCurrent() + "\r\n";
                     }
 
                 })
@@ -234,7 +194,7 @@ public class SrtActivity extends Activity implements OnClickListener,
                                         .isPlayVoice() ? false : true);
                                 break;
                             case 2:
-                                switchReplayModel();
+                                srtPlayService.switchReplayModel();
                                 break;
                             case 3:
                                 AudioManager mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -264,19 +224,8 @@ public class SrtActivity extends Activity implements OnClickListener,
                 });
     }
 
-    private String getCurFile()
-    {
-        return DataHolder.getFileKey();
-    }
-
-    private int getCurIndex()
-    {
-        return DataHolder.getCurrentSrtIndex();
-    }
-
     private void initView()
     {
-
         btnPlay = (Button) findViewById(R.id.btnPlay);
         movieTv = (TextView) findViewById(R.id.file_tv);
         chsTv = (TextView) findViewById(R.id.chs_tv);
@@ -323,28 +272,6 @@ public class SrtActivity extends Activity implements OnClickListener,
         }
     }
 
-    private void showNewSrtFile(String srtFile)
-    {
-        if (BasicFileUtil.isExistFile(srtFile))
-        {
-            stopSrtPlay();
-            DataHolder.switchFile(srtFile);
-            if (!DataHolder.map.containsKey(srtFile))
-            {
-                PickerHelper.dataEntity(getCurFile());
-                getSrtInfoAndPlay(VIEW_RIGHT);
-            }
-            else
-            {
-                getSrtInfoAndPlay(VIEW_CURRENT);
-            }
-        }
-        else
-        {
-            Log.e("srt", "not found " + srtFile);
-        }
-    }
-
     @Override
     public void onClick(View v)
     {
@@ -354,28 +281,24 @@ public class SrtActivity extends Activity implements OnClickListener,
             setting();
             break;
         case R.id.btnChoose:
-            stopReplayModel();
             showChooseMovieWheel();
             break;
         case R.id.btnSkip:
             if (hasSrtContent())
             {
-                stopReplayModel();
                 showSkipWheel();
             }
             break;
         case R.id.btnFirst:
             if (hasSrtContent())
             {
-                stopReplayModel();
-                getSrtInfoAndPlay(R.id.btnFirst);
+                getSrtInfoAndPlay(SRT_VIEW_TYPE.VIEW_FIRST);
             }
             break;
         case R.id.btnLast:
             if (hasSrtContent())
             {
-                stopReplayModel();
-                getSrtInfoAndPlay(R.id.btnLast);
+                getSrtInfoAndPlay(SRT_VIEW_TYPE.VIEW_LAST);
             }
             break;
         case R.id.btnPlay:
@@ -405,7 +328,7 @@ public class SrtActivity extends Activity implements OnClickListener,
     {
         settingItems[0] = !SrtSetting.isAutoPlayNext() ? "自动下一条" : "只播放一条";
         settingItems[1] = !SrtSetting.isPlayVoice() ? "播放声音" : "不播放声音";
-        settingItems[2] = !replayCtrl ? "复读" : "不复读";
+        settingItems[2] = !srtPlayService.isReplayCtrl() ? "复读" : "不复读";
         alertDialog = settingDialogBuilder.show();
     }
 
@@ -424,17 +347,19 @@ public class SrtActivity extends Activity implements OnClickListener,
                 rightArr[i] = srtInfo.getToTime().toString();
             }
 
-            int curIndex = getCurIndex();
+            int curIndex = srtPlayService.getCurIndex();
             WheelDialogShowUtil.showSrtDialog(this, leftArr, rightArr,
                     curIndex, curIndex, new AfterWheelChooseListener()
                     {
                         @Override
                         public void afterWheelChoose(Object... objs)
                         {
-                            setReplayIndex(Integer.valueOf(objs[0].toString()),
+                            srtPlayService.setReplayIndex(
+                                    Integer.valueOf(objs[0].toString()),
                                     Integer.valueOf(objs[1].toString()));
-                            replayCtrl = true;
-                            DataHolder.setCurrentSrtIndex(beginReplayIndex);
+                            srtPlayService.setReplayCtrl(true);
+                            DataHolder.setCurrentSrtIndex(srtPlayService
+                                    .getBeginReplayIndex());
                         }
                     });
         }
@@ -442,12 +367,7 @@ public class SrtActivity extends Activity implements OnClickListener,
 
     private boolean hasSrtContent()
     {
-        if (BasicFileUtil.isExistFile(getCurFile()))
-        {
-            return true;
-        }
-        ToastUtil.showShortToast(getApplicationContext(), "没有选择任何剧集");
-        return false;
+        return srtPlayService.isSrtShowing();
     }
 
     /**
@@ -455,12 +375,7 @@ public class SrtActivity extends Activity implements OnClickListener,
      */
     private void showThumbPic()
     {
-        System.out.println(getCurFile().replace(srtFolder, ""));
-        String filePath = thumbPicFolder + getCurFile().replace(srtFolder, "");
-        int i = filePath.lastIndexOf(".");
-        filePath = filePath.substring(0, i);
-        filePath = filePath + File.separator
-                + TextFormatUtil.getFileNameNoExtend(getCurFile()) + "_p1.pic";
+        String filePath = srtPlayService.getThumbPicPath();
         Intent intent = ClickFileIntentFactory.getIntentByFile(filePath);
         startActivity(intent);
     }
@@ -480,63 +395,18 @@ public class SrtActivity extends Activity implements OnClickListener,
     private void beginSrtPlay()
     {
         btnPlay.setText("停止");
-        autoPlayNextCtrl = true;
-        playSrt();
+
+        srtPlayService.playSrt();
     }
 
     /**
      * 停止字幕播放
      */
-    private void stopSrtPlay()
+    public void stopSrtPlay()
     {
         btnPlay.setText("播放");
         SrtVoiceHelper.stop();
-        stopSrtPlayThread();
-        autoPlayThread = null;
-        autoPlayNextCtrl = false;
-    }
-
-    private void playSrt()
-    {
-        // 每次播放,先设置自动播放控制为true
-        autoPlayNextCtrl = true;
-        // 停止原有的播放线程,播放新字幕
-        stopSrtPlayThread();
-        autoPlayThread = new Thread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                Message msg = new Message();
-                long time = TimeHelper.getTime(DataHolder.getCurrent()
-                        .getToTime())
-                        - TimeHelper.getTime(DataHolder.getCurrent()
-                                .getFromTime());
-                try
-                {
-                    if (SrtSetting.isPlayVoice())
-                    {
-                        String voicePath = SrtTextHelper.getSrtVoiceLocation();
-                        if (BasicFileUtil.isExistFile(voicePath))
-                        {
-                            SrtVoiceHelper.play(voicePath);
-                        }
-                    }
-                    Thread.sleep(time);
-                    autoPlayHandler.sendMessage(msg);
-                }
-                catch (InterruptedException e)
-                {
-                    e.printStackTrace();
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-
-            }
-        });
-        autoPlayThread.start();
+        srtPlayService.stopSrt();
     }
 
     public Handler autoPlayHandler = new Handler()
@@ -545,20 +415,22 @@ public class SrtActivity extends Activity implements OnClickListener,
         public void handleMessage(android.os.Message msg)
         {
 
-            if (isReplayInvalid())
+            if (srtPlayService.isReplayInvalid())
             {
-                stopReplayModel();
+                srtPlayService.stopReplayModel();
             }
-            if (replayCtrl)
+            if (srtPlayService.isReplayCtrl())
             {
                 // System.out.println("6:" + DataHolder.getCurrentSrtIndex() +
                 // " "
                 // + beginReplayIndex + " " + endReplayIndex);
                 // 复读结束时,回到复读开始的地方继续复读
-                if (getCurIndex() == endReplayIndex)
+                if (srtPlayService.getCurIndex() == srtPlayService
+                        .getEndReplayIndex())
                 {
-                    DataHolder.setCurrentSrtIndex(beginReplayIndex);
-                    getSrtInfoAndPlay(VIEW_CURRENT);
+                    DataHolder.setCurrentSrtIndex(srtPlayService
+                            .getBeginReplayIndex());
+                    getSrtInfoAndPlay(SRT_VIEW_TYPE.VIEW_CURRENT);
                 }
                 else
                 {
@@ -566,7 +438,7 @@ public class SrtActivity extends Activity implements OnClickListener,
                     doRight();
                 }
             }
-            else if (isAutoPlayModel())
+            else if (srtPlayService.isAutoPlayModel())
             {
                 // 在自动播放模式下,播放下一条
                 doRight();
@@ -576,23 +448,7 @@ public class SrtActivity extends Activity implements OnClickListener,
                 stopSrtPlay();
             }
         }
-
-        /**
-         * 检查复读模式是否失效:在复读的时候,如果翻页的范围超出了复读范围
-         * 
-         * @return
-         */
-        private boolean isReplayInvalid()
-        {
-            return replayCtrl
-                    && (getCurIndex() < beginReplayIndex || getCurIndex() > endReplayIndex);
-        };
     };
-
-    private boolean isAutoPlayModel()
-    {
-        return autoPlayNextCtrl && SrtSetting.isAutoPlayNext();
-    }
 
     private void showSkipWheel()
     {
@@ -633,57 +489,12 @@ public class SrtActivity extends Activity implements OnClickListener,
 
     private void showChooseMovieWheel()
     {
-        File srtFolderFile = new File(srtFolder);
         try
         {
-
-            final List<File> tvFolderFiles = new ArrayList<File>();
-
-            for (File f : MyFileUtil.getSortFiles(srtFolderFile.listFiles()))
-            {
-                if (f.isDirectory())
-                {
-                    tvFolderFiles.add(f);
-                }
-            }
-            int tvs = tvFolderFiles.size();
-            final String[] leftArr = new String[tvs];
-            final String[][] rightArr = new String[tvs][];
-            int i = 0;
-            for (File folder : tvFolderFiles)
-            {
-                // 文件夹最大只取10位
-                leftArr[i] = BasicStringUtil.subString(folder.getName(), 0, 10);
-                File[] listFiles = folder.listFiles();
-                List<File> fileList = MyFileUtil.getSortFiles(listFiles);
-                int length = 0;
-                for (File f2 : fileList)
-                {
-                    if (f2.isFile()
-                            && (f2.getName().endsWith("ass") || f2.getName()
-                                    .endsWith("srt")))
-                    {
-                        length++;
-                    }
-                }
-                String[] arr = new String[length];
-                int j = 0;
-                for (File f2 : fileList)
-                {
-                    if (f2.isFile()
-                            && (f2.getName().endsWith("ass") || f2.getName()
-                                    .endsWith("srt")))
-                    {
-                        srtFilePathes.put(DELTA_UNIQUE * i + j,
-                                f2.getAbsolutePath());
-                        // 文件名最大只取8位
-                        arr[j++] = BasicStringUtil.subString(TextFormatUtil
-                                .getFileNameNoExtend(f2.getName()), 0, 8);
-                    }
-                }
-                rightArr[i] = arr;
-                i++;
-            }
+            final String[] leftArr = srtPlayService.getDirs();
+            System.out.println(Arrays.toString(leftArr));
+            final String[][] rightArr = srtPlayService.getDirsFiles();
+            System.out.println(Arrays.toString(rightArr));
             WheelDialogShowUtil.showRelativeDialog(this, "选择剧集", leftArr,
                     rightArr, defaultMoviePoint[0], defaultMoviePoint[1],
                     new AfterWheelChooseListener()
@@ -695,11 +506,11 @@ public class SrtActivity extends Activity implements OnClickListener,
                                     .toString());
                             defaultMoviePoint[1] = Integer.valueOf(objs[1]
                                     .toString());
-                            String srtFilePath = srtFilePathes.get(DELTA_UNIQUE
-                                    * defaultMoviePoint[0]
-                                    + defaultMoviePoint[1]);
+                            String srtFilePath = srtPlayService
+                                    .getSrtFileByArrIndex(defaultMoviePoint[0],
+                                            defaultMoviePoint[1]);
                             initFileTv(srtFilePath);
-                            showNewSrtFile(srtFilePath);
+                            srtPlayService.showNewSrtFile(srtFilePath);
                         }
 
                     });
@@ -710,44 +521,16 @@ public class SrtActivity extends Activity implements OnClickListener,
         }
     }
 
-    /**
-     * 停止原来的字幕自动播放
-     */
-    private void stopSrtPlayThread()
+    public void getSrtInfoAndPlay(SRT_VIEW_TYPE view_type)
     {
-        if (autoPlayThread != null)
-        {
-            autoPlayThread.interrupt();
-        }
-    }
 
-    private void getSrtInfoAndPlay(int btId)
-    {
         if (alertDialog != null)
         {
             alertDialog.hide();
         }
         try
         {
-            SrtInfo srt = null;
-            switch (btId)
-            {
-            case R.id.btnFirst:
-                srt = DataHolder.getFirst();
-                break;
-            case R.id.btnLast:
-                srt = DataHolder.getLast();
-                break;
-            case VIEW_LEFT:
-                srt = DataHolder.getPre();
-                break;
-            case VIEW_RIGHT:
-                srt = DataHolder.getNext();
-                break;
-            case VIEW_CURRENT:
-                srt = DataHolder.getCurrent();
-                break;
-            }
+            SrtInfo srt = srtPlayService.getSrtInfo(view_type);
             if (srt != null)
             {
                 setContentAndPlay(srt);
@@ -757,7 +540,7 @@ public class SrtActivity extends Activity implements OnClickListener,
         {
             // btnPlay.setText("播放");
             stopSrtPlay();
-            ToastUtil.showShortToast(this, "错误:" + ex.getMessage());
+            ToastUtil.showLongToast(this, ex.getMessage());
         }
     }
 
@@ -806,46 +589,13 @@ public class SrtActivity extends Activity implements OnClickListener,
     @Override
     public void doLeft()
     {
-        getSrtInfoAndPlay(VIEW_LEFT);
+        getSrtInfoAndPlay(SRT_VIEW_TYPE.VIEW_LEFT);
     }
 
     @Override
     public void doRight()
     {
-        getSrtInfoAndPlay(VIEW_RIGHT);
-    }
-
-    /**
-     * 控制切换是否复读,快捷设置仅复读本句
-     */
-    private void switchReplayModel()
-    {
-        this.replayCtrl = replayCtrl ? false : true;
-        if (replayCtrl)
-        {
-            setReplayIndex(getCurIndex(), getCurIndex());
-        }
-        ToastUtil.showShortToast(getApplicationContext(), replayCtrl ? "复读"
-                : "不复读");
-    }
-
-    private void setReplayIndex(int bIndex, int eIndex)
-    {
-        if (bIndex > eIndex)
-        {
-            ToastUtil.showLongToast(this, "结束时间不能小于开始时间!");
-        }
-        else
-        {
-            beginReplayIndex = bIndex;
-            endReplayIndex = eIndex;
-        }
-    }
-
-    private void stopReplayModel()
-    {
-        this.replayCtrl = false;
-        setReplayIndex(-1, -1);
+        getSrtInfoAndPlay(SRT_VIEW_TYPE.VIEW_RIGHT);
     }
 
     @Override
@@ -861,7 +611,6 @@ public class SrtActivity extends Activity implements OnClickListener,
     {
         if (alertDialog != null)
         {
-            System.out.println();
             alertDialog.dismiss();
         }
         HeadSetUtil.getInstance().close(this);
@@ -873,7 +622,7 @@ public class SrtActivity extends Activity implements OnClickListener,
         @Override
         public void onDoubleClick()
         {
-            switchReplayModel();
+            srtPlayService.switchReplayModel();
         }
 
         @Override
@@ -943,11 +692,16 @@ public class SrtActivity extends Activity implements OnClickListener,
     public void uncaughtException(Thread thread, Throwable ex)
     {
         Log.i("AAA", "uncaughtException   " + ex);
-        stopSrtPlay();
-        ToastUtil.showShortToast(this, "播放出现异常");
         for (StackTraceElement o : ex.getStackTrace())
         {
             System.out.println(o.toString());
         }
+        stopSrtPlay();
+        ToastUtil.showShortToast(this, "播放出现异常");
+    }
+
+    public void reveiveMsg(Message msg)
+    {
+        autoPlayHandler.sendMessage(msg);
     }
 }

@@ -87,13 +87,13 @@ public class DataHolder
         {
             srtIndex = 0;
             indexMap.put(fileKey, srtIndex);
-            throw new RuntimeException("下标越界!");
+            throw new RuntimeException("已经是第一条了!");
         }
         if (srtIndex == list.size())
         {
             srtIndex = list.size() - 1;
             indexMap.put(fileKey, srtIndex);
-            throw new RuntimeException("下标越界!");
+            throw new RuntimeException("已经读完了!");
         }
         return list.get(srtIndex);
     }
