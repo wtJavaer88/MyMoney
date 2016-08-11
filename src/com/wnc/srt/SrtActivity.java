@@ -492,6 +492,7 @@ public class SrtActivity extends Activity implements OnClickListener,
         btnPlay.setText("播放");
         SrtVoiceHelper.stop();
         stopSrtPlayThread();
+        autoPlayThread = null;
         autoPlayNextCtrl = false;
     }
 
@@ -543,10 +544,17 @@ public class SrtActivity extends Activity implements OnClickListener,
         @Override
         public void handleMessage(android.os.Message msg)
         {
+
+            if (isReplayInvalid())
+            {
+                stopReplayModel();
+            }
             if (replayCtrl)
             {
-                System.out.println("6:" + DataHolder.getCurrentSrtIndex() + " "
-                        + beginReplayIndex + " " + endReplayIndex);
+                // System.out.println("6:" + DataHolder.getCurrentSrtIndex() +
+                // " "
+                // + beginReplayIndex + " " + endReplayIndex);
+                // 复读结束时,回到复读开始的地方继续复读
                 if (getCurIndex() == endReplayIndex)
                 {
                     DataHolder.setCurrentSrtIndex(beginReplayIndex);
@@ -554,18 +562,30 @@ public class SrtActivity extends Activity implements OnClickListener,
                 }
                 else
                 {
-                    getSrtInfoAndPlay(VIEW_RIGHT);
+                    // 复读模式下,也会自动播放下一条,但是临时性的
+                    doRight();
                 }
             }
             else if (isAutoPlayModel())
             {
-                // 只有在自动播放模式下,才播放下一条
+                // 在自动播放模式下,播放下一条
                 doRight();
             }
             else
             {
                 stopSrtPlay();
             }
+        }
+
+        /**
+         * 检查复读模式是否失效:在复读的时候,如果翻页的范围超出了复读范围
+         * 
+         * @return
+         */
+        private boolean isReplayInvalid()
+        {
+            return replayCtrl
+                    && (getCurIndex() < beginReplayIndex || getCurIndex() > endReplayIndex);
         };
     };
 
