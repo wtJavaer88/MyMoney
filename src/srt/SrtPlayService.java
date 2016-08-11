@@ -16,7 +16,6 @@ import com.wnc.basic.BasicStringUtil;
 import com.wnc.mymoney.util.app.ToastUtil;
 import com.wnc.mymoney.util.common.MyFileUtil;
 import com.wnc.mymoney.util.common.TextFormatUtil;
-import com.wnc.srt.PickerHelper;
 import com.wnc.srt.SrtActivity;
 import com.wnc.srt.SrtSetting;
 import com.wnc.srt.SrtVoiceHelper;
@@ -91,6 +90,16 @@ public class SrtPlayService
             break;
         }
         return srt;
+    }
+
+    public String getPleyProgress()
+    {
+        final List<SrtInfo> list = DataHolder.map.get(getCurFile());
+        if (list == null)
+        {
+            return "";
+        }
+        return "(" + (getCurIndex() + 1) + "/" + list.size() + ")";
     }
 
     public int getCurIndex()

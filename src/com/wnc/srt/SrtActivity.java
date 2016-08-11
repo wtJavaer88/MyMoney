@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
@@ -66,7 +67,7 @@ public class SrtActivity extends Activity implements OnClickListener,
     { 0, -1 };// 初次使用请把右边序号设为-1,以便程序判断
 
     String[] settingItems = new String[]
-    { "自动下一条", "播放声音", "打开复读", "音量调节" };
+    { "自动下一条", "播放声音", "打开复读", "音量调节", "隐藏中文" };
     static SrtPlayService srtPlayService;
 
     @Override
@@ -203,6 +204,9 @@ public class SrtActivity extends Activity implements OnClickListener,
                                         AudioManager.ADJUST_RAISE,
                                         AudioManager.FX_FOCUS_NAVIGATION_UP);
                                 break;
+                            case 4:
+                                toggleChsTv();
+                                break;
                             default:
                                 break;
                             }
@@ -214,6 +218,7 @@ public class SrtActivity extends Activity implements OnClickListener,
                             e.printStackTrace();
                         }
                     }
+
                 })
                 .setNegativeButton("取消", new DialogInterface.OnClickListener()
                 {
@@ -231,6 +236,10 @@ public class SrtActivity extends Activity implements OnClickListener,
         chsTv = (TextView) findViewById(R.id.chs_tv);
         engTv = (TextView) findViewById(R.id.eng_tv);
         timelineTv = (TextView) findViewById(R.id.timeline_tv);
+
+        chsTv.setMovementMethod(new ScrollingMovementMethod());
+        engTv.setMovementMethod(new ScrollingMovementMethod());
+
         engTv.setOnLongClickListener(this);
         timelineTv.setOnClickListener(this);
         movieTv.setOnClickListener(this);
@@ -269,6 +278,18 @@ public class SrtActivity extends Activity implements OnClickListener,
 
                 movieTv.setText(folder + " / " + name);
             }
+        }
+    }
+
+    private void toggleChsTv()
+    {
+        if (isChsShow())
+        {
+            chsTv.setVisibility(View.INVISIBLE);
+        }
+        else
+        {
+            chsTv.setVisibility(View.VISIBLE);
         }
     }
 
@@ -329,7 +350,13 @@ public class SrtActivity extends Activity implements OnClickListener,
         settingItems[0] = !SrtSetting.isAutoPlayNext() ? "自动下一条" : "只播放一条";
         settingItems[1] = !SrtSetting.isPlayVoice() ? "播放声音" : "不播放声音";
         settingItems[2] = !srtPlayService.isReplayCtrl() ? "复读" : "不复读";
+        settingItems[4] = !isChsShow() ? "显示中文" : "隐藏中文";
         alertDialog = settingDialogBuilder.show();
+    }
+
+    private boolean isChsShow()
+    {
+        return chsTv.getVisibility() == View.VISIBLE;
     }
 
     private void showSrtInfoWheel()
@@ -574,6 +601,8 @@ public class SrtActivity extends Activity implements OnClickListener,
             defaultTimePoint[1] = srt.getFromTime().getMinute();
             defaultTimePoint[2] = srt.getFromTime().getSecond();
         }
+        ((TextView) findViewById(R.id.progress_tv)).setText(srtPlayService
+                .getPleyProgress());
     }
 
     @Override

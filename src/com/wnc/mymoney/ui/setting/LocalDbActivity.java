@@ -45,6 +45,7 @@ public class LocalDbActivity extends Activity
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                     final int arg2, long arg3)
             {
+                final Activity activity = LocalDbActivity.this;
                 ListView lv = (ListView) arg0;
                 final HashMap map = (HashMap) (lv).getItemAtPosition(arg2);
                 // System.out.println(map);
@@ -69,14 +70,11 @@ public class LocalDbActivity extends Activity
                                                 if (BackUpDataUtil.canBackUpDb)
                                                 {
                                                     BackUpDataUtil
-                                                            .backupDatabase(getApplicationContext());
+                                                            .backupDatabase(activity);
                                                 }
-                                                if (MoveDbUtil
-                                                        .moveSdCardDb(
-                                                                dbpath,
-                                                                getApplicationContext()
-                                                                        .getDatabasePath(
-                                                                                "money.db")))
+                                                if (MoveDbUtil.moveSdCardDb(
+                                                        dbpath,
+                                                        activity.getDatabasePath("money.db")))
                                                 {
                                                     ToastUtil
                                                             .showLongToast(
@@ -95,8 +93,7 @@ public class LocalDbActivity extends Activity
                                             else if (which == 1)
                                             {
                                                 ConfirmUtil.confirmDelete(
-                                                        LocalDbActivity.this,
-                                                        "确定要删除数据吗?",
+                                                        activity, "确定要删除数据吗?",
                                                         new PositiveEvent()
                                                         {
                                                             @Override
@@ -125,10 +122,8 @@ public class LocalDbActivity extends Activity
                                             }
                                             else if (which == 2)
                                             {
-                                                ShareUtil
-                                                        .shareFile(
-                                                                getApplicationContext(),
-                                                                dbpath);
+                                                ShareUtil.shareFile(activity,
+                                                        dbpath);
                                             }
                                         }
                                         catch (Exception ex)
