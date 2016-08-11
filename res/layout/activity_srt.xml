@@ -8,7 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:orientation="horizontal" >
 
         <Button
@@ -100,7 +100,6 @@
             android:textSize="@dimen/dimen_15_dip"
             android:textStyle="bold" />
 
-
         <Button
             android:id="@+id/btnSkip"
             android:layout_width="60dp"
@@ -141,8 +140,14 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal" >
+        android:layout_gravity="center" >
+
+        <ImageButton
+            android:id="@+id/starBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#00000000"
+            android:src="@drawable/star2" />
 
         <TextView
             android:id="@+id/timeline_tv"
@@ -152,6 +157,7 @@
             android:layout_marginTop="3dp"
             android:text="00:00:00,000 --->  00:00:00,000"
             android:textColor="@color/white" />
+
         <TextView
             android:id="@+id/progress_tv"
             android:layout_width="wrap_content"
@@ -168,8 +174,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="3dp"
-        android:singleLine="false"
         android:maxLines="2"
+        android:singleLine="false"
         android:textColor="#820072"
         android:textSize="40dp" />
 
@@ -179,8 +185,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="3dp"
-        android:singleLine="false"
         android:maxLines="2"
+        android:singleLine="false"
         android:textColor="#820072"
         android:textSize="40dp" />
 

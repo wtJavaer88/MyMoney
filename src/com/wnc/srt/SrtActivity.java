@@ -592,6 +592,9 @@ public class SrtActivity extends Activity implements OnClickListener,
             chsTv.setText(srt.getChs() == null ? "NULL" : srt.getChs());
             engTv.setText(srt.getEng() == null ? "NULL" : srt.getEng());
         }
+
+        checkLineCount();
+
         if (srt.getFromTime() != null && srt.getToTime() != null)
         {
             timelineTv.setText(srt.getFromTime().toString() + " ---> "
@@ -603,6 +606,22 @@ public class SrtActivity extends Activity implements OnClickListener,
         }
         ((TextView) findViewById(R.id.progress_tv)).setText(srtPlayService
                 .getPleyProgress());
+    }
+
+    private void checkLineCount()
+    {
+        ToastUtil.cancel();
+        if (engTv.getLineCount() > 2)
+        {
+            ToastUtil.showLongToast(this, "英文超过两行,请手动滚动");
+        }
+        if (chsTv.getLineCount() > 2)
+        {
+            ToastUtil.showLongToast(this, "中文超过两行,请手动滚动");
+        }
+        // 下次开始,自动回到第一行
+        engTv.scrollTo(0, 0);
+        chsTv.scrollTo(0, 0);
     }
 
     @Override

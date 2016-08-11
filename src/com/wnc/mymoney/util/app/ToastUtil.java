@@ -10,10 +10,7 @@ public class ToastUtil
 
     public static void showShortToast(Context context, Object toastMsg)
     {
-        if (toast != null)
-        {
-            toast.cancel();
-        }
+        cancel();
         if (valid(context, toastMsg))
         {
             toast = Toast.makeText(context, toastMsg.toString(),
@@ -24,15 +21,20 @@ public class ToastUtil
 
     public static void showLongToast(Context context, Object toastMsg)
     {
-        if (toast != null)
-        {
-            toast.cancel();
-        }
+        cancel();
         if (valid(context, toastMsg))
         {
             toast = Toast.makeText(context, toastMsg.toString(),
                     Toast.LENGTH_LONG);
             toast.show();
+        }
+    }
+
+    public static void cancel()
+    {
+        if (toast != null)
+        {
+            toast.cancel();
         }
     }
 
