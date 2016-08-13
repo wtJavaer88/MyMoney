@@ -28,7 +28,7 @@ import com.wnc.mymoney.bean.Trade;
 import com.wnc.mymoney.dao.TransactionsDao;
 import com.wnc.mymoney.uihelper.HorGestureDetectorListener;
 import com.wnc.mymoney.uihelper.MyExpandableListAdapter;
-import com.wnc.mymoney.uihelper.MyHorizontalGestureDetector;
+import com.wnc.mymoney.uihelper.MyGestureDetector;
 import com.wnc.mymoney.uihelper.MyListViewAdapter;
 import com.wnc.mymoney.util.common.TextFormatUtil;
 import com.wnc.mymoney.util.enums.TOTAL_RANGE;
@@ -88,7 +88,7 @@ public class NavTransactionActivity extends DataViewActivity implements View.OnC
 
 		initDateRange();
 
-		this.gestureDetector = new GestureDetector(this, new MyHorizontalGestureDetector(0.33, this));
+		this.gestureDetector = new GestureDetector(this, new MyGestureDetector(0.33, 0, this));
 
 		initViews();
 		initData();

@@ -249,7 +249,7 @@ public class WheelDialogShowUtil
 			@Override
 			public void onChanged(WheelView wheel, int oldValue, int newValue)
 			{
-				ToastUtil.showShortToast(context, DataHolder.getCurrentSrtInfos().get(newValue).getEng());
+				ToastUtil.showShortToast(context, DataHolder.getCurrentSrtInfos().get(newValue).getChs());
 			}
 		};
 		wheelview1.addChangingListener(onWheelChangedListener);
