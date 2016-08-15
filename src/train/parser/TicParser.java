@@ -54,13 +54,11 @@ public class TicParser
 
     private void parseTicketsFromTrain(String train)
     {
-        System.out.println("15:" + train);
         TicketInfo tInfo = new TicketInfo();
         String code = firstMatch(train, "station_train_code\":\"([\\S]+?)\",");
         String zyString = firstMatch(train, "\"zy_num\":\"([\\S]+?)\"");
         String zeString = firstMatch(train, "\"ze_num\":\"([\\S]+?)\"");
         String wzString = firstMatch(train, "\"wz_num\":\"(.+?)\"");
-        System.out.println("wzString:" + wzString);
         String yzString = firstMatch(train, "\"yz_num\":\"([\\S]+?)\"");
         String stString = firstMatch(train, "\"start_time\":\"([\\S]+?)\"");
         String arString = firstMatch(train, "\"arrive_time\":\"([\\S]+?)\"");
@@ -97,7 +95,7 @@ public class TicParser
         Pattern p = Pattern.compile(regex);
         Matcher matcher = p.matcher(testStr);
         // 使用while将会对每一个匹配的对象都找出分组
-        while (matcher.find())
+        if (matcher.find())
         {
             ret = matcher.group(1);
         }

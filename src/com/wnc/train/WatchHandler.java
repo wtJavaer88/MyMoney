@@ -32,7 +32,6 @@ public class WatchHandler extends Handler
             System.out.println("msg1.obj.toString():  " + msg.obj.toString());
             String result = msg.obj.toString();
             boolean abortSearch = trainActivity.isAbortSearch();
-            System.out.println("15:abortSearch" + abortSearch);
             if (abortSearch)
             {
                 return;
@@ -41,7 +40,6 @@ public class WatchHandler extends Handler
             {
                 return;
             }
-            System.out.println("15:TicParser");
             TicParser ticParser = new TicParser(result);
             ticParser.refresh();
             ticParser.parse();
