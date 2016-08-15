@@ -121,7 +121,7 @@ public class SrtPlayService
 			DataHolder.switchFile(srtFile);
 			if (!DataHolder.map.containsKey(srtFile))
 			{
-				PickerHelper.dataEntity(getCurFile());
+				SrtFileDataHelper.dataEntity(getCurFile());
 				srtActivity.getSrtInfoAndPlay(SRT_VIEW_TYPE.VIEW_RIGHT);
 			}
 			else
@@ -326,26 +326,18 @@ public class SrtPlayService
 		{
 			File[] listFiles = folder.listFiles();
 			List<File> fileList = MyFileUtil.getSortFiles(listFiles);
-			int length = 0;
-			for (File f2 : fileList)
-			{
-				if (f2.isFile() && (f2.getName().endsWith("ass") || f2.getName().endsWith("srt")))
-				{
-					length++;
-				}
-			}
-			String[] arr = new String[length];
+			List<String> srtList = new ArrayList<String>();
 			int j = 0;
 			for (File f2 : fileList)
 			{
-				if (f2.isFile() && (f2.getName().endsWith("ass") || f2.getName().endsWith("srt")))
+				if (SrtTextHelper.isSrtfile(f2))
 				{
 					srtFilePathes.put(DELTA_UNIQUE * i + j, f2.getAbsolutePath());
 					// 文件名最大只取8位
-					arr[j++] = BasicStringUtil.subString(TextFormatUtil.getFileNameNoExtend(f2.getName()), 0, 8);
+					srtList.add(BasicStringUtil.subString(TextFormatUtil.getFileNameNoExtend(f2.getName()), 0, 8));
 				}
 			}
-			rightArr[i] = arr;
+			rightArr[i] = srtList.toArray(new String[srtList.size()]);
 			i++;
 		}
 		return rightArr;

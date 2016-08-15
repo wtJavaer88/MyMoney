@@ -28,4 +28,8 @@ public class SrtTextHelper
 		return getSrtVoiceFolder(DataHolder.getFileKey()) + File.separator + DataHolder.getCurrent().getFromTime().toString().replace(":", "") + ".mp3";
 	}
 
+	public static boolean isSrtfile(File f)
+	{
+		return f.isFile() && (f.getName().endsWith("ass") || f.getName().endsWith("srt") || f.getName().endsWith("ssa") || f.getName().endsWith("cnpy"));
+	}
 }

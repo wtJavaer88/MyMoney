@@ -1,6 +1,8 @@
-package srt;
+package srt.picker;
 
 import java.util.List;
+
+import srt.SrtInfo;
 
 public interface Picker
 {
