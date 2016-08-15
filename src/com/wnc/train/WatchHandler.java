@@ -32,6 +32,7 @@ public class WatchHandler extends Handler
             System.out.println("msg1.obj.toString():  " + msg.obj.toString());
             String result = msg.obj.toString();
             boolean abortSearch = trainActivity.isAbortSearch();
+            System.out.println("15:abortSearch" + abortSearch);
             if (abortSearch)
             {
                 return;
@@ -40,7 +41,7 @@ public class WatchHandler extends Handler
             {
                 return;
             }
-
+            System.out.println("15:TicParser");
             TicParser ticParser = new TicParser(result);
             ticParser.refresh();
             ticParser.parse();
@@ -125,12 +126,14 @@ public class WatchHandler extends Handler
             }
         }
 
+        System.out.println("15 getSelTrains:" + trainActivity.getSelTrains());
         for (String train : trainActivity.getSelTrains())
         {
             ticParser.addAssignTrain(train.trim().toUpperCase());
         }
         if (ticParser.getTicketInfos().size() > 0)
         {
+            System.out.println("15:" + ticParser.getTicketInfos());
             if (ticParser.checkAvaliable())
             {
                 if (!abortSearch)

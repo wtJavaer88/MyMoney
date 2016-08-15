@@ -54,20 +54,21 @@ public class TicParser
 
     private void parseTicketsFromTrain(String train)
     {
+        System.out.println("15:" + train);
         TicketInfo tInfo = new TicketInfo();
         String code = firstMatch(train, "station_train_code\":\"([\\S]+?)\",");
-        String zyString = firstMatch(train, "zy_num\":\"([\\S]+?)\",");
-        String zeString = firstMatch(train, "ze_num\":\"([\\S]+?)\",");
-        String wzString = firstMatch(train, "wz_num\":\"([\\S]+?)\",");
-        String yzString = firstMatch(train, "yz_num\":\"([\\S]+?)\",");
-        String stString = firstMatch(train, "start_time\":\"([\\S]+?)\",");
-        String arString = firstMatch(train, "arrive_time\":\"([\\S]+?)\",");
+        String zyString = firstMatch(train, "\"zy_num\":\"([\\S]+?)\"");
+        String zeString = firstMatch(train, "\"ze_num\":\"([\\S]+?)\"");
+        String wzString = firstMatch(train, "\"wz_num\":\"(.+?)\"");
+        System.out.println("wzString:" + wzString);
+        String yzString = firstMatch(train, "\"yz_num\":\"([\\S]+?)\"");
+        String stString = firstMatch(train, "\"start_time\":\"([\\S]+?)\"");
+        String arString = firstMatch(train, "\"arrive_time\":\"([\\S]+?)\"");
         tInfo.setTrainCode(code);
         tInfo.setYiCount(wrapCount(zyString));
         tInfo.setErCount(wrapCount(zeString));
         tInfo.setWzCount(wrapCount(wzString));
         tInfo.setYzCount(wrapCount(yzString));
-        tInfo.setYzCount(wrapCount(stString));
         tInfo.setStartTime(stString);
         tInfo.setArriveTime(arString);
         if (BasicStringUtil.isNotNullString(code.trim()))
