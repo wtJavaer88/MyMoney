@@ -64,8 +64,25 @@ public class SrtPlayService
                 + getCurFile().replace(srtActivity.srtFolder, "");
         int i = filePath.lastIndexOf(".");
         filePath = filePath.substring(0, i);
-        filePath = filePath + File.separator
-                + TextFormatUtil.getFileNameNoExtend(getCurFile()) + "_p1.pic";
+        File picFolder = new File(filePath);
+        if (picFolder.exists())
+        {
+            filePath = filePath + File.separator
+                    + TextFormatUtil.getFileNameNoExtend(getCurFile())
+                    + "_p1.pic";
+            if (!BasicFileUtil.isExistFile(filePath))
+            {
+                if (picFolder.listFiles().length > 0)
+                {
+                    filePath = picFolder.listFiles()[0].getAbsolutePath();
+                }
+            }
+        }
+        else
+        {
+            filePath = "";
+        }
+        System.out.println("filePath:" + filePath);
         return filePath;
     }
 

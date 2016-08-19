@@ -66,7 +66,7 @@ public class AssPicker implements Picker
     public List<SrtInfo> getSrtInfos(int start, int end)
     {
         List<SrtInfo> srtInfos = new ArrayList<SrtInfo>();
-        int index = -1;
+        int index = 1;
         TimeInfo fromTime = null;
         TimeInfo toTime = null;
         String chs = null;
@@ -78,7 +78,7 @@ public class AssPicker implements Picker
             if (valid(parts))
             {
                 String dialogue = getDialogAfterEight(parts);
-                index++;
+
                 fromTime = parseTimeInfo(parts[1]);
                 toTime = parseTimeInfo(parts[2]);
                 int pos = dialogue.indexOf("\\N");
@@ -102,6 +102,7 @@ public class AssPicker implements Picker
                     srtInfo.setChs(chs);
                     srtInfo.setEng(eng);
                     srtInfos.add(srtInfo);
+                    index++;
                     fromTime = null;
                     toTime = null;
                     chs = null;
