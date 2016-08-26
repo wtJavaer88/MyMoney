@@ -32,7 +32,7 @@ public class SrtPlayService
     final String favoriteTxt = Environment.getExternalStorageDirectory()
             .getPath() + "/wnc/app/srt/favorite.txt";
     final String thumbPicFolder = Environment.getExternalStorageDirectory()
-            .getPath() + "/wnc/app/图片/";
+            .getPath() + "/wnc/res/srtpic/";
     // 文件夹名称最大只取12位
     final int FOLDER_NAME_MAXLEN = 12;
     final int DELTA_UNIQUE = 1000;// 文件夹和所属文件的Map的Key规则
