@@ -19,6 +19,8 @@ public class SysInit
     {
         context = context2;
         BackUpDataUtil.clearTmpZips();
+        // 初始化节日休假以及调休信息
+        FestivalUtil.init(context);
 
         MyAppParams.getInstance().setPackageName(context.getPackageName());
         MyAppParams.getInstance().setResources(context.getResources());

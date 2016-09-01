@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -23,13 +25,16 @@ import com.wnc.mymoney.R;
 import com.wnc.mymoney.bean.CostChartTotal;
 import com.wnc.mymoney.bean.DayRangePoint;
 import com.wnc.mymoney.dao.TransactionsDao;
+import com.wnc.mymoney.uihelper.HorGestureDetectorListener;
+import com.wnc.mymoney.uihelper.MyAppParams;
+import com.wnc.mymoney.uihelper.MyGestureDetector;
 import com.wnc.mymoney.util.app.ToastUtil;
 import com.wnc.mymoney.util.common.TextFormatUtil;
 import com.wnc.mymoney.util.enums.CostTypeUtil;
 import com.wnc.mymoney.util.enums.TOTAL_RANGE;
 
 public class MonthPieChartActivity extends BaseActivity implements
-        OnClickListener
+        OnClickListener, HorGestureDetectorListener
 {
     private PieView pieView;
     private MyButton myButton;
@@ -75,6 +80,11 @@ public class MonthPieChartActivity extends BaseActivity implements
         initIntentData();
         initViews();
         setTitle();
+        this.gestureDetector = new GestureDetector(this, new MyGestureDetector(
+                0.33, 0, this).setEffectHorRange(
+                MyAppParams.getScreenHeight() * 0.8,
+                MyAppParams.getScreenHeight() * 1.0));
+
     }
 
     private void initIntentData()
@@ -326,6 +336,30 @@ public class MonthPieChartActivity extends BaseActivity implements
         {
             this.pieView.rotateDisable();
         }
+    }
+
+    private GestureDetector gestureDetector;
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent paramMotionEvent)
+    {
+        if (!this.gestureDetector.onTouchEvent(paramMotionEvent))
+        {
+            return super.dispatchTouchEvent(paramMotionEvent);
+        }
+        return true;
+    }
+
+    @Override
+    public void doLeft()
+    {
+        preDateRangePie();
+    }
+
+    @Override
+    public void doRight()
+    {
+        nextDateRangePie();
     }
 
 }
