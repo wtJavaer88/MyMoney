@@ -43,6 +43,7 @@ public class WatchHandler extends Handler
             TicParser ticParser = new TicParser(result);
             ticParser.refresh();
             ticParser.parse();
+            ticParser.setMustSite(trainActivity.getMustSite());
             parseResult(ticParser, abortSearch);
         }
         else if (msg.what == 22)

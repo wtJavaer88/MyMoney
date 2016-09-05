@@ -1,16 +1,17 @@
-package com.wnc.mymoney.util;
+package com.wnc.mymoney.util.app;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
+import android.content.Context;
 
-public class AssertUtil
+public class AssertsUtil
 {
-    public static List<String> getContent(Activity context, String fileName,
+    public static List<String> getContent(Context context, String fileName,
             String charSet)
     {
         List<String> list = new ArrayList<String>();
@@ -19,7 +20,7 @@ public class AssertUtil
         BufferedReader br = null;
         try
         {
-            in = context.getAssets().open(fileName);
+            in = getInputStream(context, fileName);
             bis = new InputStreamReader(in, charSet);
             br = new BufferedReader(bis);
 
@@ -48,5 +49,11 @@ public class AssertUtil
             }
         }
         return list;
+    }
+
+    public static InputStream getInputStream(Context context, String fileName)
+            throws IOException
+    {
+        return context.getAssets().open(fileName);
     }
 }

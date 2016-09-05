@@ -39,6 +39,13 @@ public class TicParser
         return resultJson;
     }
 
+    boolean mustSite = false;
+
+    public void setMustSite(boolean mustSite)
+    {
+        this.mustSite = mustSite;
+    }
+
     public void parse()
     {
         String[] data = resultJson.split("\"train_no\":");
@@ -129,7 +136,8 @@ public class TicParser
             if (trains.size() == 0 || trains.contains(info.getTrainCode()))
             {
                 if (info.getYiCount() > 0 || info.getErCount() > 0
-                        || info.getWzCount() > 0 || info.getYzCount() > 0)
+                        || info.getYzCount() > 0
+                        || (!mustSite && info.getWzCount() > 0))
                 {
                     return true;
                 }

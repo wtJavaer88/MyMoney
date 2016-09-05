@@ -1,5 +1,6 @@
 package com.wnc.train;
 
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Arrays;
 
 import train.dao.StationDao;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,18 +23,24 @@ import com.wnc.basic.BasicNumberUtil;
 import com.wnc.basic.BasicStringUtil;
 import com.wnc.mymoney.R;
 import com.wnc.mymoney.uihelper.AfterWheelChooseListener;
+import com.wnc.mymoney.uihelper.Setting;
 import com.wnc.mymoney.util.app.ToastUtil;
 import com.wnc.mymoney.util.app.WheelDialogShowUtil;
 import com.wnc.mymoney.util.common.TextFormatUtil;
 import com.wnc.mymoney.widget.ComboBox;
 import com.wnc.mymoney.widget.ComboBox.ListViewItemClickListener;
+import com.wnc.mymoney.widget.MyToggle;
+import com.wnc.mymoney.widget.MyToggle.OnToggleStateListener;
 
-public class TrainTicketActivity extends Activity
+public class TrainTicketActivity extends Activity implements
+        UncaughtExceptionHandler
 {
     private Button watch_Btn;
     private Button chooseTrain_Btn;
     private Button chooseDate_Btn;
     private Button clear_Btn;
+    // 自定义开关对象
+    private MyToggle toggle;
 
     private EditText fromStation_Et;
     private EditText toStation_Et;
@@ -58,6 +66,8 @@ public class TrainTicketActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ticket_activity);
+        Thread.setDefaultUncaughtExceptionHandler(this);
+
         initViews();
         // 对ui助手进行初始化
         initTrainUIMsgHelper();
@@ -101,6 +111,36 @@ public class TrainTicketActivity extends Activity
                 }
             }
         });
+
+        toggle = (MyToggle) findViewById(R.id.togSite);
+        toggle.setImageRes(R.drawable.btn_switch, R.drawable.btn_switch,
+                R.drawable.btn_slip);
+        toggle.setToggleState(false);
+        toggle.setOnToggleStateListener(new OnToggleStateListener()
+        {
+            @Override
+            public void onToggleState(boolean state)
+            {
+                if (state)
+                {
+                    ToastUtil.showShortToast(getApplicationContext(), "开关开启");
+                    Setting.setBACKUP_AUTO("true");
+                }
+                else
+                {
+                    ToastUtil.showShortToast(getApplicationContext(), "开关关闭");
+                    Setting.setBACKUP_AUTO("false");
+                }
+            }
+        });
+    }
+
+    public void exchangeCity(View v)
+    {
+        String city1 = fromStation_Et.getText().toString();
+        String city2 = toStation_Et.getText().toString();
+        fromStation_Et.setText(city2);
+        toStation_Et.setText(city1);
     }
 
     public void watchTickets(View v)
@@ -364,6 +404,21 @@ public class TrainTicketActivity extends Activity
     public Handler getHandler_watch()
     {
         return this.handler_watch;
+    }
+
+    @Override
+    public void uncaughtException(Thread thread, Throwable ex)
+    {
+        Log.i("AAA", "uncaughtException   " + ex);
+        for (StackTraceElement o : ex.getStackTrace())
+        {
+            System.out.println(o.toString());
+        }
+    }
+
+    public boolean getMustSite()
+    {
+        return this.toggle.getToggleState();
     }
 
 }

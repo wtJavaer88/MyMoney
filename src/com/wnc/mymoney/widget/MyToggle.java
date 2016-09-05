@@ -173,6 +173,11 @@ public class MyToggle extends View implements OnTouchListener
             setMeasuredDimension(bkgSwitchOn.getWidth(),
                     bkgSwitchOn.getHeight());
         }
+        else
+        {
+            setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        }
     }
 
     /**
@@ -197,6 +202,11 @@ public class MyToggle extends View implements OnTouchListener
     public void setToggleState(boolean state)
     {
         toggleStateOn = state;
+    }
+
+    public boolean getToggleState()
+    {
+        return toggleStateOn;
     }
 
     /**

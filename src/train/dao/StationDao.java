@@ -1,14 +1,12 @@
 package train.dao;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
 
+import com.wnc.mymoney.util.app.AssertsUtil;
 import com.wnc.string.PatternUtil;
 
 public class StationDao
@@ -38,45 +36,18 @@ public class StationDao
 
     private static void getContent(Activity context)
     {
-        InputStream in = null;
-        InputStreamReader bis = null;
-        BufferedReader br = null;
-        try
+        for (String message : AssertsUtil.getContent(context, "station.txt",
+                "GBK"))
         {
-            in = context.getAssets().open("station.txt");
-            bis = new InputStreamReader(in, "GBK");
-            br = new BufferedReader(bis);
-
-            String message = null;
-
-            while ((message = br.readLine()) != null)
-            {
-                parseStations(message);
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        finally
-        {
-            try
-            {
-                br.close();
-                bis.close();
-                in.close();
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
+            parseStations(message);
         }
     }
 
-    private static void parseStations(String message) throws Exception
+    private static void parseStations(String message)
     {
         List<String> pairs = PatternUtil.getPatternStrings(message,
                 "[\u4e00-\u9fa5]+\\|[A-Z]+");
+        System.out.println("pairs.size():" + pairs.size());
         for (String pair : pairs)
         {
             int index = pair.indexOf("|");
@@ -86,10 +57,10 @@ public class StationDao
             {
                 name = pair.substring(0, index);
                 code = pair.substring(index + 1);
-            }
-            if (!name.equals("") && !code.equals(""))
-            {
-                stations.put(name, code);
+                if (!name.equals("") && !code.equals(""))
+                {
+                    stations.put(name, code);
+                }
             }
         }
     }

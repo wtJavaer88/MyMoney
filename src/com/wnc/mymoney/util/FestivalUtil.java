@@ -8,6 +8,7 @@ import android.app.Activity;
 import com.wnc.basic.BasicDateUtil;
 import com.wnc.basic.BasicNumberUtil;
 import com.wnc.mymoney.bean.FestivalDay;
+import com.wnc.mymoney.util.app.AssertsUtil;
 import com.wnc.string.PatternUtil;
 
 public class FestivalUtil
@@ -23,7 +24,7 @@ public class FestivalUtil
     {
         for (int year = 2016; year <= 2016; year++)
         {
-            List<String> readFrom = AssertUtil.getContent(activity, year
+            List<String> readFrom = AssertsUtil.getContent(activity, year
                     + "-festival.txt", "GBK");
             for (String line : readFrom)
             {
