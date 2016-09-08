@@ -47,7 +47,7 @@
         <activity android:name="com.wnc.mymoney.ui.ViewTransActivity"></activity>
         <activity android:name="com.wnc.mymoney.test.ExpandableListViewActivity"></activity>
         <activity android:name="com.wnc.mymoney.ui.DragListActivity"></activity>
-        <activity android:name="com.wnc.train.TrainTicketActivity"></activity>
+        <activity android:name="com.wnc.train.TrainTicketActivity"  android:configChanges="orientation|keyboardHidden|screenSize"></activity>
         <activity android:name="com.wnc.train.RadioButtonListActivity"></activity>
         <activity android:name="com.wnc.mymoney.ui.MovieActivity"></activity>
         <activity android:name="com.wnc.mymoney.ui.setting.SettingActivity"></activity>

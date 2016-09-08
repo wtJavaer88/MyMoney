@@ -6,7 +6,6 @@ import java.util.Arrays;
 import train.dao.StationDao;
 import train.model.QueryModel;
 import train.util.HttpsConnUtil;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,6 +21,7 @@ import com.wnc.basic.BasicDateUtil;
 import com.wnc.basic.BasicNumberUtil;
 import com.wnc.basic.BasicStringUtil;
 import com.wnc.mymoney.R;
+import com.wnc.mymoney.ui.BaseVerActivity;
 import com.wnc.mymoney.uihelper.AfterWheelChooseListener;
 import com.wnc.mymoney.uihelper.Setting;
 import com.wnc.mymoney.util.app.ToastUtil;
@@ -32,7 +32,7 @@ import com.wnc.mymoney.widget.ComboBox.ListViewItemClickListener;
 import com.wnc.mymoney.widget.MyToggle;
 import com.wnc.mymoney.widget.MyToggle.OnToggleStateListener;
 
-public class TrainTicketActivity extends Activity implements
+public class TrainTicketActivity extends BaseVerActivity implements
         UncaughtExceptionHandler
 {
     private Button watch_Btn;
