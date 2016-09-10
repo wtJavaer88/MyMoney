@@ -21,6 +21,7 @@ import com.wnc.mymoney.bean.PriceTotalBean;
 import com.wnc.mymoney.bean.Trade;
 import com.wnc.mymoney.dao.TransactionsDao;
 import com.wnc.mymoney.ui.DataViewActivity;
+import com.wnc.mymoney.uihelper.listener.TransItemClickListener;
 import com.wnc.mymoney.util.common.TextFormatUtil;
 import com.wnc.mymoney.util.enums.CostTypeUtil;
 import com.wnc.mymoney.util.enums.TOTAL_RANGE;

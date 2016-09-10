@@ -34,8 +34,8 @@ import com.wnc.mymoney.bean.Trade;
 import com.wnc.mymoney.dao.CategoryDao;
 import com.wnc.mymoney.dao.MemberDao;
 import com.wnc.mymoney.dao.TransactionsDao;
-import com.wnc.mymoney.uihelper.AfterWheelChooseListener;
-import com.wnc.mymoney.uihelper.TransItemClickListener;
+import com.wnc.mymoney.uihelper.listener.AfterWheelChooseListener;
+import com.wnc.mymoney.uihelper.listener.TransItemClickListener;
 import com.wnc.mymoney.util.app.ToastUtil;
 import com.wnc.mymoney.util.app.WheelDialogShowUtil;
 import com.wnc.mymoney.util.common.TextFormatUtil;
@@ -327,6 +327,8 @@ public class SearchTransactionActivity extends DataViewActivity implements View.
 		this.search_expense_lv.setOnItemLongClickListener(transItemClickListener);
 
 		dataReOrder();
+		System.out.println("debug");
+		System.out.println(mData);
 		if (mData.size() > 0)
 		{
 			ToastUtil.showLongToast(this, "记录数:" + mData.size() + " 消费总额:" + TextFormatUtil.getFormatMoneyStr(COST_SUM));
@@ -364,7 +366,7 @@ public class SearchTransactionActivity extends DataViewActivity implements View.
 			map.put("photo", CostTypeUtil.getFlagIcon(trade.getHaspicture()));
 			map.put("memo", trade.getMemo());
 			map.put("cost", trade.getCost());
-			map.put("searchtime", trade.getCreatelongtime());// 方便后期的排序
+			map.put("createlongtime", trade.getCreatelongtime());// 方便后期的排序
 			if (trade.getType_id() == -1)
 			{
 				COST_SUM += trade.getCost();
@@ -394,8 +396,8 @@ public class SearchTransactionActivity extends DataViewActivity implements View.
 				}
 				else if (curOrderField == ORDER_FIELD.FIELD_TIME)
 				{
-					String com1 = o1.get("searchtime") + "";
-					String com2 = o2.get("searchtime") + "";
+					Long com1 = BasicNumberUtil.getLongNumber(o1.get("createlongtime") + "");
+					Long com2 = BasicNumberUtil.getLongNumber(o2.get("createlongtime") + "");
 					return com1.compareTo(com2);
 				}
 				else if (curOrderField == ORDER_FIELD.FIELD_TYPE)
