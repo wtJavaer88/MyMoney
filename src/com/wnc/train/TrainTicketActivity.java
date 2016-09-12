@@ -22,7 +22,6 @@ import com.wnc.basic.BasicNumberUtil;
 import com.wnc.basic.BasicStringUtil;
 import com.wnc.mymoney.R;
 import com.wnc.mymoney.ui.BaseVerActivity;
-import com.wnc.mymoney.uihelper.AfterWheelChooseListener;
 import com.wnc.mymoney.uihelper.Setting;
 import com.wnc.mymoney.util.app.ToastUtil;
 import com.wnc.mymoney.util.app.WheelDialogShowUtil;
@@ -163,28 +162,34 @@ public class TrainTicketActivity extends BaseVerActivity implements
 
     public void chooseDate(View v)
     {
-        WheelDialogShowUtil.showCurrDateDialog(this,
-                new AfterWheelChooseListener()
-                {
-                    @Override
-                    public void afterWheelChoose(Object... objs)
-                    {
-
-                        String day = objs[0].toString().substring(0, 10);
-                        if (!BasicDateUtil.isDateFormatTimeString(day,
-                                "yyyy-MM-dd"))
+        WheelDialogShowUtil
+                .showCurrDateDialog(
+                        this,
+                        new com.wnc.mymoney.uihelper.listener.AfterWheelChooseListener()
                         {
-                            ToastUtil.showLongToast(getApplicationContext(),
-                                    "请检查是否有" + TextFormatUtil.addChnToDay(day)
-                                            + "这一天!");
-                        }
-                        else
-                        {
-                            date_Tv.setText(day);
-                        }
-                    }
+                            @Override
+                            public void afterWheelChoose(Object... objs)
+                            {
 
-                });
+                                String day = objs[0].toString()
+                                        .substring(0, 10);
+                                if (!BasicDateUtil.isDateFormatTimeString(day,
+                                        "yyyy-MM-dd"))
+                                {
+                                    ToastUtil.showLongToast(
+                                            getApplicationContext(),
+                                            "请检查是否有"
+                                                    + TextFormatUtil
+                                                            .addChnToDay(day)
+                                                    + "这一天!");
+                                }
+                                else
+                                {
+                                    date_Tv.setText(day);
+                                }
+                            }
+
+                        });
     }
 
     public void clearTrains(View v)

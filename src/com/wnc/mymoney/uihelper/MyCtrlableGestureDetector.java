@@ -4,14 +4,14 @@ import android.app.Activity;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 
-import com.wnc.mymoney.uihelper.listener.HorGestureDetectorListener;
-import com.wnc.mymoney.uihelper.listener.VerGestureDetectorListener;
+import com.wnc.mymoney.uihelper.listener.CtrlableHorGestureDetectorListener;
+import com.wnc.mymoney.uihelper.listener.CtrlableVerGestureDetectorListener;
 
-public class MyGestureDetector extends SimpleOnGestureListener
+public class MyCtrlableGestureDetector extends SimpleOnGestureListener
 {
 	Activity context;
-	HorGestureDetectorListener horlistener;
-	VerGestureDetectorListener verlistener;
+	CtrlableHorGestureDetectorListener horlistener;
+	CtrlableVerGestureDetectorListener verlistener;
 	double scaleX = 0.5f;
 	double scaleY = 0.5f;
 
@@ -24,14 +24,14 @@ public class MyGestureDetector extends SimpleOnGestureListener
 	 * @param scaleY
 	 * @param context
 	 */
-	public MyGestureDetector(double scaleX, double scaleY, Activity context)
+	public MyCtrlableGestureDetector(double scaleX, double scaleY, Activity context)
 	{
 		this(context);
 		setScaleX(scaleX);
 		setScaleY(scaleY);
 	}
 
-	public MyGestureDetector(double scaleX, double scaleY, Activity context, HorGestureDetectorListener listener, VerGestureDetectorListener listener2)
+	public MyCtrlableGestureDetector(double scaleX, double scaleY, Activity context, CtrlableHorGestureDetectorListener listener, CtrlableVerGestureDetectorListener listener2)
 	{
 		this(context);
 		setScaleX(scaleX);
@@ -56,16 +56,16 @@ public class MyGestureDetector extends SimpleOnGestureListener
 		}
 	}
 
-	public MyGestureDetector(Activity context)
+	public MyCtrlableGestureDetector(Activity context)
 	{
 		this.context = context;
-		if (context instanceof HorGestureDetectorListener)
+		if (context instanceof CtrlableHorGestureDetectorListener)
 		{
-			this.horlistener = (HorGestureDetectorListener) context;
+			this.horlistener = (CtrlableHorGestureDetectorListener) context;
 		}
-		if (context instanceof VerGestureDetectorListener)
+		if (context instanceof CtrlableVerGestureDetectorListener)
 		{
-			this.verlistener = (VerGestureDetectorListener) context;
+			this.verlistener = (CtrlableVerGestureDetectorListener) context;
 		}
 	}
 
@@ -84,18 +84,17 @@ public class MyGestureDetector extends SimpleOnGestureListener
 		// 超过给定的比例才滑屏
 		if (scaleX > 0 && Math.abs(deltaX) > scaleX * this.context.getWindowManager().getDefaultDisplay().getWidth())
 		{
-
 			if (this.horlistener != null)
 			{
 				if (deltaX > 0)
 				{
 					// System.out.println("left");
-					this.horlistener.doLeft();
+					this.horlistener.doLeft(new FlingPoint(e1.getX(), e1.getY()), new FlingPoint(e2.getX(), e2.getY()));
 				}
 				else if (deltaX < 0)
 				{
 					// System.out.println("right");
-					this.horlistener.doRight();
+					this.horlistener.doRight(new FlingPoint(e1.getX(), e1.getY()), new FlingPoint(e2.getX(), e2.getY()));
 				}
 			}
 		}
@@ -107,11 +106,11 @@ public class MyGestureDetector extends SimpleOnGestureListener
 			{
 				if (deltaY > 0)
 				{
-					this.verlistener.doUp();
+					this.verlistener.doUp(new FlingPoint(e1.getX(), e1.getY()), new FlingPoint(e2.getX(), e2.getY()));
 				}
 				else if (deltaY < 0)
 				{
-					this.verlistener.doDown();
+					this.verlistener.doDown(new FlingPoint(e1.getX(), e1.getY()), new FlingPoint(e2.getX(), e2.getY()));
 				}
 			}
 		}

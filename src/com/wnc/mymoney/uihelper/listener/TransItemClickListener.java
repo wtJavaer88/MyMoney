@@ -1,4 +1,4 @@
-package com.wnc.mymoney.uihelper;
+package com.wnc.mymoney.uihelper.listener;
 
 import java.util.HashMap;
 
@@ -22,6 +22,7 @@ import com.wnc.mymoney.dao.TransactionsDao;
 import com.wnc.mymoney.ui.AddOrEditTransActivity;
 import com.wnc.mymoney.ui.DataViewActivity;
 import com.wnc.mymoney.ui.ViewTransActivity;
+import com.wnc.mymoney.uihelper.MyAppParams;
 import com.wnc.mymoney.util.app.ClipBoardUtil;
 import com.wnc.mymoney.util.app.ToastUtil;
 
