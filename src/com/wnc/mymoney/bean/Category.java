@@ -5,7 +5,7 @@ public class Category implements MyWheelBean
     private int id;
     private String name;
     private String parent_id;
-    private String depth;
+    private int depth;
     private String icon;
     private String path;
     private String ordered;
@@ -45,12 +45,12 @@ public class Category implements MyWheelBean
         this.parent_id = parent_id;
     }
 
-    public String getDepth()
+    public int getDepth()
     {
         return this.depth;
     }
 
-    public void setDepth(String depth)
+    public void setDepth(int depth)
     {
         this.depth = depth;
     }

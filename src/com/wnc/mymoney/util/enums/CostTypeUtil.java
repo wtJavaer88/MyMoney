@@ -28,7 +28,7 @@ public class CostTypeUtil
         {
             if (c.getId() == id)
             {
-                if (c.getDepth().equals("1"))
+                if (c.getDepth() == 1)
                 {
                     return true;
                 }

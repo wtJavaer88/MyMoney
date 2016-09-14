@@ -78,16 +78,12 @@ public class AddOrEditTransActivity extends BaseActivity implements
 
     final String defaultOutLevelName = "食品酒水";
     final String defaultOutDescTypeName = "早中晚餐";
-    final int defaultOutTradeType = 1;
-    final int defaultOutDescTradeType = 11;
 
     final String defaultInLevelName = "资金收入";
     final String defaultInDescTypeName = "工资收入";
-    final int defaultInTradeType = 6;
-    final int defaultInDescTradeType = 61;
 
-    int curTradeType = 1;// 代表食品酒水
-    int curDescTradeType = 11;// 代表早中晚餐
+    int curTradeType = CategoryDao.defaultOutTradeType;// 代表食品酒水
+    int curDescTradeType = CategoryDao.defaultOutDescTradeType;// 代表早中晚餐
 
     private Map<String, Integer> typeMap = new HashMap<String, Integer>();
 
@@ -116,8 +112,6 @@ public class AddOrEditTransActivity extends BaseActivity implements
     private int selectedLeftIndex = 0;
     private int selectedRightIndex = 0;
 
-    private int modifyIndex = -1;
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -139,7 +133,6 @@ public class AddOrEditTransActivity extends BaseActivity implements
     private void initData()
     {
         this.isAdd = getIntent().getBooleanExtra("isAdd", true);
-        modifyIndex = getIntent().getIntExtra("index", -1);
         this.modifyTrade = (Trade) getIntent().getSerializableExtra("Trade");
 
         if (!this.isAdd && this.modifyTrade == null)
@@ -204,14 +197,14 @@ public class AddOrEditTransActivity extends BaseActivity implements
                         case 0:
                             reSetCategoryTV(defaultOutLevelName + "-->"
                                     + defaultOutDescTypeName);
-                            curTradeType = defaultOutTradeType;
-                            curDescTradeType = defaultOutDescTradeType;
+                            curTradeType = CategoryDao.defaultOutTradeType;
+                            curDescTradeType = CategoryDao.defaultOutDescTradeType;
                             break;
                         case 1:
                             reSetCategoryTV(defaultInLevelName + "-->"
                                     + defaultInDescTypeName);
-                            curTradeType = defaultInTradeType;
-                            curDescTradeType = defaultInDescTradeType;
+                            curTradeType = CategoryDao.defaultInTradeType;
+                            curDescTradeType = CategoryDao.defaultInDescTradeType;
                             break;
                         case 2:
                             reSetCategoryTV("内部转账");
