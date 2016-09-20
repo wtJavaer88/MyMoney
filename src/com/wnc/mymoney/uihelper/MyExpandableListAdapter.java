@@ -287,7 +287,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter
             map.put("name",
                     CostTypeUtil.getCostTypeName(trade.getCostdesc_id()));
             map.put("photo", CostTypeUtil.getFlagIcon(trade.getHaspicture()));
-            map.put("memo", trade.getMemo());
+            map.put("memo", MemoHelper.concatMemo(trade));
             map.put("cost", trade.getCost());
             map.put("searchDate", searchDate);
             list.add(map);
