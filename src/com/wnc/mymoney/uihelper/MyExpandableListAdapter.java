@@ -93,7 +93,6 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter
             }
             monthBalance[i] = pricebean;
         }
-        System.out.println("每日明细: " + arms);
         TransactionsDao.closeDb();
     }
 
@@ -242,16 +241,18 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter
         holder.day_of_income_tv.setText(total.getInbound() + "");
         holder.day_of_payout_tv.setText(total.getOutbound() + "");
         holder.day_of_balance_tv.setText(total.getBalance() + "");
-        simpleLvSet(holder.listview, total.getSearchDate());
+        simpleLvSet(holder, total.getSearchDate());
 
         return convertView;
     }
 
-    private void simpleLvSet(ListView listview, String searchDate)
+    private void simpleLvSet(TranListViewHolder holder, String searchDate)
     {
-        final SimpleAdapter adapter = new SimpleAdapter(activity,
-                getMapData(searchDate), R.layout.nav_year_trans_lv_item,
-                new String[]
+        ListView listview = holder.listview;
+        final List<Map<String, Object>> mapData = getMapData(searchDate);
+        setLvHeadVisible(mapData.size() > 5, holder);
+        final SimpleAdapter adapter = new SimpleAdapter(activity, mapData,
+                R.layout.nav_year_trans_lv_item, new String[]
                 { "icon", "name", "photo", "memo", "cost" }, new int[]
                 { R.id.item_icon_iv, R.id.item_name_tv, R.id.photo_flag_iv,
                         R.id.memo_tv, R.id.cost_tv });
@@ -270,6 +271,14 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter
                     + listview.getDividerHeight() * (adapter.getCount() - 1);
             listview.setLayoutParams(params);
         }
+    }
+
+    private void setLvHeadVisible(boolean b, TranListViewHolder holder)
+    {
+        int v = b ? View.VISIBLE : View.INVISIBLE;
+        holder.day_of_income_tv.setVisibility(v);
+        holder.day_of_payout_tv.setVisibility(v);
+        holder.day_of_balance_tv.setVisibility(v);
     }
 
     private List<Map<String, Object>> getMapData(String searchDate)

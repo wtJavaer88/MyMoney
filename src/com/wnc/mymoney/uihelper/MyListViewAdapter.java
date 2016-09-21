@@ -118,13 +118,17 @@ public class MyListViewAdapter extends BaseAdapter
         holder.day_of_balance_tv.setText(""
                 + this.mData.get(position).get("balance"));
 
-        simpleLvSet(holder.listview, this.mData.get(position).get("searchDate")
+        simpleLvSet(holder, this.mData.get(position).get("searchDate")
                 .toString());
     }
 
-    private void simpleLvSet(ListView listview, String searchDate)
+    private void simpleLvSet(TranListViewHolder holder, String searchDate)
     {
+        ListView listview = holder.listview;
         List<Map<String, Object>> mapData = getMapData(searchDate);
+
+        setLvHeadVisible(mapData.size() > 5, holder);
+
         final SimpleAdapter adapter = new SimpleAdapter(this.activity, mapData,
                 R.layout.nav_year_trans_lv_item, new String[]
                 { "icon", "name", "photo", "memo", "cost" }, new int[]
@@ -146,12 +150,19 @@ public class MyListViewAdapter extends BaseAdapter
                     + listview.getDividerHeight() * (adapter.getCount() - 1);
             listview.setLayoutParams(params);
         }
-        System.out.println("mapData.size():" + mapData.size());
         if (mapData.size() == 0 && mData.size() > curPosition)
         {
             activity.refresh(curPosition);
         }
 
+    }
+
+    private void setLvHeadVisible(boolean b, TranListViewHolder holder)
+    {
+        int v = b ? View.VISIBLE : View.INVISIBLE;
+        holder.day_of_income_tv.setVisibility(v);
+        holder.day_of_payout_tv.setVisibility(v);
+        holder.day_of_balance_tv.setVisibility(v);
     }
 
     private List<Map<String, Object>> getMapData(String searchDate)

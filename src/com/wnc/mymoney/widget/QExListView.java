@@ -94,10 +94,7 @@ public class QExListView extends ExpandableListView implements OnScrollListener
                         groupPos);
                 if (childPos == maxInGroup - 1)
                 {
-                    if (this._groupTv != null)
-                    {
-                        this._groupTv.setVisibility(GONE);// 这里设置Gone
-                    }
+                    clearTipTv();
                 }
                 else
                 {
@@ -116,11 +113,7 @@ public class QExListView extends ExpandableListView implements OnScrollListener
             {
 
                 this._groupIndex = groupPos;
-
-                if (this._groupTv != null)
-                {
-                    this._groupTv.setVisibility(GONE);// 这里设置Gone
-                }
+                clearTipTv();
             }
             else if (groupPos > this._groupIndex)
             {
@@ -166,6 +159,17 @@ public class QExListView extends ExpandableListView implements OnScrollListener
         }
     }
 
+    /**
+     * 添加一个方法清除提示的悬浮区
+     */
+    public void clearTipTv()
+    {
+        if (this._groupTv != null)
+        {
+            this._groupTv.setVisibility(GONE);// 这里设置Gone
+        }
+    }
+
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState)
     {
@@ -176,7 +180,6 @@ public class QExListView extends ExpandableListView implements OnScrollListener
     private void setGroup(int i)
     {
         curGroup = i;
-        // System.out.println("III " + i);
     }
 
     public int getCurrentGroup()
