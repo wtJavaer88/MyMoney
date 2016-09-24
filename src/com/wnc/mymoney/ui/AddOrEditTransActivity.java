@@ -31,6 +31,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.wnc.basic.BasicDateUtil;
 import com.wnc.basic.BasicFileUtil;
+import com.wnc.basic.BasicNumberUtil;
 import com.wnc.basic.BasicStringUtil;
 import com.wnc.mymoney.R;
 import com.wnc.mymoney.backup.BackupFilesHolder;
@@ -39,7 +40,7 @@ import com.wnc.mymoney.bean.Trade;
 import com.wnc.mymoney.dao.CategoryDao;
 import com.wnc.mymoney.dao.MemberDao;
 import com.wnc.mymoney.dao.TransactionsDao;
-import com.wnc.mymoney.uihelper.AutoDefaultType;
+import com.wnc.mymoney.uihelper.AutoCostTypeRec;
 import com.wnc.mymoney.uihelper.MyAppParams;
 import com.wnc.mymoney.uihelper.Setting;
 import com.wnc.mymoney.uihelper.listener.AfterWheelChooseListener;
@@ -808,7 +809,7 @@ public class AddOrEditTransActivity extends BaseActivity implements OnClickListe
 			try
 			{
 				String ids = getAutoSelectedIndexByCost(cost);
-				setCostType(Integer.parseInt(PatternUtil.getFirstPattern(ids, "\\d+")), Integer.parseInt(PatternUtil.getLastPattern(ids, "\\d+")));
+				setCostType(BasicNumberUtil.getNumber(PatternUtil.getFirstPattern(ids, "\\d+")), BasicNumberUtil.getNumber(PatternUtil.getLastPattern(ids, "\\d+")));
 			}
 			catch (NumberFormatException e)
 			{
@@ -864,7 +865,7 @@ public class AddOrEditTransActivity extends BaseActivity implements OnClickListe
 			for (int j = 0; j < list.size(); j++)
 			{
 				int type_id = list.get(j).getId();
-				if (AutoDefaultType.isMatch(cost, type_id))
+				if (AutoCostTypeRec.isMatch(cost, type_id))
 				{
 					return i + "+" + j;
 				}

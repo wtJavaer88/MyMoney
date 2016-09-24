@@ -6,7 +6,7 @@ package com.wnc.mymoney.uihelper;
  * @author wnc
  *
  */
-public class AutoDefaultType
+public class AutoCostTypeRec
 {
 	static double cost;
 	static int type_id;
