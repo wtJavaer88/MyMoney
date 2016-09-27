@@ -1,5 +1,6 @@
 package com.wnc.mymoney.uihelper;
 
+import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.os.Environment;
 
@@ -19,6 +20,7 @@ public class MyAppParams
     private String tmpVideoPath;
     private String zipPath;
 
+    private static AssetManager assertMgr;
     private static int screenWidth;
     private static int screenHeight;
 
@@ -153,5 +155,15 @@ public class MyAppParams
     public String getTmpVideoPath()
     {
         return this.tmpVideoPath;
+    }
+
+    public static AssetManager getAssertMgr()
+    {
+        return assertMgr;
+    }
+
+    public static void setAssertMgr(AssetManager assertMgr)
+    {
+        MyAppParams.assertMgr = assertMgr;
     }
 }

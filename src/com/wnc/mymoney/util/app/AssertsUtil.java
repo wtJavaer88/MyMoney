@@ -8,11 +8,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.content.res.AssetManager;
+
+import com.wnc.mymoney.uihelper.MyAppParams;
 
 public class AssertsUtil
 {
+    public static List<String> getContent(String fileName, String charSet)
+    {
+        return getContent(MyAppParams.getAssertMgr(), fileName, charSet);
+    }
+
     public static List<String> getContent(Context context, String fileName,
             String charSet)
+    {
+        return getContent(context.getAssets(), fileName, charSet);
+    }
+
+    public static List<String> getContent(AssetManager assetMgr,
+            String fileName, String charSet)
     {
         List<String> list = new ArrayList<String>();
         InputStream in = null;
@@ -20,7 +34,7 @@ public class AssertsUtil
         BufferedReader br = null;
         try
         {
-            in = getInputStream(context, fileName);
+            in = getInputStream(assetMgr, fileName);
             bis = new InputStreamReader(in, charSet);
             br = new BufferedReader(bis);
 
@@ -51,9 +65,16 @@ public class AssertsUtil
         return list;
     }
 
+    public static InputStream getInputStream(AssetManager assetMgr,
+            String fileName) throws IOException
+    {
+        return assetMgr.open(fileName);
+    }
+
     public static InputStream getInputStream(Context context, String fileName)
             throws IOException
     {
         return context.getAssets().open(fileName);
     }
+
 }

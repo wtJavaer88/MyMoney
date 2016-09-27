@@ -29,6 +29,7 @@ public class SysInit
                 context.getWindowManager().getDefaultDisplay().getWidth());
         MyAppParams.getInstance().setScreenHeight(
                 context.getWindowManager().getDefaultDisplay().getHeight());
+        MyAppParams.getInstance().setAssertMgr(context.getAssets());
 
         if (isFirstRun())
         {

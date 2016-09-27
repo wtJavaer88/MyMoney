@@ -856,19 +856,13 @@ public class AddOrEditTransActivity extends BaseActivity implements
             String cost = TextFormatUtil.getFormatMoneyStr(data.getDoubleExtra(
                     "cost", 0d));
             this.tranCostBT.setText(cost);
-            try
-            {
-                String ids = getAutoSelectedIndexByCost(BasicNumberUtil
-                        .getDouble(cost));
-                setCostType(BasicNumberUtil.getNumber(PatternUtil
-                        .getFirstPattern(ids, "\\d+")),
-                        BasicNumberUtil.getNumber(PatternUtil.getLastPattern(
-                                ids, "\\d+")));
-            }
-            catch (NumberFormatException e)
-            {
-                e.printStackTrace();
-            }
+
+            String ids = getAutoSelectedIndexByCost(BasicNumberUtil
+                    .getDouble(cost));
+            setCostType(BasicNumberUtil.getNumber(PatternUtil.getFirstPattern(
+                    ids, "\\d+")), BasicNumberUtil.getNumber(PatternUtil
+                    .getLastPattern(ids, "\\d+")));
+
         }
 
         if (requestCode == this.VOICE_RESULT && data != null)
@@ -902,38 +896,13 @@ public class AddOrEditTransActivity extends BaseActivity implements
 
     private String getAutoSelectedIndexByCost(double cost)
     {
-        List<MyWheelBean> leftData = null;
-        Map<MyWheelBean, List<? extends MyWheelBean>> rightData = null;
-
-        if (getSelRecordTypeId() == OUT_MODEL)
-        {
-            leftData = this.outTradeTypes;
-            rightData = this.outTradeDescTypes;
-        }
-        else
-        {
-            leftData = this.inTradeTypes;
-            rightData = this.inTradeDescTypes;
-        }
-        for (int i = 0; i < leftData.size(); i++)
-        {
-            List<? extends MyWheelBean> list = rightData.get(leftData.get(i));
-            for (int j = 0; j < list.size(); j++)
-            {
-                int type_id = list.get(j).getId();
-                if (AutoCostTypeRec.isMatch(cost, type_id))
-                {
-                    return i + "+" + j;
-                }
-            }
-        }
-        return "0+0";
+        return AutoCostTypeRec.getMatchedTypes(cost);
     }
 
     public void setCostType(int i, int j)
     {
-        selectedLeftIndex = i;
-        selectedRightIndex = j;
+        curTradeType = i;
+        curDescTradeType = j;
 
         List<MyWheelBean> leftData = null;
         Map<MyWheelBean, List<? extends MyWheelBean>> rightData = null;
@@ -948,12 +917,24 @@ public class AddOrEditTransActivity extends BaseActivity implements
             leftData = this.inTradeTypes;
             rightData = this.inTradeDescTypes;
         }
-        MyWheelBean lbean, rbean;
-        lbean = leftData.get(i);
-        rbean = rightData.get(lbean).get(j);
-        curTradeType = lbean.getId();
-        curDescTradeType = rbean.getId();
-        reSetCategoryTV(lbean.getName() + "-->" + rbean.getName());
+        int a = 0;
+        for (MyWheelBean bean1 : leftData)
+        {
+            a++;
+            if (bean1.getId() == i)
+            {
+                selectedLeftIndex = a;
+            }
+            int b = 0;
+            for (MyWheelBean bean2 : rightData.get(bean1))
+            {
+                if (bean2.getId() == j)
+                {
+                    selectedRightIndex = b;
+                    reSetCategoryTV(bean1.getName() + "-->" + bean2.getName());
+                }
+            }
+        }
     }
 
     /*

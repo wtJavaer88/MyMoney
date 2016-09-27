@@ -17,7 +17,6 @@ import com.wnc.mymoney.backup.BackUpDataUtil;
 import com.wnc.mymoney.dao.OnStartUpDataUtil;
 import com.wnc.mymoney.dao.TransactionsDao;
 import com.wnc.mymoney.service.LogService;
-import com.wnc.mymoney.test.ExpandableListViewActivity;
 import com.wnc.mymoney.ui.setting.SettingActivity;
 import com.wnc.mymoney.uihelper.Setting;
 import com.wnc.mymoney.util.SysInit;
@@ -165,10 +164,10 @@ public class MainActivity extends Activity
                 intoTransTotalActivity(TOTAL_RANGE.CURRYEAR);
                 break;
             case R.id.nav_account_tv:
-                Intent localIntent = new Intent();
-                localIntent.setClass(getApplicationContext(),
-                        ExpandableListViewActivity.class);
-                startActivity(localIntent);
+                // Intent localIntent = new Intent();
+                // localIntent.setClass(getApplicationContext(),
+                // VideoActivity.class);
+                // startActivity(localIntent);
                 break;
             case R.id.nav_report_tv:
                 toPieChart();
