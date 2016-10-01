@@ -22,6 +22,7 @@ public class SharedPreferenceUtil
 		Editor editor = sharedPreferences.edit();
 		editor.putString(key, value);
 		editor.commit();
+
 	}
 
 	public static String getShareDataByKey(String key, String defaultValue)

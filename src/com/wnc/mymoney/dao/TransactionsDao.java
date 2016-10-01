@@ -15,6 +15,7 @@ import com.wnc.mymoney.backup.BackUpDataUtil;
 import com.wnc.mymoney.bean.CostChartTotal;
 import com.wnc.mymoney.bean.DayTranTotal;
 import com.wnc.mymoney.bean.Trade;
+import com.wnc.mymoney.uihelper.Setting;
 import com.wnc.mymoney.util.common.TextFormatUtil;
 import com.wnc.mymoney.util.enums.CostTypeUtil;
 import com.wnc.string.PatternUtil;
@@ -54,6 +55,7 @@ public class TransactionsDao
 	private static void trigger()
 	{
 		BackUpDataUtil.canBackUpDb = true;
+		Setting.datachanged = true;
 	}
 
 	public static boolean update(Trade trade)
