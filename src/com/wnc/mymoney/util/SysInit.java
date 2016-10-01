@@ -35,15 +35,19 @@ public class SysInit
 
 		if (isFirstRun())
 		{
+			Setting.setAllBySavedJsonData();
 			createDbAndFullData();
 		}
 		initGlobalMap();
-		Setting.setAllBySavedJsonData();
 	}
 
+	/**
+	 * 全局数据初始化
+	 */
 	private static void initGlobalMap()
 	{
 		CategoryDao.initDb(context);
+		CategoryDao.initBasicData();
 		CategoryDao.closeDb();
 
 		MemberDao.initDb(context);
