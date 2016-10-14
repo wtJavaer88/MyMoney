@@ -15,6 +15,7 @@ import com.wnc.mymoney.backup.BackupFilesHolder;
 import com.wnc.mymoney.backup.ZipPathFactory;
 import com.wnc.mymoney.uihelper.Setting;
 import com.wnc.mymoney.util.app.ShareUtil;
+import com.wnc.mymoney.util.common.MailUtil;
 import com.wnc.mymoney.util.common.ZipUtils;
 import com.wnc.mymoney.util.enums.NetChannel;
 
@@ -46,7 +47,8 @@ public abstract class AbstractNetBackup implements FilesZip
         boolean backCode = false;
         if (channel == NetChannel.EMAIL)
         {
-            backCode = zipAndSendEmail(list, destZip);
+            // backCode = zipAndSendEmail(list, destZip);// 调用安卓自带模块,有界面
+            backCode = zipAndSendEmailBackGround(list, destZip);// 调用javamail,无界面
         }
         else if (channel == NetChannel.SHARE)
         {
@@ -114,7 +116,35 @@ public abstract class AbstractNetBackup implements FilesZip
                 Intent.createChooser(intent, "Choose Email Client");
                 activity.startActivity(intent);
             }
-            catch (IOException e)
+            catch (Exception e)
+            {
+                Log.e("backup", e.getMessage());
+                return false;
+            }
+        }
+        else
+        {
+            Log.e("backup", "没有找到备份数据!");
+        }
+        return true;
+    }
+
+    @Override
+    public boolean zipAndSendEmailBackGround(Collection<File> list,
+            String destZip)
+    {
+        if (list != null && list.size() > 0)
+        {
+            try
+            {
+                ZipUtils.zipFiles(list, new File(destZip));
+
+                MailUtil.sendMail(
+                        "随手记" + tip + "备份"
+                                + BasicDateUtil.getCurrentDateString(),
+                        "备份文件数目:" + list.size(), destZip);
+            }
+            catch (Exception e)
             {
                 Log.e("backup", e.getMessage());
                 return false;

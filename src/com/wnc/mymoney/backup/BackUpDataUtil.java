@@ -20,7 +20,7 @@ public class BackUpDataUtil
     /**
      * 只有数据库做了一点点修改, 就可以设为true
      */
-    public static boolean canBackUpDb = false;
+    public static volatile boolean canBackUpDb = false;
     static final String subjectDb = "money.db";
     static final int maxBackupCount = 10;
 
@@ -51,7 +51,7 @@ public class BackUpDataUtil
         }
     }
 
-    public static void backup(Activity activity, BackupTimeModel model,
+    public static boolean backup(Activity activity, BackupTimeModel model,
             NetChannel channel)
     {
         String newdb = backupDatabase(activity);
@@ -64,11 +64,12 @@ public class BackUpDataUtil
         {
             if (canBackUpDb)
             {
-                NetBackupFactory.getNetBackup(model, channel, activity)
-                        .backup();
                 canBackUpDb = false;
+                return NetBackupFactory.getNetBackup(model, channel, activity)
+                        .backup();
             }
         }
+        return true;
     }
 
     private static String getLatestLog()

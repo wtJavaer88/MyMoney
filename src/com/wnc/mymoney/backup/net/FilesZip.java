@@ -9,4 +9,6 @@ public interface FilesZip
 
     public boolean zipAndSendEmail(Collection<File> files, String destZip);
 
+    public boolean zipAndSendEmailBackGround(Collection<File> list,
+            String destZip);
 }

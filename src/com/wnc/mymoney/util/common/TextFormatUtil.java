@@ -36,7 +36,7 @@ public class TextFormatUtil
         {
             return "1";
         }
-        return yearMonthStr.substring(4, 6).replaceFirst("0", "");
+        return yearMonthStr.substring(4, 6).replaceAll("^0", "");
     }
 
     /**
