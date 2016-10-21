@@ -37,6 +37,7 @@ $RECYCLE.BIN/
 *.dex
 *.cache
 *.apk
+.classpath
 
 .setting/
 bin/class/
