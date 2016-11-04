@@ -129,12 +129,12 @@ public class MailUtil
         }
     }
 
-    public static void sendMail(String title, String content, String attachPath)
-            throws Exception
+    public static void sendQQMail(String title, String content,
+            String attachPath) throws Exception
     {
-        System.out.println("......sendmail");
+        System.out.println("......sendQQmail");
         final String user = "529801034@qq.com";
-        final String pw = "eqxkjmlacvuabjgc";
+        final String pw = "lvuukleusqgvbhhg";
         final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
         Properties props = System.getProperties();
         props.setProperty("mail.smtp.host", "smtp.qq.com");

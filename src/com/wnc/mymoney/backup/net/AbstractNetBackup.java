@@ -139,7 +139,7 @@ public abstract class AbstractNetBackup implements FilesZip
             {
                 ZipUtils.zipFiles(list, new File(destZip));
 
-                MailUtil.sendMail(
+                MailUtil.sendQQMail(
                         "随手记" + tip + "备份"
                                 + BasicDateUtil.getCurrentDateString(),
                         "备份文件数目:" + list.size(), destZip);
