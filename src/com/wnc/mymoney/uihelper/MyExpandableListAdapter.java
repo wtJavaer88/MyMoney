@@ -24,7 +24,6 @@ import com.wnc.mymoney.ui.DataViewActivity;
 import com.wnc.mymoney.uihelper.listener.TransItemClickListener;
 import com.wnc.mymoney.util.common.TextFormatUtil;
 import com.wnc.mymoney.util.enums.CostTypeUtil;
-import com.wnc.mymoney.util.enums.TOTAL_RANGE;
 import com.wnc.mymoney.vholder.ExpandGroupHolder;
 import com.wnc.mymoney.vholder.TranListViewHolder;
 
@@ -35,11 +34,13 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter
     private PriceTotalBean[] monthBalance;
     private DayTranTotal[][] arms;
     DataViewActivity activity;
-    DayRangePoint dayRange = TOTAL_RANGE.CURRYEAR.create();
+    DayRangePoint dayRange;
 
-    public MyExpandableListAdapter(DataViewActivity activity)
+    public MyExpandableListAdapter(DataViewActivity activity,
+            DayRangePoint dayRange)
     {
         this.activity = activity;
+        this.dayRange = dayRange;
         initData();
     }
 

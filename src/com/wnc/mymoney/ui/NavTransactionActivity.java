@@ -167,7 +167,7 @@ public class NavTransactionActivity extends DataViewActivity implements
             if (this.TOTAL_RANGE_TYPE == TOTAL_RANGE.CURRYEAR)
             {
                 ((ExpandableListView) this.expanseLV)
-                        .setAdapter(new MyExpandableListAdapter(this));
+                        .setAdapter(new MyExpandableListAdapter(this, dayRange));
             }
             else
             {
