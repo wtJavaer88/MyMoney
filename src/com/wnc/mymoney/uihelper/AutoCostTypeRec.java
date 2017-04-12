@@ -18,16 +18,21 @@ public class AutoCostTypeRec
 	static List<Cost_Mapper> mappers = new ArrayList<Cost_Mapper>();
 	static
 	{
-		List<String> content = AssertsUtil.getContent("cost_mapper.txt", "UTF-8");
+		List<String> content = AssertsUtil.getContent("cost_mapper.txt",
+				"UTF-8");
 		for (String string : content)
 		{
 
-			for (String money : PatternUtil.getPatternStrings(string, "\\d+\\.?\\d+"))
+			for (String money : PatternUtil.getPatternStrings(
+					PatternUtil.getFirstPattern(string, "/.*?/"),
+					"\\d+\\.?\\d+"))
 			{
 				Cost_Mapper mapper = new Cost_Mapper();
-				mapper.setCost_Types(PatternUtil.getFirstPattern(string, "\\d+-\\d+"));
+				mapper.setCost_Types(PatternUtil.getFirstPattern(string,
+						"\\d+-\\d+"));
 				mapper.setMoney(money.trim().replace("/", ""));
-				mapper.setDescription(PatternUtil.getLastPattern(string, "/[^/]*+").replace("/", ""));
+				mapper.setDescription(PatternUtil.getLastPattern(string,
+						"/[^/]*+").replace("/", ""));
 				// System.out.println(mapper);
 				mappers.add(mapper);
 			}
@@ -65,7 +70,8 @@ public class AutoCostTypeRec
 		@Override
 		public String toString()
 		{
-			return "Cost_Mapper [cost_types=" + cost_types + ", money=" + money + ", description=" + description + "]";
+			return "Cost_Mapper [cost_types=" + cost_types + ", money=" + money
+					+ ", description=" + description + "]";
 		}
 
 		public String getMoney()

@@ -1,5 +1,8 @@
 package com.wnc.mymoney.uihelper;
 
+import com.wnc.basic.BasicNumberUtil;
+import com.wnc.basic.BasicStringUtil;
+
 public class SimulatorCal
 {
 	private String content = "";
@@ -70,17 +73,17 @@ public class SimulatorCal
 		// System.out.println("��������: " + Arrays.toString(parts));
 		if (parts.length == 1)
 		{
-			this.result = Double.parseDouble(parts[0]);
+			this.result = getDouble(parts[0]);
 		}
 		else if (parts.length > 1)
 		{
 			int index = 1;
 			double left, right;
-			this.result = Double.parseDouble(parts[0]);
+			this.result = getDouble(parts[0]);
 			while (index < parts.length - 1)
 			{
 				left = this.result;
-				right = Double.parseDouble(parts[index + 1]);
+				right = getDouble(parts[index + 1]);
 				if (parts[index].equals("+"))
 				{
 					this.result = left + right;
@@ -94,6 +97,16 @@ public class SimulatorCal
 		}
 		this.content = this.result + "";
 		// System.out.println("###result:" + this.result);
+	}
+
+	private double getDouble(String part)
+	{
+		if (BasicStringUtil.isNotNullString(part))
+		{
+			part = BasicStringUtil.removeRightString(part, ".");
+			return BasicNumberUtil.getDouble(part);
+		}
+		return 0;
 	}
 
 	private void clearContent()
