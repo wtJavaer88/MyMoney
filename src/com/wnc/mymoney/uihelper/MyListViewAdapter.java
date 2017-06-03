@@ -25,196 +25,238 @@ import com.wnc.mymoney.vholder.TranListViewHolder;
 public class MyListViewAdapter extends BaseAdapter
 {
 
-    private LayoutInflater mInflater;
-    private DataViewActivity activity;
-    List<Map<String, Object>> mData = new ArrayList<Map<String, Object>>();
-    public Map<Integer, TranListViewHolder> listHolders = new HashMap<Integer, TranListViewHolder>();
-    private int costLevel = 0;
+	private LayoutInflater mInflater;
+	private DataViewActivity activity;
+	List<Map<String, Object>> mData = new ArrayList<Map<String, Object>>();
+	public Map<Integer, TranListViewHolder> listHolders = new HashMap<Integer, TranListViewHolder>();
+	private int costLevel = 0;
 
-    public MyListViewAdapter(DataViewActivity activity,
-            List<Map<String, Object>> mData)
-    {
-        this.activity = activity;
-        this.mData = mData;
-        this.mInflater = LayoutInflater.from(activity);
-    }
+	public MyListViewAdapter(DataViewActivity activity,
+			List<Map<String, Object>> mData)
+	{
+		this.activity = activity;
+		this.mData = mData;
+		this.mInflater = LayoutInflater.from(activity);
+	}
 
-    /**
-     * 为统计图分消费类型所提供的接口
-     * 
-     * @param activity
-     * @param mData
-     * @param costLevel
-     */
-    public MyListViewAdapter(DataViewActivity activity,
-            List<Map<String, Object>> mData, int costLevel)
-    {
-        this(activity, mData);
-        this.costLevel = costLevel;
-    }
+	/**
+	 * 为统计图分消费类型所提供的接口
+	 * 
+	 * @param activity
+	 * @param mData
+	 * @param costLevel
+	 */
+	public MyListViewAdapter(DataViewActivity activity,
+			List<Map<String, Object>> mData, int costLevel)
+	{
+		this(activity, mData);
+		this.costLevel = costLevel;
+	}
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent)
-    {
-        TranListViewHolder holder = null;
-        if (convertView == null)
-        {
-            convertView = this.mInflater.inflate(R.layout.nav_year_trans_row,
-                    null);
-            holder = getNewViewHolder(convertView);
-            setHolderListView(holder, convertView);
-            convertView.setTag(holder);
-        }
-        else
-        {
-            holder = (TranListViewHolder) convertView.getTag();
-        }
-        listHolders.put(position, holder);
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent)
+	{
+		TranListViewHolder holder = null;
+		if (convertView == null)
+		{
+			convertView = this.mInflater.inflate(R.layout.nav_year_trans_row,
+					null);
+			holder = getNewViewHolder(convertView);
+			setHolderListView(holder, convertView);
+			convertView.setTag(holder);
+		}
+		else
+		{
+			holder = (TranListViewHolder) convertView.getTag();
+		}
+		listHolders.put(position, holder);
 
-        setHolderData(holder, position);
+		setHolderData(holder, position);
 
-        return convertView;
-    }
+		return convertView;
+	}
 
-    private TranListViewHolder getNewViewHolder(View convertView)
-    {
-        TranListViewHolder holder = new TranListViewHolder();
-        holder.trans_day_of_month_tv = (TextView) convertView
-                .findViewById(R.id.trans_day_of_month_tv);
-        holder.trans_day_of_week_tv = (TextView) convertView
-                .findViewById(R.id.trans_day_of_week_tv);
-        holder.day_of_income_tv = (TextView) convertView
-                .findViewById(R.id.day_of_income_tv);
-        holder.day_of_payout_tv = (TextView) convertView
-                .findViewById(R.id.day_of_payout_tv);
-        holder.day_of_balance_tv = (TextView) convertView
-                .findViewById(R.id.day_of_balance_tv);
+	private TranListViewHolder getNewViewHolder(View convertView)
+	{
+		TranListViewHolder holder = new TranListViewHolder();
+		holder.trans_day_of_month_tv = (TextView) convertView
+				.findViewById(R.id.trans_day_of_month_tv);
+		holder.trans_day_of_week_tv = (TextView) convertView
+				.findViewById(R.id.trans_day_of_week_tv);
+		holder.day_of_income_tv = (TextView) convertView
+				.findViewById(R.id.day_of_income_tv);
+		holder.day_of_payout_tv = (TextView) convertView
+				.findViewById(R.id.day_of_payout_tv);
+		holder.day_of_balance_tv = (TextView) convertView
+				.findViewById(R.id.day_of_balance_tv);
 
-        return holder;
-    }
+		return holder;
+	}
 
-    private void setHolderListView(TranListViewHolder holder, View convertView)
-    {
-        LinearLayout trans_rows_ly = (LinearLayout) convertView
-                .findViewById(R.id.trans_rows_ly);
-        ListView addedLV = new ListView(this.activity);
-        trans_rows_ly.addView(addedLV);
-        holder.listview = addedLV;
-    }
+	private void setHolderListView(TranListViewHolder holder, View convertView)
+	{
+		LinearLayout trans_rows_ly = (LinearLayout) convertView
+				.findViewById(R.id.trans_rows_ly);
+		ListView addedLV = new ListView(this.activity);
+		trans_rows_ly.addView(addedLV);
+		holder.listview = addedLV;
+	}
 
-    int curPosition = -1;
+	int curPosition = -1;
 
-    public void setHolderData(TranListViewHolder holder, int position)
-    {
-        curPosition = position;
-        holder.trans_day_of_month_tv.setText((String) this.mData.get(position)
-                .get("day"));
-        holder.trans_day_of_week_tv.setText((String) this.mData.get(position)
-                .get("week"));
-        holder.day_of_income_tv
-                .setText("" + this.mData.get(position).get("in"));
-        holder.day_of_payout_tv.setText(""
-                + this.mData.get(position).get("out"));
-        holder.day_of_balance_tv.setText(""
-                + this.mData.get(position).get("balance"));
+	public void setHolderData(TranListViewHolder holder, int position)
+	{
+		curPosition = position;
+		holder.trans_day_of_month_tv.setText((String) this.mData.get(position)
+				.get("day"));
+		holder.trans_day_of_week_tv.setText((String) this.mData.get(position)
+				.get("week"));
+		holder.day_of_income_tv
+				.setText("" + this.mData.get(position).get("in"));
+		holder.day_of_payout_tv.setText(""
+				+ this.mData.get(position).get("out"));
+		holder.day_of_balance_tv.setText(""
+				+ this.mData.get(position).get("balance"));
 
-        simpleLvSet(holder, this.mData.get(position).get("searchDate")
-                .toString());
-    }
+		simpleLvSet(holder, this.mData.get(position).get("searchDate")
+				.toString());
+	}
 
-    private void simpleLvSet(TranListViewHolder holder, String searchDate)
-    {
-        ListView listview = holder.listview;
-        List<Map<String, Object>> mapData = getMapData(searchDate);
+	private void simpleLvSet(TranListViewHolder holder, String searchDate)
+	{
+		ListView listview = holder.listview;
+		List<Map<String, Object>> mapData = getMapData(searchDate);
 
-        setLvHeadVisible(mapData.size() > 5, holder);
+		setLvHeadVisible(mapData.size() > 5, holder);
 
-        final SimpleAdapter adapter = new SimpleAdapter(this.activity, mapData,
-                R.layout.nav_year_trans_lv_item, new String[]
-                { "icon", "name", "photo", "memo", "cost" }, new int[]
-                { R.id.item_icon_iv, R.id.item_name_tv, R.id.photo_flag_iv,
-                        R.id.memo_tv, R.id.cost_tv });
-        listview.setAdapter(adapter);
-        TransItemClickListener listener = new TransItemClickListener(
-                this.activity, listview);
-        listview.setOnItemClickListener(listener);
-        listview.setOnItemLongClickListener(listener);
-        // 动态设置listview的高度
-        if (adapter.getCount() > 0)
-        {
+		final SimpleAdapter adapter = new SimpleAdapter(this.activity, mapData,
+				R.layout.nav_year_trans_lv_item, new String[] { "icon", "name",
+						"photo", "memo", "cost" }, new int[] {
+						R.id.item_icon_iv, R.id.item_name_tv,
+						R.id.photo_flag_iv, R.id.memo_tv, R.id.cost_tv });
+		listview.setAdapter(adapter);
+		TransItemClickListener listener = new TransItemClickListener(
+				this.activity, listview);
+		listview.setOnItemClickListener(listener);
+		listview.setOnItemLongClickListener(listener);
+		// 动态设置listview的高度
+		if (adapter.getCount() > 0)
+		{
 
-            ViewGroup.LayoutParams params = listview.getLayoutParams();
-            View listItem = adapter.getView(0, null, listview);
-            listItem.measure(0, 0);
-            params.height = listItem.getMeasuredHeight() * adapter.getCount()
-                    + listview.getDividerHeight() * (adapter.getCount() - 1);
-            listview.setLayoutParams(params);
-        }
-        if (mapData.size() == 0 && mData.size() > curPosition)
-        {
-            activity.refresh(curPosition);
-        }
+			ViewGroup.LayoutParams params = listview.getLayoutParams();
+			View listItem = adapter.getView(0, null, listview);
+			listItem.measure(0, 0);
+			params.height = listItem.getMeasuredHeight() * adapter.getCount()
+					+ listview.getDividerHeight() * (adapter.getCount() - 1);
+			listview.setLayoutParams(params);
+		}
+		if (mapData.size() == 0 && mData.size() > curPosition)
+		{
+			activity.refresh(curPosition);
+		}
 
-    }
+	}
 
-    private void setLvHeadVisible(boolean b, TranListViewHolder holder)
-    {
-        int v = b ? View.VISIBLE : View.INVISIBLE;
-        holder.day_of_income_tv.setVisibility(v);
-        holder.day_of_payout_tv.setVisibility(v);
-        holder.day_of_balance_tv.setVisibility(v);
-    }
+	private void setLvHeadVisible(boolean b, TranListViewHolder holder)
+	{
+		int v = b ? View.VISIBLE : View.INVISIBLE;
+		holder.day_of_income_tv.setVisibility(v);
+		holder.day_of_payout_tv.setVisibility(v);
+		holder.day_of_balance_tv.setVisibility(v);
+	}
 
-    private List<Map<String, Object>> getMapData(String searchDate)
-    {
-        TransactionsDao.initDb(this.activity);
-        List<Trade> tradeItems;
-        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-        if (costLevel > 0)
-        {
-            tradeItems = TransactionsDao.getDayTradesByCostLevel(searchDate,
-                    costLevel);
-        }
-        else
-        {
-            tradeItems = TransactionsDao.getDayTrades(searchDate);
-        }
+	/**
+	 * 缓存每日的交易记录
+	 */
+	static Map<String, List<Trade>> dayTradesMap = new HashMap<String, List<Trade>>();
 
-        for (Trade trade : tradeItems)
-        {
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put("Trade", trade);
-            map.put("id", trade.getId());// 获取交易ID
-            map.put("icon", CostTypeUtil.getIcon(trade.getCostdesc_id()));
-            map.put("name",
-                    CostTypeUtil.getCostTypeName(trade.getCostdesc_id()));
-            map.put("photo", CostTypeUtil.getFlagIcon(trade.getHaspicture()));
-            map.put("memo", MemoHelper.concatMemo(trade));
-            map.put("cost", trade.getCost());
-            map.put("searchDate", searchDate);
-            list.add(map);
-        }
-        TransactionsDao.closeDb();
-        return list;
-    }
+	private List<Map<String, Object>> getMapData(String searchDate)
+	{
+		List<Trade> tradeItems;
+		TransactionsDao.initDb(this.activity);
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		if (costLevel > 0)
+		{
+			tradeItems = TransactionsDao.getDayTradesByCostLevel(searchDate,
+					costLevel);
+		}
+		else
+		{
+			if (!dayTradesMap.containsKey(searchDate))
+			{
+				tradeItems = TransactionsDao.getDayTrades(searchDate);
+				dayTradesMap.put(searchDate, tradeItems);
+			}
+			else
+			{
+				tradeItems = dayTradesMap.get(searchDate);
+			}
+		}
+		dayTradesMap.put(searchDate, tradeItems);
 
-    @Override
-    public int getCount()
-    {
-        return this.mData.size();
-    }
+		for (Trade trade : tradeItems)
+		{
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("Trade", trade);
+			map.put("id", trade.getId());// 获取交易ID
+			map.put("icon", CostTypeUtil.getIcon(trade.getCostdesc_id()));
+			map.put("name",
+					CostTypeUtil.getCostTypeName(trade.getCostdesc_id()));
+			map.put("photo", CostTypeUtil.getFlagIcon(trade.getHaspicture()));
+			map.put("memo", MemoHelper.concatMemo(trade));
+			map.put("cost", trade.getCost());
+			map.put("searchDate", searchDate);
+			list.add(map);
+		}
+		TransactionsDao.closeDb();
+		return list;
+	}
 
-    @Override
-    public Object getItem(int arg0)
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	/**
+	 * 返回给NavTransactionActivity的数据
+	 * 
+	 * @return
+	 */
+	public List<Trade> getTradeItemsInDays()
+	{
+		List<Trade> retList = new ArrayList<Trade>();
+		TransactionsDao.initDb(this.activity);
 
-    @Override
-    public long getItemId(int arg0)
-    {
-        // TODO Auto-generated method stub
-        return 0;
-    }
+		for (Map<String, Object> map : mData)
+		{
+			String day = map.get("searchDate").toString();
+			if (!dayTradesMap.containsKey(day))
+			{
+				List<Trade> dayTrades = TransactionsDao.getDayTrades(day);
+				retList.addAll(dayTrades);
+				dayTradesMap.put(day, dayTrades);
+			}
+			else
+			{
+				retList.addAll(dayTradesMap.get(day));
+			}
+		}
+		TransactionsDao.closeDb();
+		return retList;
+	}
+
+	@Override
+	public int getCount()
+	{
+		return this.mData.size();
+	}
+
+	@Override
+	public Object getItem(int arg0)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long getItemId(int arg0)
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

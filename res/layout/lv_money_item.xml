@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal" >
+
+    <TextView
+        android:id="@+id/index"
+        android:layout_width="20dp"
+        android:layout_height="wrap_content"
+        android:textColor="#7766FF"
+        android:textSize="12sp" />
+    
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#7766FF"
+        android:layout_marginLeft="5dp"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/money"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FF66FF"
+        android:layout_marginLeft="5dp"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#7766FF"
+        android:layout_marginLeft="5dp"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/member"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#7766FF"
+        android:layout_marginLeft="5dp"
+        android:textSize="12sp" />
+
+</LinearLayout>

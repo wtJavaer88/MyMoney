@@ -7,7 +7,10 @@ public class Trade implements Serializable
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 3910584680855031271L;
+	/**
+	 * 
+	 */
 	private int id;
 	private int type_id;
 	private double cost;
@@ -170,8 +173,13 @@ public class Trade implements Serializable
 	@Override
 	public String toString()
 	{
-		return "Trade [id=" + id + ", type_id=" + type_id + ", cost=" + cost + ", member=" + member + ", costlevel_id=" + costlevel_id + ", costdesc_id=" + costdesc_id + ", memo=" + memo + ", project=" + project + ", shop=" + shop + ", haspicture=" + haspicture + ", createtime="
-				+ createtime + ", modifytime=" + modifytime + ", createlongtime=" + createlongtime + ", uuid=" + uuid + "]";
+		return "Trade [id=" + id + ", type_id=" + type_id + ", cost=" + cost
+				+ ", member=" + member + ", costlevel_id=" + costlevel_id
+				+ ", costdesc_id=" + costdesc_id + ", memo=" + memo
+				+ ", project=" + project + ", shop=" + shop + ", haspicture="
+				+ haspicture + ", createtime=" + createtime + ", modifytime="
+				+ modifytime + ", createlongtime=" + createlongtime + ", uuid="
+				+ uuid + "]";
 	}
 
 }
