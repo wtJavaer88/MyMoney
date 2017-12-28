@@ -550,7 +550,7 @@ public class AddOrEditTransActivity extends BaseActivity implements
 		}
 		catch (Exception ex)
 		{
-			Log.e("saveErr", ex.getMessage());
+			ex.printStackTrace();
 			ToastUtil.showLongToast(this, "保存失败,出现异常!");
 		}
 	}

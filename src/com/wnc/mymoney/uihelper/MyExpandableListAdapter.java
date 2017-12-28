@@ -41,6 +41,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter
 			DayRangePoint dayRange)
 	{
 		this.activity = activity;
+		DayTradesHolder.activity = activity;
 		this.dayRange = dayRange;
 		initData();
 	}
@@ -283,22 +284,12 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter
 		holder.day_of_balance_tv.setVisibility(v);
 	}
 
-	static Map<String, List<Trade>> dayTradesMap = new HashMap<String, List<Trade>>();
-
 	private List<Map<String, Object>> getMapData(String searchDate)
 	{
-		TransactionsDao.initDb(activity);
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		List<Trade> tradeItems = null;
-		if (!dayTradesMap.containsKey(searchDate))
-		{
-			tradeItems = TransactionsDao.getDayTrades(searchDate);
-			dayTradesMap.put(searchDate, tradeItems);
-		}
-		else
-		{
-			tradeItems = dayTradesMap.get(searchDate);
-		}
+		tradeItems = DayTradesHolder.getDayTrades(searchDate);
+
 		for (Trade trade : tradeItems)
 		{
 			Map<String, Object> map = new HashMap<String, Object>();
@@ -313,7 +304,6 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter
 			map.put("searchDate", searchDate);
 			list.add(map);
 		}
-		TransactionsDao.closeDb();
 		return list;
 	}
 
@@ -325,24 +315,13 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter
 	public List<Trade> getTradeItemsInDays()
 	{
 		List<Trade> retList = new ArrayList<Trade>();
-		TransactionsDao.initDb(this.activity);
 
 		String day = dayRange.getStartDay();
 		while (day.compareTo(dayRange.getEndDay()) <= 0)
 		{
-			if (!dayTradesMap.containsKey(day))
-			{
-				List<Trade> dayTrades = TransactionsDao.getDayTrades(day);
-				retList.addAll(dayTrades);
-				dayTradesMap.put(day, dayTrades);
-			}
-			else
-			{
-				retList.addAll(dayTradesMap.get(day));
-			}
-			BasicDateUtil.getDateAfterDayDateString(day, 1);
+			retList.addAll(DayTradesHolder.getDayTrades(day));
+			day = BasicDateUtil.getDateAfterDayDateString(day, 1);
 		}
-		TransactionsDao.closeDb();
 		return retList;
 	}
 

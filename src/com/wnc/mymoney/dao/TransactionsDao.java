@@ -15,6 +15,7 @@ import com.wnc.mymoney.backup.BackUpDataUtil;
 import com.wnc.mymoney.bean.CostChartTotal;
 import com.wnc.mymoney.bean.DayTranTotal;
 import com.wnc.mymoney.bean.Trade;
+import com.wnc.mymoney.uihelper.DayTradesHolder;
 import com.wnc.mymoney.uihelper.Setting;
 import com.wnc.mymoney.util.common.TextFormatUtil;
 import com.wnc.mymoney.util.enums.CostTypeUtil;
@@ -26,7 +27,11 @@ public class TransactionsDao
 
 	public static void initDb(Context context)
 	{
-		db = context.openOrCreateDatabase("money.db", Context.MODE_PRIVATE, null);
+		if (db == null)
+		{
+			db = context.openOrCreateDatabase("money.db", Context.MODE_PRIVATE,
+					null);
+		}
 	}
 
 	public static boolean insert(Trade trade)
@@ -40,9 +45,14 @@ public class TransactionsDao
 		{
 			db.execSQL(
 					"INSERT INTO transactions(ID,TYPE_ID,COSTLEVEL_ID,COSTDESC_ID,MEMBER,SHOP,PROJECT,COST,HASPICTURE,CREATE_TIME,CREATE_LONGTIME,MODIFY_TIME,MEMO,UUID) VALUES (NULL,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-					new Object[] { trade.getType_id(), trade.getCostlevel_id(), trade.getCostdesc_id(), trade.getMember(), trade.getShop(), trade.getProject(), trade.getCost(), trade.getHaspicture(), trade.getCreatetime(), trade.getCreatelongtime(), trade.getModifytime(),
-							trade.getMemo(), trade.getUuid() });
-			trigger();
+					new Object[] { trade.getType_id(), trade.getCostlevel_id(),
+							trade.getCostdesc_id(), trade.getMember(),
+							trade.getShop(), trade.getProject(),
+							trade.getCost(), trade.getHaspicture(),
+							trade.getCreatetime(), trade.getCreatelongtime(),
+							trade.getModifytime(), trade.getMemo(),
+							trade.getUuid() });
+			trigger(trade);
 		}
 		catch (Exception ex)
 		{
@@ -52,10 +62,12 @@ public class TransactionsDao
 		return true;
 	}
 
-	private static void trigger()
+	// 日期格式20170101
+	private static void trigger(Trade trade)
 	{
 		BackUpDataUtil.canBackUpDb = true;
 		Setting.datachanged = true;
+		DayTradesHolder.refreshDayTrades(trade.getCreatetime().substring(0, 8));
 	}
 
 	public static boolean update(Trade trade)
@@ -79,8 +91,9 @@ public class TransactionsDao
 			cv.put("CREATE_LONGTIME", trade.getCreatelongtime());
 			cv.put("MODIFY_TIME", trade.getModifytime());
 			cv.put("MEMO", trade.getMemo());
-			db.update("transactions", cv, "id = ?", new String[] { String.valueOf(trade.getId()) });
-			trigger();
+			db.update("transactions", cv, "id = ?",
+					new String[] { String.valueOf(trade.getId()) });
+			trigger(trade);
 		}
 		catch (Exception ex)
 		{
@@ -107,7 +120,8 @@ public class TransactionsDao
 		return getTradeList(c);
 	}
 
-	public static List<Trade> getDayTradesByCostLevel(String dayStr, int costLevel)
+	public static List<Trade> getDayTradesByCostLevel(String dayStr,
+			int costLevel)
 	{
 		Cursor c = getDayTradesByCostLevelCursor(dayStr, costLevel);
 		return getTradeList(c);
@@ -122,7 +136,8 @@ public class TransactionsDao
 			Trade bean = new Trade();
 			bean.setId(Integer.parseInt(getStrValue(c, "ID")));
 			bean.setType_id(Integer.parseInt(getStrValue(c, "TYPE_ID")));
-			bean.setCostlevel_id(Integer.parseInt(getStrValue(c, "COSTLEVEL_ID")));
+			bean.setCostlevel_id(Integer
+					.parseInt(getStrValue(c, "COSTLEVEL_ID")));
 			bean.setCostdesc_id(Integer.parseInt(getStrValue(c, "COSTDESC_ID")));
 			bean.setMember(getStrValue(c, "MEMBER"));
 			bean.setShop(getStrValue(c, "SHOP"));
@@ -145,6 +160,7 @@ public class TransactionsDao
 		if (db != null)
 		{
 			db.close();
+			db = null;
 		}
 	}
 
@@ -156,7 +172,8 @@ public class TransactionsDao
 	 *            月份:201604
 	 * @return
 	 */
-	public static List<CostChartTotal> getCostChartTotalsInRange(int type, String startDay, String endDay)
+	public static List<CostChartTotal> getCostChartTotalsInRange(int type,
+			String startDay, String endDay)
 	{
 		List<CostChartTotal> list = new ArrayList<CostChartTotal>();
 		if (db == null)
@@ -167,11 +184,15 @@ public class TransactionsDao
 		Cursor c = null;
 		if (type < 0)
 		{
-			c = db.rawQuery("select  costlevel_id TYPE,sum(cost) SUM from transactions where isdel=0 and type_id=? and substr(create_time,0,9) between ? and ? group by costlevel_id order by type asc", new String[] { "" + type, startDay, endDay });
+			c = db.rawQuery(
+					"select  costlevel_id TYPE,sum(cost) SUM from transactions where isdel=0 and type_id=? and substr(create_time,0,9) between ? and ? group by costlevel_id order by type asc",
+					new String[] { "" + type, startDay, endDay });
 		}
 		else
 		{
-			c = db.rawQuery("select costdesc_id TYPE,sum(cost) SUM from transactions where isdel=0 and costlevel_id=? and substr(create_time,0,9) between ? and ? group by type  order by create_time,type asc", new String[] { "" + type, startDay, endDay });
+			c = db.rawQuery(
+					"select costdesc_id TYPE,sum(cost) SUM from transactions where isdel=0 and costlevel_id=? and substr(create_time,0,9) between ? and ? group by type  order by create_time,type asc",
+					new String[] { "" + type, startDay, endDay });
 		}
 		CostChartTotal bean;
 		while (c.moveToNext())
@@ -185,7 +206,8 @@ public class TransactionsDao
 		return list;
 	}
 
-	public static List<DayTranTotal> getAllTranTotalInRange(String startDay, String endDay)
+	public static List<DayTranTotal> getAllTranTotalInRange(String startDay,
+			String endDay)
 	{
 		List<DayTranTotal> list = new ArrayList<DayTranTotal>();
 		if (db == null)
@@ -193,7 +215,10 @@ public class TransactionsDao
 			Log.e("dao", "Not opened Db !");
 			return list;
 		}
-		Cursor c = db.rawQuery("select substr(create_time,0,9) DAY,type_id TYPE,sum(cost) SUM from transactions where isdel=0 group by type_id,substr(create_time,0,9) having day between ? and ? order by day,type asc", new String[] { startDay, endDay });
+		Cursor c = db
+				.rawQuery(
+						"select substr(create_time,0,9) DAY,type_id TYPE,sum(cost) SUM from transactions where isdel=0 group by type_id,substr(create_time,0,9) having day between ? and ? order by day,type asc",
+						new String[] { startDay, endDay });
 		String lastDay = "";
 		DayTranTotal bean = null;
 		while (c.moveToNext())
@@ -230,14 +255,19 @@ public class TransactionsDao
 			Log.e("dao", "Not opened Db !");
 			return trade;
 		}
-		Cursor c = db.rawQuery("select * from transactions where isdel=0 and CREATE_TIME > ? order by CREATE_LONGTIME asc", new String[] { curTime + "" });
+		Cursor c = db
+				.rawQuery(
+						"select * from transactions where isdel=0 and CREATE_TIME > ? order by CREATE_LONGTIME asc",
+						new String[] { curTime + "" });
 		while (c != null && c.moveToNext())
 		{
 			trade = new Trade();
 			trade.setId(Integer.parseInt(getStrValue(c, "ID")));
 			trade.setType_id(Integer.parseInt(getStrValue(c, "TYPE_ID")));
-			trade.setCostlevel_id(Integer.parseInt(getStrValue(c, "COSTLEVEL_ID")));
-			trade.setCostdesc_id(Integer.parseInt(getStrValue(c, "COSTDESC_ID")));
+			trade.setCostlevel_id(Integer.parseInt(getStrValue(c,
+					"COSTLEVEL_ID")));
+			trade.setCostdesc_id(Integer
+					.parseInt(getStrValue(c, "COSTDESC_ID")));
 			trade.setMember(getStrValue(c, "MEMBER"));
 			trade.setShop(getStrValue(c, "SHOP"));
 			trade.setProject(getStrValue(c, "PROJECT"));
@@ -261,14 +291,19 @@ public class TransactionsDao
 			Log.e("dao", "Not opened Db !");
 			return trade;
 		}
-		Cursor c = db.rawQuery("select * from transactions where isdel=0 and CREATE_TIME < ? order by CREATE_LONGTIME desc", new String[] { curTime + "" });
+		Cursor c = db
+				.rawQuery(
+						"select * from transactions where isdel=0 and CREATE_TIME < ? order by CREATE_LONGTIME desc",
+						new String[] { curTime + "" });
 		while (c != null && c.moveToNext())
 		{
 			trade = new Trade();
 			trade.setId(Integer.parseInt(getStrValue(c, "ID")));
 			trade.setType_id(Integer.parseInt(getStrValue(c, "TYPE_ID")));
-			trade.setCostlevel_id(Integer.parseInt(getStrValue(c, "COSTLEVEL_ID")));
-			trade.setCostdesc_id(Integer.parseInt(getStrValue(c, "COSTDESC_ID")));
+			trade.setCostlevel_id(Integer.parseInt(getStrValue(c,
+					"COSTLEVEL_ID")));
+			trade.setCostdesc_id(Integer
+					.parseInt(getStrValue(c, "COSTDESC_ID")));
 			trade.setMember(getStrValue(c, "MEMBER"));
 			trade.setShop(getStrValue(c, "SHOP"));
 			trade.setProject(getStrValue(c, "PROJECT"));
@@ -284,7 +319,8 @@ public class TransactionsDao
 		return trade;
 	}
 
-	public static List<DayTranTotal> getAllTranTotalForChart(int costLevel, String startDay, String endDay)
+	public static List<DayTranTotal> getAllTranTotalForChart(int costLevel,
+			String startDay, String endDay)
 	{
 		List<DayTranTotal> list = new ArrayList<DayTranTotal>();
 		if (db == null)
@@ -295,13 +331,15 @@ public class TransactionsDao
 		Cursor c = null;
 		if (CostTypeUtil.isLevelType(costLevel))
 		{
-			c = db.rawQuery("select substr(create_time,0,9) DAY,type_id TYPE,sum(cost) SUM from transactions where isdel=0 and costlevel_id=? group by type_id,substr(create_time,0,9) having day between ? and ? order by day,type asc", new String[] { "" + costLevel, startDay,
-					endDay });
+			c = db.rawQuery(
+					"select substr(create_time,0,9) DAY,type_id TYPE,sum(cost) SUM from transactions where isdel=0 and costlevel_id=? group by type_id,substr(create_time,0,9) having day between ? and ? order by day,type asc",
+					new String[] { "" + costLevel, startDay, endDay });
 		}
 		else
 		{
-			c = db.rawQuery("select substr(create_time,0,9) DAY,type_id TYPE,sum(cost) SUM from transactions where isdel=0 and costdesc_id=? group by type_id,substr(create_time,0,9) having day between ? and ? order by day,type asc", new String[] { "" + costLevel, startDay,
-					endDay });
+			c = db.rawQuery(
+					"select substr(create_time,0,9) DAY,type_id TYPE,sum(cost) SUM from transactions where isdel=0 and costdesc_id=? group by type_id,substr(create_time,0,9) having day between ? and ? order by day,type asc",
+					new String[] { "" + costLevel, startDay, endDay });
 		}
 		String lastDay = "";
 		DayTranTotal bean = null;
@@ -340,9 +378,12 @@ public class TransactionsDao
 		}
 	}
 
-	public static List<Trade> getSearchTransactionWithDateRange(String haspic, String member, String categorypath, String keyword, String startDay, String endDay)
+	public static List<Trade> getSearchTransactionWithDateRange(String haspic,
+			String member, String categorypath, String keyword,
+			String startDay, String endDay)
 	{
-		Cursor c = getSearchTradeCursorWithDateRange(haspic, member, categorypath, keyword, startDay, endDay);
+		Cursor c = getSearchTradeCursorWithDateRange(haspic, member,
+				categorypath, keyword, startDay, endDay);
 
 		return getTradeList(c);
 	}
@@ -355,7 +396,9 @@ public class TransactionsDao
 	 * @param endDay
 	 * @return
 	 */
-	private static Cursor getSearchTradeCursorWithDateRange(String haspic, String member, String categorypath, String keyword, String startDay, String endDay)
+	private static Cursor getSearchTradeCursorWithDateRange(String haspic,
+			String member, String categorypath, String keyword,
+			String startDay, String endDay)
 	{
 		if (db == null)
 		{
@@ -374,18 +417,23 @@ public class TransactionsDao
 					.rawQuery(
 							"SELECT T.*,G.PATH,case HASPICTURE when 0 then '无图' else '有图' end PICTURE FROM TRANSACTIONS T  JOIN CATEGORY G ON T.COSTDESC_ID=G.ID"
 									+ " WHERE PICTURE like ? AND MEMBER like ? AND PATH LIKE ?  AND (COST LIKE ? OR PROJECT LIKE ? OR SHOP LIKE ? OR MEMO LIKE ?)  AND isdel=0 AND (date(date(substr(create_time,0,5)|| '-'||substr(create_time,5,2)|| '-' || substr(create_time,7,2))) between date(?) and date(?))   ORDER BY CREATE_LONGTIME ASC",
-							new String[] { haspic, member, categorypath, keyword, keyword, keyword, keyword, startDay, endDay });
+							new String[] { haspic, member, categorypath,
+									keyword, keyword, keyword, keyword,
+									startDay, endDay });
 		}
 		else
 		{
-			String costMin = PatternUtil.getFirstPattern(keyword.replace(" ", ""), "\\d+\\.?\\d*");
-			String costMax = PatternUtil.getLastPattern(keyword.replace(" ", ""), "\\d+\\.?\\d*");
+			String costMin = PatternUtil.getFirstPattern(
+					keyword.replace(" ", ""), "\\d+\\.?\\d*");
+			String costMax = PatternUtil.getLastPattern(
+					keyword.replace(" ", ""), "\\d+\\.?\\d*");
 			// System.out.println("金钱区间::  " + costMin + "  " + costMax);
 			return db
 					.rawQuery(
 							"SELECT T.*,G.PATH,case HASPICTURE when 0 then '无图' else '有图' end PICTURE FROM TRANSACTIONS T  JOIN CATEGORY G ON T.COSTDESC_ID=G.ID"
 									+ " WHERE PICTURE like ? AND MEMBER like ? AND PATH LIKE ?  AND (COST BETWEEN ? AND ?)  AND isdel=0 AND (date(date(substr(create_time,0,5)|| '-'||substr(create_time,5,2)|| '-' || substr(create_time,7,2))) between date(?) and date(?))   ORDER BY CREATE_LONGTIME ASC",
-							new String[] { haspic, member, categorypath, costMin, costMax, startDay, endDay });
+							new String[] { haspic, member, categorypath,
+									costMin, costMax, startDay, endDay });
 		}
 	}
 
@@ -396,10 +444,14 @@ public class TransactionsDao
 			Log.e("dao", "Not opened Db !");
 			return null;
 		}
-		return db.rawQuery("SELECT * FROM TRANSACTIONS WHERE CREATE_TIME LIKE ? AND isdel=0  ORDER BY CREATE_LONGTIME ASC", new String[] { dayStr + "%" });
+		return db
+				.rawQuery(
+						"SELECT * FROM TRANSACTIONS WHERE CREATE_TIME LIKE ? AND isdel=0  ORDER BY CREATE_LONGTIME ASC",
+						new String[] { dayStr + "%" });
 	}
 
-	private static Cursor getDayTradesByCostLevelCursor(String dayStr, int costLevel)
+	private static Cursor getDayTradesByCostLevelCursor(String dayStr,
+			int costLevel)
 	{
 		if (db == null)
 		{
@@ -409,11 +461,15 @@ public class TransactionsDao
 		Cursor c = null;
 		if (CostTypeUtil.isLevelType(costLevel))
 		{
-			c = db.rawQuery("SELECT * FROM TRANSACTIONS WHERE CREATE_TIME LIKE ? AND isdel=0 AND costlevel_id=? ORDER BY CREATE_LONGTIME ASC", new String[] { dayStr + "%", "" + costLevel });
+			c = db.rawQuery(
+					"SELECT * FROM TRANSACTIONS WHERE CREATE_TIME LIKE ? AND isdel=0 AND costlevel_id=? ORDER BY CREATE_LONGTIME ASC",
+					new String[] { dayStr + "%", "" + costLevel });
 		}
 		else
 		{
-			c = db.rawQuery("SELECT * FROM TRANSACTIONS WHERE CREATE_TIME LIKE ? AND isdel=0 AND costdesc_id=? ORDER BY CREATE_LONGTIME ASC", new String[] { dayStr + "%", "" + costLevel });
+			c = db.rawQuery(
+					"SELECT * FROM TRANSACTIONS WHERE CREATE_TIME LIKE ? AND isdel=0 AND costdesc_id=? ORDER BY CREATE_LONGTIME ASC",
+					new String[] { dayStr + "%", "" + costLevel });
 		}
 		return c;
 	}
@@ -425,8 +481,9 @@ public class TransactionsDao
 		{
 			ContentValues cv = new ContentValues();
 			cv.put("isdel", 1);
-			db.update("transactions", cv, "id = ?", new String[] { String.valueOf(trade.getId()) });
-			trigger();
+			db.update("transactions", cv, "id = ?",
+					new String[] { String.valueOf(trade.getId()) });
+			trigger(trade);
 		}
 		catch (Exception ex)
 		{
@@ -444,7 +501,9 @@ public class TransactionsDao
 			Log.e("dao", "Not opened Db !");
 			return false;
 		}
-		Cursor c = db.rawQuery("SELECT * FROM TRANSACTIONS WHERE UUID = ? AND isdel=0", new String[] { uuid });
+		Cursor c = db.rawQuery(
+				"SELECT * FROM TRANSACTIONS WHERE UUID = ? AND isdel=0",
+				new String[] { uuid });
 		while (c != null && c.moveToNext())
 		{
 			return true;

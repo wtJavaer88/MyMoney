@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.wnc.mymoney.R;
 import com.wnc.mymoney.bean.Trade;
-import com.wnc.mymoney.dao.TransactionsDao;
 import com.wnc.mymoney.ui.DataViewActivity;
 import com.wnc.mymoney.uihelper.listener.TransItemClickListener;
 import com.wnc.mymoney.util.enums.CostTypeUtil;
@@ -37,6 +36,8 @@ public class MyListViewAdapter extends BaseAdapter
 		this.activity = activity;
 		this.mData = mData;
 		this.mInflater = LayoutInflater.from(activity);
+
+		DayTradesHolder.activity = activity;
 	}
 
 	/**
@@ -165,34 +166,11 @@ public class MyListViewAdapter extends BaseAdapter
 		holder.day_of_balance_tv.setVisibility(v);
 	}
 
-	/**
-	 * 缓存每日的交易记录
-	 */
-	static Map<String, List<Trade>> dayTradesMap = new HashMap<String, List<Trade>>();
-
 	private List<Map<String, Object>> getMapData(String searchDate)
 	{
 		List<Trade> tradeItems;
-		TransactionsDao.initDb(this.activity);
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		if (costLevel > 0)
-		{
-			tradeItems = TransactionsDao.getDayTradesByCostLevel(searchDate,
-					costLevel);
-		}
-		else
-		{
-			if (!dayTradesMap.containsKey(searchDate))
-			{
-				tradeItems = TransactionsDao.getDayTrades(searchDate);
-				dayTradesMap.put(searchDate, tradeItems);
-			}
-			else
-			{
-				tradeItems = dayTradesMap.get(searchDate);
-			}
-		}
-		dayTradesMap.put(searchDate, tradeItems);
+		tradeItems = DayTradesHolder.getDayTrades(searchDate, costLevel);
 
 		for (Trade trade : tradeItems)
 		{
@@ -208,7 +186,6 @@ public class MyListViewAdapter extends BaseAdapter
 			map.put("searchDate", searchDate);
 			list.add(map);
 		}
-		TransactionsDao.closeDb();
 		return list;
 	}
 
@@ -220,23 +197,12 @@ public class MyListViewAdapter extends BaseAdapter
 	public List<Trade> getTradeItemsInDays()
 	{
 		List<Trade> retList = new ArrayList<Trade>();
-		TransactionsDao.initDb(this.activity);
 
 		for (Map<String, Object> map : mData)
 		{
 			String day = map.get("searchDate").toString();
-			if (!dayTradesMap.containsKey(day))
-			{
-				List<Trade> dayTrades = TransactionsDao.getDayTrades(day);
-				retList.addAll(dayTrades);
-				dayTradesMap.put(day, dayTrades);
-			}
-			else
-			{
-				retList.addAll(dayTradesMap.get(day));
-			}
+			retList.addAll(DayTradesHolder.getDayTrades(day));
 		}
-		TransactionsDao.closeDb();
 		return retList;
 	}
 
