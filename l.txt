@@ -8,7 +8,6 @@ C:\Users\cpr216\Desktop\工作文件夹\MyMoney\res\layout\combobox_item.xml
 C:\Users\cpr216\Desktop\工作文件夹\MyMoney\res\layout\combobox_listview.xml
 C:\Users\cpr216\Desktop\工作文件夹\MyMoney\res\layout\common_lv_empty_tips.xml
 C:\Users\cpr216\Desktop\工作文件夹\MyMoney\res\layout\common_titlebar.xml
-
 C:\Users\cpr216\Desktop\工作文件夹\MyMoney\res\layout\common_titlebar_include_menu_btn.xml
 C:\Users\cpr216\Desktop\工作文件夹\MyMoney\res\layout\corp_project_bottom_toolbar.xml
 C:\Users\cpr216\Desktop\工作文件夹\MyMoney\res\layout\drag_listview_tips.xml
