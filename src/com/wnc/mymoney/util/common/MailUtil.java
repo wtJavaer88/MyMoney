@@ -134,7 +134,7 @@ public class MailUtil
     {
         System.out.println("......sendQQmail");
         final String user = "529801034@qq.com";
-        final String pw = "lvuukleusqgvbhhg";
+        final String pw = "yfcyagsafndsbjga";
         final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
         Properties props = System.getProperties();
         props.setProperty("mail.smtp.host", "smtp.qq.com");

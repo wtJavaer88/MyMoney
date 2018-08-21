@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
+import com.wnc.basic.BasicDateUtil;
 import com.wnc.basic.BasicFileUtil;
 import com.wnc.basic.BasicStringUtil;
 import com.wnc.mymoney.uihelper.MyAppParams;
@@ -103,7 +104,7 @@ public class BackUpDataUtil
 		String newFilePath = BasicFileUtil.getMakeFilePath(MyAppParams
 				.getInstance().getBackupDbPath(),
 		// "/data/data/db",
-				System.currentTimeMillis() + "_" + subjectDb);
+				BasicDateUtil.getCurrentDateTimeString().replaceAll("[^\\d]", "") + "_" + subjectDb);
 		File[] files = new File(MyAppParams.getInstance().getBackupDbPath())
 				.listFiles();
 		Arrays.sort(files);
