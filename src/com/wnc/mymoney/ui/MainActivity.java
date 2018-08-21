@@ -3,7 +3,10 @@ package com.wnc.mymoney.ui;
 
 import java.lang.Thread.UncaughtExceptionHandler;
 
+import org.jsoup.nodes.Document;
+
 import com.wnc.basic.BasicDateUtil;
+import com.wnc.basic.BasicFileUtil;
 import com.wnc.mymoney.R;
 import com.wnc.mymoney.backup.BackUpDataUtil;
 import com.wnc.mymoney.backup.BackupFilesHolder;
@@ -11,7 +14,9 @@ import com.wnc.mymoney.dao.OnStartUpDataUtil;
 import com.wnc.mymoney.dao.TransactionsDao;
 import com.wnc.mymoney.service.LogService;
 import com.wnc.mymoney.ui.setting.SettingActivity;
+import com.wnc.mymoney.uihelper.MyAppParams;
 import com.wnc.mymoney.uihelper.Setting;
+import com.wnc.mymoney.util.JsoupHelper;
 import com.wnc.mymoney.util.SysInit;
 import com.wnc.mymoney.util.app.AppRescouceReflect;
 import com.wnc.mymoney.util.common.TextFormatUtil;
@@ -20,6 +25,8 @@ import com.wnc.mymoney.util.enums.NetChannel;
 import com.wnc.mymoney.util.enums.TOTAL_RANGE;
 import com.wnc.train.TrainTicketActivity;
 import com.wnc.train.TrainUIMsgHelper;
+
+import dmm.DmmSpider;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -57,6 +64,9 @@ public class MainActivity extends Activity implements UncaughtExceptionHandler
 
         initComponents();
         setViewsIfChange();
+        
+        DmmSpider.run();
+        
     }
 
     private void initComponents()
