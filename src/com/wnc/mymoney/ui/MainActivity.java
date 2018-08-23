@@ -65,7 +65,7 @@ public class MainActivity extends Activity implements UncaughtExceptionHandler
         initComponents();
         setViewsIfChange();
         
-        DmmSpider.run();
+//        DmmSpider.run();
         
     }
 
